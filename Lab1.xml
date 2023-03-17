@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<biblioteka xmlns="http://tempuri.org/XMLSchema.xsd">
+    <ksiazka tytul="Teoria wszystkiego">
+        <autor imie="Adam" nazwisko="Kuklinowski"/>
+    </ksiazka>
+    <ksiazka tytul="Graph Theory">
+        <autor imie="Terence" nazwisko="Tao"/>
+        <autor imie="T" nazwisko="Student"/>
+    </ksiazka>
+</biblioteka>
