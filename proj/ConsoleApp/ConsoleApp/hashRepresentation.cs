@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace ConsoleApp;
 using System.Collections.Generic;
 
@@ -6,120 +8,146 @@ using System.Collections.Generic;
 public class GameHash
 {
     private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
-    
     private int _name;
-    public int getName()
-    {
-        return _name;
-    }
-    public void setName(string name)
-    {
-        _name = name.GetHashCode();
-        _myHashMap[_name] = name;
-    }
-    
     private int _genre;
-    public int getGenre()
-    {
-        return _genre;
-    }
-    public void setGenre(string genre)
-    {
-        _genre = genre.GetHashCode();
-        _myHashMap[_genre] = genre;
-    }
-    
-    
-    public List<User> Authors { get; set; }
-    public List<Review> Reviews { get; set; }
-    public List<Mod> Mods { get; set; }
-    
     private int _devices;
-    public int getDevices()
+
+    public GameHash(string name, string genre, string devices, List<UserHash> authors, List<ReviewHash> reviews, List<ModHash> mods)
     {
-        return _devices;
+        Name = name;
+        Genre = genre;
+        Devices = devices;
+        Authors = authors;
+        Reviews = reviews;
+        Mods = mods;
     }
-    public void setDevices(string devices)
+
+    public string Name
     {
-        _devices = devices.GetHashCode();
-        _myHashMap[_devices] = devices;
+        get => _myHashMap[_name];
+        set
+        {
+            _name = value.GetHashCode();
+            _myHashMap[_name] = value;
+        }
     }
+
+    public string Genre
+    {
+        get => _myHashMap[_genre];
+        set
+        {
+            _genre = value.GetHashCode();
+            _myHashMap[_genre] = value;
+        }
+    }
+
+    public string Devices
+    {
+        get => _myHashMap[_devices];
+        set
+        {
+            _devices = value.GetHashCode();
+            _myHashMap[_devices] = value;
+        }
+    }
+    
+    public List<UserHash> Authors { get; set; }
+    public List<ReviewHash> Reviews { get; set; }
+    public List<ModHash> Mods { get; set; }
 }
 
 public class ReviewHash
 {
-    private Dictionary<int, string> myHashMap = new Dictionary<int, string>();
-    
+    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _text;
-    public int getText()
-    {
-        return _text;
-    }
-    public void setText(string text)
-    {
-        _text = text.GetHashCode();
-        myHashMap[_text] = text;
-    }
-    
     private int _rating;
-    public int getRating()
+
+    public ReviewHash(string text, int rating, UserHash author)
     {
-        return _rating;
+        Text = text;
+        Rating = rating;
+        Author = author;
     }
-    public void setRating(int rating)
+
+    public string Text {
+        get => _myHashMap[_rating];
+        set
+        {
+            _text = value.GetHashCode();
+            _myHashMap[_text] = value;
+        }
+    }
+
+    public int Rating
     {
-        string stringRating = rating.ToString();
-        _text = stringRating.GetHashCode();
-        myHashMap[_text] = stringRating;
+        get => int.Parse(_myHashMap[_rating]);
+        set
+        {
+            string stringRating = value.ToString();
+            _text = stringRating.GetHashCode();
+            _myHashMap[_text] = stringRating;
+        }
     }
     
-    public User Author { get; set; }
+    public UserHash Author { get; set; }
 }
 
 public class ModHash
 {
-    private Dictionary<int, string> myHashMap = new Dictionary<int, string>();
-
+    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _name;
-    public int getName()
+    private int _description;
+
+    public ModHash(string name, string description, List<UserHash> authors, List<ModHash> compatibility)
     {
-        return _name;
-    }
-    public void setName(string name)
-    {
-        _name = name.GetHashCode();
-        myHashMap[_name] = name;
+        Name = name;
+        Description = description;
+        Authors = authors;
+        Compatibility = compatibility;
     }
 
-    private int _description;
-    public int getDescription()
+    public string Name
     {
-        return _description;
-    }
-    public void setDescription(string description)
-    {
-        _description = description.GetHashCode();
-        myHashMap[_description] = description;
+        get => _myHashMap[_name];
+        set
+        {
+            _name = value.GetHashCode();
+            _myHashMap[_name] = value;
+        }
     }
     
-    public List<User> Authors { get; set; }
-    public List<Mod> Compatibility { get; set; }
+    public string Description { get => _myHashMap[_description];
+        set
+        {
+            _description = value.GetHashCode();
+            _myHashMap[_description] = value;
+        }
+    }
+
+    public List<UserHash> Authors { get; set; }
+    public List<ModHash> Compatibility { get; set; }
 }
 
 public class UserHash
 {
-    private Dictionary<int, string> myHashMap = new Dictionary<int, string>();
-
+    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _nickname;
-    public int getNickname()
+
+    public UserHash(string nickname, List<GameHash> ownedGames)
     {
-        return _nickname;
-    }
-    public void setNickname(string nickname)
-    {
-        _nickname = nickname.GetHashCode();
-        myHashMap[_nickname] = nickname;
+        Nickname = nickname;
+        OwnedGames = ownedGames;
     }
     
-    public List<Game> OwnedGames { get; set; }
+    public string Nickname {
+        get => _myHashMap[_nickname];
+        set
+        {
+            _nickname = value.GetHashCode();
+            _myHashMap[_nickname] = value;
+        }
+    }
+    
+    public List<GameHash> OwnedGames { get; set; }
 }
