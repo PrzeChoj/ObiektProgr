@@ -55,6 +55,31 @@ public class GameHash
     public List<UserHash> Authors { get; set; }
     public List<ReviewHash> Reviews { get; set; }
     public List<ModHash> Mods { get; set; }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"Name: {Name}");
+        sb.AppendLine($"Genre: {Genre}");
+        sb.AppendLine($"Devices: {Devices}");
+        sb.AppendLine("Authors:");
+        foreach (var author in Authors)
+        {
+            sb.AppendLine($"- {author.Nickname}");
+        }
+        sb.AppendLine("Reviews:");
+        foreach (var review in Reviews)
+        {
+            sb.AppendLine($"- {review.Author}: {review.Rating}");
+        }
+        sb.AppendLine("Mods:");
+        foreach (var mod in Mods)
+        {
+            sb.AppendLine($"- {mod.Name}");
+        }
+        return sb.ToString();
+    }
+
 }
 
 public class ReviewHash
@@ -91,6 +116,18 @@ public class ReviewHash
     }
     
     public UserHash Author { get; set; }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append($"Author: {Author.Nickname}\n");
+        sb.Append($"Rating: {Rating}\n");
+        sb.Append($"Text: {Text}");
+
+        return sb.ToString();
+    }
+
 }
 
 public class ModHash
@@ -127,6 +164,25 @@ public class ModHash
 
     public List<UserHash> Authors { get; set; }
     public List<ModHash> Compatibility { get; set; }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"Name: {Name}");
+        sb.AppendLine($"Description: {Description}");
+        sb.AppendLine("Authors:");
+        foreach (var author in Authors)
+        {
+            sb.AppendLine($"- {author.Nickname}");
+        }
+        sb.AppendLine("Compatibility:");
+        foreach (var mod in Compatibility)
+        {
+            sb.AppendLine($"- {mod.Name}");
+        }
+        return sb.ToString();
+    }
+
 }
 
 public class UserHash
@@ -150,4 +206,16 @@ public class UserHash
     }
     
     public List<GameHash> OwnedGames { get; set; }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"Nickname: {Nickname}");
+        sb.AppendLine("Owned Games:");
+        foreach (var game in OwnedGames)
+        {
+            sb.AppendLine(game.Name);
+        }
+        return sb.ToString();
+    }
 }
