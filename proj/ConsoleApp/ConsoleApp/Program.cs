@@ -60,6 +60,9 @@ Console.WriteLine(m1);
 
 Console.WriteLine(m1.Authors[0].OwnedGames.Count); // Should be 5
 
+Console.WriteLine(r1.ToString());
+Console.WriteLine(r1.Author.OwnedGames[2].Reviews[0].ToString());
+
 
 Console.WriteLine("\n==========================\n\nHASH:");
 

@@ -4,6 +4,7 @@ namespace ConsoleApp;
 using System.Collections.Generic;
 
 /// Adaptery z brzydkiej do ladnej
+/// TODO Dodać ToString()
 public class GameHashAdapter : IGame
 {
     private readonly GameHash g;
@@ -40,9 +41,37 @@ public class GameHashAdapter : IGame
     }
     
     //TODO(:<<<)
-    public List<User> Authors { get => g.Authors; set; }
-    public List<Review> Reviews { get; set; }
-    public List<Mod> Mods { get; set; }
+    public List<IUser> Authors
+    {
+        get
+        {
+            var outAuthors = new List<IUser>();
+            foreach (UserHash gAuthor in g.Authors)
+            {
+                outAuthors.Add(new UserHashAdapter(gAuthor));
+            }
+
+            return outAuthors;
+        }
+        set
+        {
+            var newGAuthors = new List<UserHash>();
+            foreach (IUser user in value)
+            {
+                var ownedGames = new List<GameHash>();
+                foreach (IGame ownedGame in user.OwnedGames)
+                {
+                    ;//ownedGames.Add(); // TODO()
+                }
+                newGAuthors.Add(new UserHash(user.Nickname, ownedGames));
+            }
+            
+            g.Authors = newGAuthors;
+        }
+    }
+
+    public List<IReview> Reviews { get; set; }
+    public List<IMod> Mods { get; set; }
 }
 
 public class ReviewHashAdapter : IReview
@@ -72,7 +101,7 @@ public class ReviewHashAdapter : IReview
     }
     
     // TODO
-    public User Author { get; set; }
+    public IUser Author { get; set; }
 }
 
 public class ModHashAdapter : IMod
@@ -102,8 +131,8 @@ public class ModHashAdapter : IMod
     }
     
     // TODO()
-    public List<User> Authors { get; set; }
-    public List<Mod> Compatibility { get; set; }
+    public List<IUser> Authors { get; set; }
+    public List<IMod> Compatibility { get; set; }
 }
 
 public class UserHashAdapter : IUser
@@ -124,7 +153,7 @@ public class UserHashAdapter : IUser
         }
     }
     // TODO()
-    public List<Game> OwnedGames { get; set; }
+    public List<IGame> OwnedGames { get; set; }
 }
 
 
