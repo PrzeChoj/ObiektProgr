@@ -123,3 +123,19 @@ Console.WriteLine(rh1);
 Console.WriteLine(mh1);
 
 Console.WriteLine(mh1.Authors[0].OwnedGames.Count); // Should be 5
+
+
+
+
+
+// Zadanie 2:
+bool IsMeanBig(Game g, double treshold = 10.0)
+{
+    int sum = 0;
+    foreach (Review review in g.Reviews)
+    {
+        sum += review.Rating;
+    }
+    
+    return (sum / g.Reviews.Count) > treshold;
+}
