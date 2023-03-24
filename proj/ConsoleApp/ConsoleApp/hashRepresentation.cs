@@ -7,213 +7,151 @@ using System.Collections.Generic;
 /// HashMap reprezentacja (czesc 4):
 public class GameHash
 {
-    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _name;
     private int _genre;
     private int _devices;
 
     public GameHash(string name, string genre, string devices, List<UserHash>? authors = null, List<ReviewHash>? reviews = null, List<ModHash>? mods = null)
     {
-        Name = name;
-        Genre = genre;
-        Devices = devices;
+        SetName(name);
+        SetGenre(genre);
+        SetDevices(devices);
         Authors = authors ?? new List<UserHash>();
         Reviews = reviews ?? new List<ReviewHash>();
         Mods = mods ?? new List<ModHash>();
     }
-    
-    public string Name
+
+    public void SetName(string name)
     {
-        get => _myHashMap[_name];
-        set
-        {
-            _name = value.GetHashCode();
-            _myHashMap[_name] = value;
-        }
+        _name = name.GetHashCode();
+        _myHashMap[_name] = name;
+    }
+    public int GetName()
+    {
+        return _name;
     }
 
-    public string Genre
+    public void SetGenre(string genre)
     {
-        get => _myHashMap[_genre];
-        set
-        {
-            _genre = value.GetHashCode();
-            _myHashMap[_genre] = value;
-        }
+        _genre = genre.GetHashCode();
+        _myHashMap[_genre] = genre;
+    }
+    public int GetGenre()
+    {
+        return _genre;
     }
 
-    public string Devices
+    public void SetDevices(string devices)
     {
-        get => _myHashMap[_devices];
-        set
-        {
-            _devices = value.GetHashCode();
-            _myHashMap[_devices] = value;
-        }
+        _devices = devices.GetHashCode();
+        _myHashMap[_devices] = devices;
+    }
+    public int GetDevices()
+    {
+        return _devices;
     }
     
     public List<UserHash> Authors { get; set; }
     public List<ReviewHash> Reviews { get; set; }
     public List<ModHash> Mods { get; set; }
-    
-    public override string ToString()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Name: {Name}");
-        sb.AppendLine($"Genre: {Genre}");
-        sb.AppendLine($"Devices: {Devices}");
-        sb.AppendLine("Authors:");
-        foreach (var author in Authors)
-        {
-            sb.AppendLine($"- {author.Nickname}");
-        }
-        sb.AppendLine("Reviews:");
-        foreach (var review in Reviews)
-        {
-            sb.AppendLine($"- {review.Author}: {review.Rating}");
-        }
-        sb.AppendLine("Mods:");
-        foreach (var mod in Mods)
-        {
-            sb.AppendLine($"- {mod.Name}");
-        }
-    
-        return sb.ToString();
-    }
 }
 
 public class ReviewHash
 {
-    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _text;
     private int _rating;
 
     public ReviewHash(string text, int rating, UserHash author)
     {
-        Text = text;
-        Rating = rating;
+        SetText(text);
+        SetRating(rating);
         Author = author;
     }
 
-    public string Text {
-        get => _myHashMap[_rating];
-        set
-        {
-            _text = value.GetHashCode();
-            _myHashMap[_text] = value;
-        }
+    public void SetText(string text)
+    {
+        _text = text.GetHashCode();
+        _myHashMap[_text] = text;
+    }
+    public int GetText()
+    {
+        return _text;
     }
 
-    public int Rating
+    public void SetRating(int rating)
     {
-        get => int.Parse(_myHashMap[_rating]);
-        set
-        {
-            string stringRating = value.ToString();
-            _rating = stringRating.GetHashCode();
-            _myHashMap[_rating] = stringRating;
-        }
+        string stringRating = rating.ToString();
+        _rating = stringRating.GetHashCode();
+        _myHashMap[_rating] = stringRating;
+    }
+    public int GetRating()
+    {
+        return _rating;
     }
     
     public UserHash Author { get; set; }
-    
-    public override string ToString()
-    {
-        StringBuilder sb = new StringBuilder();
-
-        sb.AppendLine($"Author: {Author.Nickname}");
-        sb.AppendLine($"Rating: {Rating}");
-        sb.AppendLine($"Text: {Text}");
-
-        return sb.ToString();
-    }
 }
 
 public class ModHash
 {
-    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _name;
     private int _description;
 
     public ModHash(string name, string description, List<UserHash>? authors = null, List<ModHash>? compatibility = null)
     {
-        Name = name;
-        Description = description;
+        SetName(name);
+        SetDescription(description);
         Authors = authors ?? new List<UserHash>();
         Compatibility = compatibility ?? new List<ModHash>();
     }
 
-    public string Name
+    public void SetName(string name)
     {
-        get => _myHashMap[_name];
-        set
-        {
-            _name = value.GetHashCode();
-            _myHashMap[_name] = value;
-        }
+        _name = name.GetHashCode();
+        _myHashMap[_name] = name;
     }
-    
-    public string Description { get => _myHashMap[_description];
-        set
-        {
-            _description = value.GetHashCode();
-            _myHashMap[_description] = value;
-        }
+    public int GetName()
+    {
+        return _name;
     }
 
+    public void SetDescription(string description)
+    {
+        _description = description.GetHashCode();
+        _myHashMap[_description] = description;
+    }
+    public int GetDescription()
+    {
+        return _description;
+    }
+    
     public List<UserHash> Authors { get; set; }
     public List<ModHash> Compatibility { get; set; }
-    
-    public override string ToString()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Name: {Name}");
-        sb.AppendLine($"Description: {Description}");
-        sb.AppendLine("Authors:");
-        foreach (var author in Authors)
-        {
-            sb.AppendLine($"- {author.Nickname}");
-        }
-        sb.AppendLine("Compatibility:");
-        foreach (var mod in Compatibility)
-        {
-            sb.AppendLine($"- {mod.Name}");
-        }
-        return sb.ToString();
-    }
 }
 
 public class UserHash
 {
-    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _nickname;
 
     public UserHash(string nickname, List<GameHash>? ownedGames = null)
     {
-        Nickname = nickname;
+        SetNickname(nickname);
         OwnedGames = ownedGames ?? new List<GameHash>();
     }
-    
-    public string Nickname {
-        get => _myHashMap[_nickname];
-        set
-        {
-            _nickname = value.GetHashCode();
-            _myHashMap[_nickname] = value;
-        }
+
+    public void SetNickname(string nickname)
+    {
+        _nickname = nickname.GetHashCode();
+        _myHashMap[_nickname] = nickname;
+    }
+    public int GetNickname()
+    {
+        return _nickname;
     }
     
     public List<GameHash> OwnedGames { get; set; }
-    
-    public override string ToString()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Nickname: {Nickname}");
-        sb.AppendLine("Owned Games:");
-        foreach (var game in OwnedGames)
-        {
-            sb.AppendLine($"- {game.Name}");
-        }
-        return sb.ToString();
-    }
 }
