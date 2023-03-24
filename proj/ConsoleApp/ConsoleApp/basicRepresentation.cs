@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 
 /// Bazowa reprezentacja (Czesc 0):
-public class Game
+public class Game : GameAbstract
 {
     public Game(string name, string genre, List<User> authors, List<Review> reviews, List<Mod> mods, string devices)
     {
@@ -23,7 +23,7 @@ public class Game
     public string Devices { get; set; }
 }
 
-public class Review
+public class Review : ReviewAbstract
 {
     public Review(string text, int rating, User author)
     {
@@ -37,7 +37,7 @@ public class Review
     public User Author { get; set; }
 }
 
-public class Mod
+public class Mod : ModAbstract
 {
     public Mod(string name, string description, List<User> authors, List<Mod> compatibility)
     {
@@ -53,7 +53,7 @@ public class Mod
     public List<Mod> Compatibility { get; set; }
 }
 
-public class User
+public class User : UserAbstract
 {
     public User(string nickname, List<Game> ownedGames)
     {
