@@ -7,36 +7,36 @@ using System.Collections.Generic;
 /// TODO Dodać ToString()
 public class GameHashAdapter : IGame
 {
-    private readonly IGameHash g;
+    private readonly IGameHash _g;
 
     public GameHashAdapter(IGameHash g)
     {
-        this.g = g;
+        this._g = g;
     }
 
 
     public string Name
     {
-        get => g.GetHashMap()[g.GetName()];
+        get => _g.GetHashMap()[_g.GetName()];
         set
         {
-            g.SetName(value);
+            _g.SetName(value);
         }
     }
     public string Genre
     {
-        get => g.GetHashMap()[g.GetGenre()];
+        get => _g.GetHashMap()[_g.GetGenre()];
         set
         {
-            g.SetGenre(value);
+            _g.SetGenre(value);
         }
     }
     public string Devices
     {
-        get => g.GetHashMap()[g.GetDevices()];
+        get => _g.GetHashMap()[_g.GetDevices()];
         set
         {
-            g.SetDevices(value);
+            _g.SetDevices(value);
         }
     }
     
@@ -45,7 +45,7 @@ public class GameHashAdapter : IGame
         get
         {
             var outAuthors = new List<IUser>();
-            foreach (IUserHash gAuthor in g.Authors)
+            foreach (IUserHash gAuthor in _g.Authors)
             {
                 outAuthors.Add(new UserHashAdapter(gAuthor));
             }
@@ -79,84 +79,141 @@ public class GameHashAdapter : IGame
 
 public class ReviewHashAdapter : IReview
 {
-    private readonly IReviewHash r;
+    private readonly IReviewHash _r;
 
     public ReviewHashAdapter(IReviewHash r)
     {
-        this.r = r;
+        this._r = r;
     }
     
     public string Text
     {
-        get => r.GetHashMap()[r.GetText()];
+        get => _r.GetHashMap()[_r.GetText()];
         set
         {
-            r.SetText(value);
+            _r.SetText(value);
         }
     }
     public int Rating
     {
-        get => int.Parse(r.GetHashMap()[r.GetRating()]);
+        get => int.Parse(_r.GetHashMap()[_r.GetRating()]);
         set
         {
-            r.SetRating(value);
+            _r.SetRating(value);
         }
     }
     
-    // TODO
-    public IUser Author { get; set; }
+    public IUser Author
+    {
+        get
+        {
+            return new UserHashAdapter(_r.Author);
+        }
+        set
+        {
+            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+        }
+    }
 }
 
 public class ModHashAdapter : IMod
 {
-    private readonly IModHash m;
+    private readonly IModHash _m;
 
     public ModHashAdapter(IModHash m)
     {
-        this.m = m;
+        this._m = m;
     }
     
     public string Name
     {
-        get => m.GetHashMap()[m.GetName()];
+        get => _m.GetHashMap()[_m.GetName()];
         set
         {
-            m.SetName(value);
+            _m.SetName(value);
         }
     }
     public string Description
     {
-        get => m.GetHashMap()[m.GetDescription()];
+        get => _m.GetHashMap()[_m.GetDescription()];
         set
         {
-            m.SetDescription(value);
+            _m.SetDescription(value);
         }
     }
     
-    // TODO()
-    public List<IUser> Authors { get; set; }
-    public List<IMod> Compatibility { get; set; }
+    public List<IUser> Authors
+    {
+        get
+        {
+            var outAuthors = new List<IUser>();
+            foreach (IUserHash gAuthor in _m.Authors)
+            {
+                outAuthors.Add(new UserHashAdapter(gAuthor));
+            }
+
+            return outAuthors;
+        }
+        set
+        {
+            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+        }
+    }
+
+    public List<IMod> Compatibility
+    {
+        get
+        {
+            var outMods = new List<IMod>();
+            foreach (IModHash otherMod in _m.Compatibility)
+            {
+                outMods.Add(new ModHashAdapter(otherMod));
+            }
+
+            return outMods;
+        }
+        set
+        {
+            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+        }
+    }
 }
 
 public class UserHashAdapter : IUser
 {
-    private readonly IUserHash u;
+    private readonly IUserHash _u;
 
     public UserHashAdapter(IUserHash u)
     {
-        this.u = u;
+        this._u = u;
     }
     
     public string Nickname
     {
-        get => u.GetHashMap()[u.GetNickname()];
+        get => _u.GetHashMap()[_u.GetNickname()];
         set
         {
-            u.SetNickname(value);
+            _u.SetNickname(value);
         }
     }
-    // TODO()
-    public List<IGame> OwnedGames { get; set; }
+    
+    public List<IGame> OwnedGames
+    {
+        get
+        {
+            var outGames = new List<IGame>();
+            foreach (IGameHash game in _u.OwnedGames)
+            {
+                outGames.Add(new GameHashAdapter(game));
+            }
+
+            return outGames;
+        }
+        set
+        {
+            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+        }
+    }
 }
 
 
