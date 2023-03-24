@@ -2,14 +2,14 @@
 using System.Text;
 using ConsoleApp;
 
-interface IGame
+public interface IGame
 {
     public string Name { get; set; }
     public string Genre { get; set; }
     public string Devices { get; set; }
-    public List<User> Authors { get; set; }
-    public List<Review> Reviews { get; set; }
-    public List<Mod> Mods { get; set; }
+    public List<IUser> Authors { get; set; }
+    public List<IReview> Reviews { get; set; }
+    public List<IMod> Mods { get; set; }
 
     public string ToString()
     {
@@ -37,11 +37,11 @@ interface IGame
     }
 }
 
-interface IReview
+public interface IReview
 {
     public string Text { get; set; }
     public int Rating { get; set; }
-    public User Author { get; set; }
+    public IUser Author { get; set; }
     
     public string ToString()
     {
@@ -55,12 +55,12 @@ interface IReview
     }
 }
 
-interface IMod
+public interface IMod
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public List<User> Authors { get; set; }
-    public List<Mod> Compatibility { get; set; }
+    public List<IUser> Authors { get; set; }
+    public List<IMod> Compatibility { get; set; }
     
     public string ToString()
     {
@@ -81,10 +81,10 @@ interface IMod
     }
 }
 
-interface IUser
+public interface IUser
 {
     public string Nickname { get; set; }
-    public List<Game> OwnedGames { get; set; }
+    public List<IGame> OwnedGames { get; set; }
     
     public string ToString()
     {

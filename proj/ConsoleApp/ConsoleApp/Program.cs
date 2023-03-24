@@ -11,17 +11,17 @@ User u7 = new User("lemon");
 User u8 = new User("Bonet");
 
 // Mods
-Mod m1 = new Mod("Clouds", "Super clouds", new List<User>{u3});
-Mod m2 = new Mod("T-pose", "Cow are now T-posing", new List<User>{});
+Mod m1 = new Mod("Clouds", "Super clouds", new List<IUser>{u3});
+Mod m2 = new Mod("T-pose", "Cow are now T-posing", new List<IUser>{});
 Mod m3 = new Mod("Commander Shepard", "I’m Commander Shepard and this is my favorite mod on Smoke",
-    new List<User>{u4});
-Mod m4 = new Mod("BTM", "You can now play in BTM’s trains and bytebuses", new List<User>{u7, u8});
-Mod m5 = new Mod("Cosmic - black hole edition", "Adds REALISTIC black holes", new List<User>{u2});
-m1.Compatibility = new List<Mod> { m2, m3, m4, m5 };
-m2.Compatibility = new List<Mod> { m1, m3 };
-m3.Compatibility = new List<Mod> { m1, m2, m4 };
-m4.Compatibility = new List<Mod> { m1, m3 };
-m5.Compatibility = new List<Mod> { m1 };
+    new List<IUser>{u4});
+Mod m4 = new Mod("BTM", "You can now play in BTM’s trains and bytebuses", new List<IUser>{u7, u8});
+Mod m5 = new Mod("Cosmic - black hole edition", "Adds REALISTIC black holes", new List<IUser>{u2});
+m1.Compatibility = new List<IMod> { m2, m3, m4, m5 };
+m2.Compatibility = new List<IMod> { m1, m3 };
+m3.Compatibility = new List<IMod> { m1, m2, m4 };
+m4.Compatibility = new List<IMod> { m1, m3 };
+m5.Compatibility = new List<IMod> { m1 };
 
 // Reviews
 Review r1 = new Review("I’m Commander Shepard and this is my favorite game on Smoke", 10, u4);
@@ -35,21 +35,21 @@ Review r5 = new Review("I've played this game for years nonstop. Over 8k hours l
     5, u1);
 
 // Games
-Game g1 = new Game("Garbage Collector", "simulation", "PW", null, null, new List<Mod>{m1});
-Game g2 = new Game("Universe of Technology", "4X", "bitnix", null, new List<Review>{r3}, new List<Mod>{m1, m3});
-Game g3 = new Game("Moo", "rogue-like", "bitstation", new List<User>{u2}, new List<Review>{r2, r4}, new List<Mod>{m1, m2, m3});
-Game g4 = new Game("Tickets Please", "platformer", "bitbox", new List<User>{u1}, new List<Review>{r1}, new List<Mod>{m1, m3, m4});
-Game g5 = new Game("Cosmic", "MOBA", "cross platform", new List<User>{u5}, new List<Review>{r5}, new List<Mod>{m1, m5});
+Game g1 = new Game("Garbage Collector", "simulation", "PW", null, null, new List<IMod>{m1});
+Game g2 = new Game("Universe of Technology", "4X", "bitnix", null, new List<IReview>{r3}, new List<IMod>{m1, m3});
+Game g3 = new Game("Moo", "rogue-like", "bitstation", new List<IUser>{u2}, new List<IReview>{r2, r4}, new List<IMod>{m1, m2, m3});
+Game g4 = new Game("Tickets Please", "platformer", "bitbox", new List<IUser>{u1}, new List<IReview>{r1}, new List<IMod>{m1, m3, m4});
+Game g5 = new Game("Cosmic", "MOBA", "cross platform", new List<IUser>{u5}, new List<IReview>{r5}, new List<IMod>{m1, m5});
 
 // Add Games for Users
-u1.OwnedGames = new List<Game> { g1, g2, g3, g4, g5 };
-u2.OwnedGames = new List<Game> { g1, g2, g3, g4, g5 };
-u3.OwnedGames = new List<Game> { g1, g2, g3, g4, g5 };
-u4.OwnedGames = new List<Game> { g1, g2, g4 };
-u5.OwnedGames = new List<Game> { g1, g5 };
-u6.OwnedGames = new List<Game> { g1 };
-u7.OwnedGames = new List<Game> { g3, g4 };
-u8.OwnedGames = new List<Game> { g2 };
+u1.OwnedGames = new List<IGame> { g1, g2, g3, g4, g5 };
+u2.OwnedGames = new List<IGame> { g1, g2, g3, g4, g5 };
+u3.OwnedGames = new List<IGame> { g1, g2, g3, g4, g5 };
+u4.OwnedGames = new List<IGame> { g1, g2, g4 };
+u5.OwnedGames = new List<IGame> { g1, g5 };
+u6.OwnedGames = new List<IGame> { g1 };
+u7.OwnedGames = new List<IGame> { g3, g4 };
+u8.OwnedGames = new List<IGame> { g2 };
 
 
 // Print test
