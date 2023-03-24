@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 
 /// HashMap reprezentacja (czesc 4):
-public class GameHash : GameAbstract
+public class GameHash
 {
     private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _name;
@@ -55,9 +55,57 @@ public class GameHash : GameAbstract
     public List<UserHash> Authors { get; set; }
     public List<ReviewHash> Reviews { get; set; }
     public List<ModHash> Mods { get; set; }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"Name: {Name}");
+        sb.AppendLine($"Genre: {Genre}");
+        sb.AppendLine($"Devices: {Devices}");
+        if (Authors == null)
+        {
+            sb.AppendLine("Authors: NONE");
+        }
+        else
+        {
+            sb.AppendLine("Authors:");
+            foreach (var author in Authors)
+            {
+                sb.AppendLine($"- {author.Nickname}");
+            }
+        }
+
+        if (Reviews == null)
+        {
+            sb.AppendLine("Reviews: NONE");
+        }
+        else
+        {
+            sb.AppendLine("Reviews:");
+            foreach (var review in Reviews)
+            {
+                sb.AppendLine($"- {review.Author}: {review.Rating}");
+            }
+        }
+
+        if (Mods == null)
+        {
+            sb.AppendLine("Mods: NONE");
+        }
+        else
+        {
+            sb.AppendLine("Mods:");
+            foreach (var mod in Mods)
+            {
+                sb.AppendLine($"- {mod.Name}");
+            }
+        }
+
+        return sb.ToString();
+    }
 }
 
-public class ReviewHash : ReviewAbstract
+public class ReviewHash
 {
     private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _text;
@@ -91,9 +139,20 @@ public class ReviewHash : ReviewAbstract
     }
     
     public UserHash Author { get; set; }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append($"Author: {Author.Nickname}\n");
+        sb.Append($"Rating: {Rating}\n");
+        sb.Append($"Text: {Text}");
+
+        return sb.ToString();
+    }
 }
 
-public class ModHash : ModAbstract
+public class ModHash
 {
     private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _name;
@@ -127,9 +186,27 @@ public class ModHash : ModAbstract
 
     public List<UserHash> Authors { get; set; }
     public List<ModHash> Compatibility { get; set; }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"Name: {Name}");
+        sb.AppendLine($"Description: {Description}");
+        sb.AppendLine("Authors:");
+        foreach (var author in Authors)
+        {
+            sb.AppendLine($"- {author.Nickname}");
+        }
+        sb.AppendLine("Compatibility:");
+        foreach (var mod in Compatibility)
+        {
+            sb.AppendLine($"- {mod.Name}");
+        }
+        return sb.ToString();
+    }
 }
 
-public class UserHash : UserAbstract
+public class UserHash
 {
     private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _nickname;
@@ -150,4 +227,16 @@ public class UserHash : UserAbstract
     }
     
     public List<GameHash> OwnedGames { get; set; }
+    
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"Nickname: {Nickname}");
+        sb.AppendLine("Owned Games:");
+        foreach (var game in OwnedGames)
+        {
+            sb.AppendLine(game.Name);
+        }
+        return sb.ToString();
+    }
 }
