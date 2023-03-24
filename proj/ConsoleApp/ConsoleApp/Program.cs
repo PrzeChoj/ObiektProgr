@@ -66,7 +66,7 @@ Console.WriteLine(r1.Author.OwnedGames[2].Reviews[0].ToString());
 
 Console.WriteLine("\n==========================\n\nHASH:");
 
-/// Hash
+// Hash
 // Users
 UserHash uh1 = new UserHash("Szredor");
 UserHash uh2 = new UserHash("Driver");
@@ -78,17 +78,17 @@ UserHash uh7 = new UserHash("lemon");
 UserHash uh8 = new UserHash("Bonet");
 
 // Mods
-ModHash mh1 = new ModHash("Clouds", "Super clouds", new List<UserHash> {uh3});
-ModHash mh2 = new ModHash("T-pose", "Cow are now T-posing", new List<UserHash>{});
+ModHash mh1 = new ModHash("Clouds", "Super clouds", new List<IUserHash> {uh3});
+ModHash mh2 = new ModHash("T-pose", "Cow are now T-posing", new List<IUserHash>{});
 ModHash mh3 = new ModHash("Commander Shepard", "I’m Commander Shepard and this is my favorite mod on Smoke",
-    new List<UserHash>{uh4});
-ModHash mh4 = new ModHash("BTM", "You can now play in BTM’s trains and bytebuses", new List<UserHash>{uh7, uh8});
-ModHash mh5 = new ModHash("Cosmic - black hole edition", "Adds REALISTIC black holes", new List<UserHash>{uh2});
-mh1.Compatibility = new List<ModHash> { mh2, mh3, mh4, mh5 };
-mh2.Compatibility = new List<ModHash> { mh1, mh3 };
-mh3.Compatibility = new List<ModHash> { mh1, mh2, mh4 };
-mh4.Compatibility = new List<ModHash> { mh1, mh3 };
-mh5.Compatibility = new List<ModHash> { mh1 };
+    new List<IUserHash>{uh4});
+ModHash mh4 = new ModHash("BTM", "You can now play in BTM’s trains and bytebuses", new List<IUserHash>{uh7, uh8});
+ModHash mh5 = new ModHash("Cosmic - black hole edition", "Adds REALISTIC black holes", new List<IUserHash>{uh2});
+mh1.Compatibility = new List<IModHash> { mh2, mh3, mh4, mh5 };
+mh2.Compatibility = new List<IModHash> { mh1, mh3 };
+mh3.Compatibility = new List<IModHash> { mh1, mh2, mh4 };
+mh4.Compatibility = new List<IModHash> { mh1, mh3 };
+mh5.Compatibility = new List<IModHash> { mh1 };
 
 // Reviews
 ReviewHash rh1 = new ReviewHash("I’m Commander Shepard and this is my favorite game on Smoke", 10, uh4);
@@ -102,21 +102,21 @@ ReviewHash rh5 = new ReviewHash("I've played this game for years nonstop. Over 8
     5, uh1);
 
 // Games
-GameHash gh1 = new GameHash("Garbage Collector", "simulation", "PW", null, null, new List<ModHash>{mh1});
-GameHash gh2 = new GameHash("Universe of Technology", "4X", "bitnix", null, new List<ReviewHash>{rh3}, new List<ModHash>{mh1, mh3});
-GameHash gh3 = new GameHash("Moo", "rogue-like", "bitstation", new List<UserHash>{uh2}, new List<ReviewHash>{rh2, rh4}, new List<ModHash>{mh1, mh2, mh3});
-GameHash gh4 = new GameHash("Tickets Please", "platformer", "bitbox", new List<UserHash>{uh1}, new List<ReviewHash>{rh1}, new List<ModHash>{mh1, mh3, mh4});
-GameHash gh5 = new GameHash("Cosmic", "MOBA", "cross platform", new List<UserHash>{uh5}, new List<ReviewHash>{rh5}, new List<ModHash>{mh1, mh5});
+GameHash gh1 = new GameHash("Garbage Collector", "simulation", "PW", null, null, new List<IModHash>{mh1});
+GameHash gh2 = new GameHash("Universe of Technology", "4X", "bitnix", null, new List<IReviewHash>{rh3}, new List<IModHash>{mh1, mh3});
+GameHash gh3 = new GameHash("Moo", "rogue-like", "bitstation", new List<IUserHash>{uh2}, new List<IReviewHash>{rh2, rh4}, new List<IModHash>{mh1, mh2, mh3});
+GameHash gh4 = new GameHash("Tickets Please", "platformer", "bitbox", new List<IUserHash>{uh1}, new List<IReviewHash>{rh1}, new List<IModHash>{mh1, mh3, mh4});
+GameHash gh5 = new GameHash("Cosmic", "MOBA", "cross platform", new List<IUserHash>{uh5}, new List<IReviewHash>{rh5}, new List<IModHash>{mh1, mh5});
 
 // Add Games for Users
-uh1.OwnedGames = new List<GameHash> { gh1, gh2, gh3, gh4, gh5 };
-uh2.OwnedGames = new List<GameHash> { gh1, gh2, gh3, gh4, gh5 };
-uh3.OwnedGames = new List<GameHash> { gh1, gh2, gh3, gh4, gh5 };
-uh4.OwnedGames = new List<GameHash> { gh1, gh2, gh4 };
-uh5.OwnedGames = new List<GameHash> { gh1, gh5 };
-uh6.OwnedGames = new List<GameHash> { gh1 };
-uh7.OwnedGames = new List<GameHash> { gh3, gh4 };
-uh8.OwnedGames = new List<GameHash> { gh2 };
+uh1.OwnedGames = new List<IGameHash> { gh1, gh2, gh3, gh4, gh5 };
+uh2.OwnedGames = new List<IGameHash> { gh1, gh2, gh3, gh4, gh5 };
+uh3.OwnedGames = new List<IGameHash> { gh1, gh2, gh3, gh4, gh5 };
+uh4.OwnedGames = new List<IGameHash> { gh1, gh2, gh4 };
+uh5.OwnedGames = new List<IGameHash> { gh1, gh5 };
+uh6.OwnedGames = new List<IGameHash> { gh1 };
+uh7.OwnedGames = new List<IGameHash> { gh3, gh4 };
+uh8.OwnedGames = new List<IGameHash> { gh2 };
 
 
 // Print test
@@ -134,8 +134,8 @@ Console.WriteLine(mh1.Authors[0].OwnedGames.Count); // Should be 5
 // Zadanie 2:
 bool IsMeanBig(Game g, double treshold = 10.0)
 {
-    int sum = 0;
-    foreach (Review review in g.Reviews)
+    double sum = 0;
+    foreach (IReview review in g.Reviews)
     {
         sum += review.Rating;
     }

@@ -55,10 +55,10 @@ public class GameHashAdapter : IGame
         }
         set
         {
-            var newGAuthors = new List<UserHash>();
+            var newGAuthors = new List<IUserHash>();
             foreach (IUser user in value)
             {
-                var ownedGames = new List<GameHash>();
+                var ownedGames = new List<IGameHash>();
                 foreach (IGame ownedGame in user.OwnedGames)
                 {
                     ;//ownedGames.Add(); // TODO()

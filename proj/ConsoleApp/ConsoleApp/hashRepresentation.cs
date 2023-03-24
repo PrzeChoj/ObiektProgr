@@ -5,21 +5,21 @@ using System.Collections.Generic;
 
 
 /// HashMap reprezentacja (czesc 4):
-public class GameHash
+public class GameHash : IGameHash
 {
     internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _name;
     private int _genre;
     private int _devices;
 
-    public GameHash(string name, string genre, string devices, List<UserHash>? authors = null, List<ReviewHash>? reviews = null, List<ModHash>? mods = null)
+    public GameHash(string name, string genre, string devices, List<IUserHash>? authors = null, List<IReviewHash>? reviews = null, List<IModHash>? mods = null)
     {
         SetName(name);
         SetGenre(genre);
         SetDevices(devices);
-        Authors = authors ?? new List<UserHash>();
-        Reviews = reviews ?? new List<ReviewHash>();
-        Mods = mods ?? new List<ModHash>();
+        Authors = authors ?? new List<IUserHash>();
+        Reviews = reviews ?? new List<IReviewHash>();
+        Mods = mods ?? new List<IModHash>();
     }
 
     public void SetName(string name)
@@ -52,18 +52,18 @@ public class GameHash
         return _devices;
     }
     
-    public List<UserHash> Authors { get; set; }
-    public List<ReviewHash> Reviews { get; set; }
-    public List<ModHash> Mods { get; set; }
+    public List<IUserHash> Authors { get; set; }
+    public List<IReviewHash> Reviews { get; set; }
+    public List<IModHash> Mods { get; set; }
 }
 
-public class ReviewHash
+public class ReviewHash : IReviewHash
 {
     internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _text;
     private int _rating;
 
-    public ReviewHash(string text, int rating, UserHash author)
+    public ReviewHash(string text, int rating, IUserHash author)
     {
         SetText(text);
         SetRating(rating);
@@ -91,21 +91,21 @@ public class ReviewHash
         return _rating;
     }
     
-    public UserHash Author { get; set; }
+    public IUserHash Author { get; set; }
 }
 
-public class ModHash
+public class ModHash : IModHash
 {
     internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _name;
     private int _description;
 
-    public ModHash(string name, string description, List<UserHash>? authors = null, List<ModHash>? compatibility = null)
+    public ModHash(string name, string description, List<IUserHash>? authors = null, List<IModHash>? compatibility = null)
     {
         SetName(name);
         SetDescription(description);
-        Authors = authors ?? new List<UserHash>();
-        Compatibility = compatibility ?? new List<ModHash>();
+        Authors = authors ?? new List<IUserHash>();
+        Compatibility = compatibility ?? new List<IModHash>();
     }
 
     public void SetName(string name)
@@ -128,19 +128,19 @@ public class ModHash
         return _description;
     }
     
-    public List<UserHash> Authors { get; set; }
-    public List<ModHash> Compatibility { get; set; }
+    public List<IUserHash> Authors { get; set; }
+    public List<IModHash> Compatibility { get; set; }
 }
 
-public class UserHash
+public class UserHash : IUserHash
 {
     internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _nickname;
 
-    public UserHash(string nickname, List<GameHash>? ownedGames = null)
+    public UserHash(string nickname, List<IGameHash>? ownedGames = null)
     {
         SetNickname(nickname);
-        OwnedGames = ownedGames ?? new List<GameHash>();
+        OwnedGames = ownedGames ?? new List<IGameHash>();
     }
 
     public void SetNickname(string nickname)
@@ -153,5 +153,5 @@ public class UserHash
         return _nickname;
     }
     
-    public List<GameHash> OwnedGames { get; set; }
+    public List<IGameHash> OwnedGames { get; set; }
 }
