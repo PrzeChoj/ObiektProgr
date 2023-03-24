@@ -12,16 +12,16 @@ public class GameHash
     private int _genre;
     private int _devices;
 
-    public GameHash(string name, string genre, List<UserHash> authors, List<ReviewHash> reviews, List<ModHash> mods, string devices)
+    public GameHash(string name, string genre, string devices, List<UserHash>? authors = null, List<ReviewHash>? reviews = null, List<ModHash>? mods = null)
     {
         Name = name;
         Genre = genre;
-        Authors = authors;
-        Reviews = reviews;
-        Mods = mods;
         Devices = devices;
+        Authors = authors ?? new List<UserHash>();
+        Reviews = reviews ?? new List<ReviewHash>();
+        Mods = mods ?? new List<ModHash>();
     }
-
+    
     public string Name
     {
         get => _myHashMap[_name];
@@ -62,45 +62,22 @@ public class GameHash
         sb.AppendLine($"Name: {Name}");
         sb.AppendLine($"Genre: {Genre}");
         sb.AppendLine($"Devices: {Devices}");
-        if (Authors == null)
+        sb.AppendLine("Authors:");
+        foreach (var author in Authors)
         {
-            sb.AppendLine("Authors: NONE");
+            sb.AppendLine($"- {author.Nickname}");
         }
-        else
+        sb.AppendLine("Reviews:");
+        foreach (var review in Reviews)
         {
-            sb.AppendLine("Authors:");
-            foreach (var author in Authors)
-            {
-                sb.AppendLine($"- {author.Nickname}");
-            }
+            sb.AppendLine($"- {review.Author}: {review.Rating}");
         }
-
-        if (Reviews == null)
+        sb.AppendLine("Mods:");
+        foreach (var mod in Mods)
         {
-            sb.AppendLine("Reviews: NONE");
+            sb.AppendLine($"- {mod.Name}");
         }
-        else
-        {
-            sb.AppendLine("Reviews:");
-            foreach (var review in Reviews)
-            {
-                sb.AppendLine($"- {review.Author}: {review.Rating}");
-            }
-        }
-
-        if (Mods == null)
-        {
-            sb.AppendLine("Mods: NONE");
-        }
-        else
-        {
-            sb.AppendLine("Mods:");
-            foreach (var mod in Mods)
-            {
-                sb.AppendLine($"- {mod.Name}");
-            }
-        }
-
+    
         return sb.ToString();
     }
 }
@@ -133,7 +110,7 @@ public class ReviewHash
         set
         {
             string stringRating = value.ToString();
-            _text = stringRating.GetHashCode();
+            _rating = stringRating.GetHashCode();
             _myHashMap[_text] = stringRating;
         }
     }
@@ -144,9 +121,9 @@ public class ReviewHash
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.Append($"Author: {Author.Nickname}\n");
-        sb.Append($"Rating: {Rating}\n");
-        sb.Append($"Text: {Text}");
+        sb.AppendLine($"Author: {Author.Nickname}");
+        sb.AppendLine($"Rating: {Rating}");
+        sb.AppendLine($"Text: {Text}");
 
         return sb.ToString();
     }
@@ -158,12 +135,12 @@ public class ModHash
     private int _name;
     private int _description;
 
-    public ModHash(string name, string description, List<UserHash> authors, List<ModHash> compatibility)
+    public ModHash(string name, string description, List<UserHash>? authors = null, List<ModHash>? compatibility = null)
     {
         Name = name;
         Description = description;
-        Authors = authors;
-        Compatibility = compatibility;
+        Authors = authors ?? new List<UserHash>();
+        Compatibility = compatibility ?? new List<ModHash>();
     }
 
     public string Name
@@ -211,10 +188,10 @@ public class UserHash
     private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _nickname;
 
-    public UserHash(string nickname, List<GameHash> ownedGames)
+    public UserHash(string nickname, List<GameHash>? ownedGames = null)
     {
         Nickname = nickname;
-        OwnedGames = ownedGames;
+        OwnedGames = ownedGames ?? new List<GameHash>();
     }
     
     public string Nickname {
@@ -235,7 +212,7 @@ public class UserHash
         sb.AppendLine("Owned Games:");
         foreach (var game in OwnedGames)
         {
-            sb.AppendLine(game.Name);
+            sb.AppendLine($"- {game.Name}");
         }
         return sb.ToString();
     }

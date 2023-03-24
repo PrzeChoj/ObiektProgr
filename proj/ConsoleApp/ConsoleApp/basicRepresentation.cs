@@ -7,14 +7,14 @@ using System.Collections.Generic;
 /// Bazowa reprezentacja (Czesc 0):
 public class Game
 {
-    public Game(string name, string genre, string devices, List<User> authors, List<Review> reviews, List<Mod> mods)
+    public Game(string name, string genre, string devices, List<User>? authors = null, List<Review>? reviews = null, List<Mod>? mods = null)
     {
         Name = name;
         Genre = genre;
         Devices = devices;
-        Authors = authors;
-        Reviews = reviews;
-        Mods = mods;
+        Authors = authors ?? new List<User>();
+        Reviews = reviews ?? new List<Review>();
+        Mods = mods ?? new List<Mod>();
     }
 
     public string Name { get; set; }
@@ -30,45 +30,22 @@ public class Game
         sb.AppendLine($"Name: {Name}");
         sb.AppendLine($"Genre: {Genre}");
         sb.AppendLine($"Devices: {Devices}");
-        if (Authors == null)
+        sb.AppendLine("Authors:");
+        foreach (var author in Authors)
         {
-            sb.AppendLine("Authors: NONE");
+            sb.AppendLine($"- {author.Nickname}");
         }
-        else
+        sb.AppendLine("Reviews:");
+        foreach (var review in Reviews)
         {
-            sb.AppendLine("Authors:");
-            foreach (var author in Authors)
-            {
-                sb.AppendLine($"- {author.Nickname}");
-            }
+            sb.AppendLine($"- {review.Author}: {review.Rating}");
         }
-
-        if (Reviews == null)
+        sb.AppendLine("Mods:");
+        foreach (var mod in Mods)
         {
-            sb.AppendLine("Reviews: NONE");
+            sb.AppendLine($"- {mod.Name}");
         }
-        else
-        {
-            sb.AppendLine("Reviews:");
-            foreach (var review in Reviews)
-            {
-                sb.AppendLine($"- {review.Author}: {review.Rating}");
-            }
-        }
-
-        if (Mods == null)
-        {
-            sb.AppendLine("Mods: NONE");
-        }
-        else
-        {
-            sb.AppendLine("Mods:");
-            foreach (var mod in Mods)
-            {
-                sb.AppendLine($"- {mod.Name}");
-            }
-        }
-
+    
         return sb.ToString();
     }
 }
@@ -90,9 +67,9 @@ public class Review
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.Append($"Author: {Author.Nickname}\n");
-        sb.Append($"Rating: {Rating}\n");
-        sb.Append($"Text: {Text}");
+        sb.AppendLine($"Author: {Author.Nickname}");
+        sb.AppendLine($"Rating: {Rating}");
+        sb.AppendLine($"Text: {Text}");
 
         return sb.ToString();
     }
@@ -100,12 +77,12 @@ public class Review
 
 public class Mod
 {
-    public Mod(string name, string description, List<User> authors, List<Mod> compatibility)
+    public Mod(string name, string description, List<User>? authors = null, List<Mod>? compatibility = null)
     {
         Name = name;
         Description = description;
-        Authors = authors;
-        Compatibility = compatibility;
+        Authors = authors ?? new List<User>();
+        Compatibility = compatibility ?? new List<Mod>();
     }
 
     public string Name { get; set; }
@@ -134,10 +111,10 @@ public class Mod
 
 public class User
 {
-    public User(string nickname, List<Game> ownedGames)
+    public User(string nickname, List<Game>? ownedGames = null)
     {
         Nickname = nickname;
-        OwnedGames = ownedGames;
+        OwnedGames = ownedGames ?? new List<Game>();
     }
 
     public string Nickname { get; set; }
@@ -150,7 +127,7 @@ public class User
         sb.AppendLine("Owned Games:");
         foreach (var game in OwnedGames)
         {
-            sb.AppendLine(game.Name);
+            sb.AppendLine($"- {game.Name}");
         }
         return sb.ToString();
     }

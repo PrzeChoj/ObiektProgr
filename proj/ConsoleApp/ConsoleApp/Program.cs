@@ -4,9 +4,9 @@ using ConsoleApp;
 
 Console.WriteLine("Hello, World!");
 
-User u1 = new User("Adam", new List<Game>());
-List<User> aut1 = new List<User>();
-aut1.Add(u1);
-Game g1 = new Game("Garbage Collector", "simulation", "PC", aut1, new List<Review>(), new List<Mod>());
+User u1 = new User("Adam");
+Game g1 = new Game("Garbage Collector", "simulation", "PC", new List<User>(){u1});
 
-Console.Write(g1);
+Console.WriteLine(g1);
+
+Console.WriteLine(u1);
