@@ -111,7 +111,7 @@ public class ReviewHash
         {
             string stringRating = value.ToString();
             _rating = stringRating.GetHashCode();
-            _myHashMap[_text] = stringRating;
+            _myHashMap[_rating] = stringRating;
         }
     }
     
