@@ -7,9 +7,9 @@ using System.Collections.Generic;
 /// TODO Dodać ToString()
 public class GameHashAdapter : IGame
 {
-    private readonly GameHash g;
+    private readonly IGameHash g;
 
-    public GameHashAdapter(GameHash g)
+    public GameHashAdapter(IGameHash g)
     {
         this.g = g;
     }
@@ -17,7 +17,7 @@ public class GameHashAdapter : IGame
 
     public string Name
     {
-        get => g._myHashMap[g.GetName()];
+        get => g.GetHashMap()[g.GetName()];
         set
         {
             g.SetName(value);
@@ -25,7 +25,7 @@ public class GameHashAdapter : IGame
     }
     public string Genre
     {
-        get => g._myHashMap[g.GetGenre()];
+        get => g.GetHashMap()[g.GetGenre()];
         set
         {
             g.SetGenre(value);
@@ -33,20 +33,19 @@ public class GameHashAdapter : IGame
     }
     public string Devices
     {
-        get => g._myHashMap[g.GetDevices()];
+        get => g.GetHashMap()[g.GetDevices()];
         set
         {
             g.SetDevices(value);
         }
     }
     
-    //TODO(:<<<)
     public List<IUser> Authors
     {
         get
         {
             var outAuthors = new List<IUser>();
-            foreach (UserHash gAuthor in g.Authors)
+            foreach (IUserHash gAuthor in g.Authors)
             {
                 outAuthors.Add(new UserHashAdapter(gAuthor));
             }
@@ -55,18 +54,22 @@ public class GameHashAdapter : IGame
         }
         set
         {
+            /*
             var newGAuthors = new List<IUserHash>();
             foreach (IUser user in value)
             {
-                var ownedGames = new List<IGameHash>();
+                List<IGameHash> ownedGames = new List<IGameHash>();
                 foreach (IGame ownedGame in user.OwnedGames)
                 {
-                    ;//ownedGames.Add(); // TODO()
+                    ownedGames.Add();
                 }
                 newGAuthors.Add(new UserHash(user.Nickname, ownedGames));
             }
             
             g.Authors = newGAuthors;
+            */
+
+            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
         }
     }
 
@@ -76,16 +79,16 @@ public class GameHashAdapter : IGame
 
 public class ReviewHashAdapter : IReview
 {
-    private readonly ReviewHash r;
+    private readonly IReviewHash r;
 
-    public ReviewHashAdapter(ReviewHash r)
+    public ReviewHashAdapter(IReviewHash r)
     {
         this.r = r;
     }
     
     public string Text
     {
-        get => r._myHashMap[r.GetText()];
+        get => r.GetHashMap()[r.GetText()];
         set
         {
             r.SetText(value);
@@ -93,7 +96,7 @@ public class ReviewHashAdapter : IReview
     }
     public int Rating
     {
-        get => int.Parse(r._myHashMap[r.GetRating()]);
+        get => int.Parse(r.GetHashMap()[r.GetRating()]);
         set
         {
             r.SetRating(value);
@@ -106,16 +109,16 @@ public class ReviewHashAdapter : IReview
 
 public class ModHashAdapter : IMod
 {
-    private readonly ModHash m;
+    private readonly IModHash m;
 
-    public ModHashAdapter(ModHash m)
+    public ModHashAdapter(IModHash m)
     {
         this.m = m;
     }
     
     public string Name
     {
-        get => m._myHashMap[m.GetName()];
+        get => m.GetHashMap()[m.GetName()];
         set
         {
             m.SetName(value);
@@ -123,7 +126,7 @@ public class ModHashAdapter : IMod
     }
     public string Description
     {
-        get => m._myHashMap[m.GetDescription()];
+        get => m.GetHashMap()[m.GetDescription()];
         set
         {
             m.SetDescription(value);
@@ -137,16 +140,16 @@ public class ModHashAdapter : IMod
 
 public class UserHashAdapter : IUser
 {
-    private readonly UserHash u;
+    private readonly IUserHash u;
 
-    public UserHashAdapter(UserHash u)
+    public UserHashAdapter(IUserHash u)
     {
         this.u = u;
     }
     
     public string Nickname
     {
-        get => u._myHashMap[u.GetNickname()];
+        get => u.GetHashMap()[u.GetNickname()];
         set
         {
             u.SetNickname(value);

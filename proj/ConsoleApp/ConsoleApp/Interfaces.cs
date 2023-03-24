@@ -1,4 +1,6 @@
-﻿namespace ConsoleApp;
+﻿using System.Collections.ObjectModel;
+
+namespace ConsoleApp;
 
 // Interfac'y dla basic
 public interface IGame
@@ -35,6 +37,7 @@ public interface IUser
 // Interfac'y dla hash
 public interface IGameHash
 {
+    internal ReadOnlyDictionary<int, string> GetHashMap();
     public void SetName(string name);
     public int GetName();
     public void SetGenre(string genre);
@@ -48,6 +51,7 @@ public interface IGameHash
 
 public interface IReviewHash
 {
+    internal ReadOnlyDictionary<int, string> GetHashMap();
     public void SetText(string text);
     public int GetText();
     public void SetRating(int rating);
@@ -57,6 +61,7 @@ public interface IReviewHash
 
 public interface IModHash
 {
+    internal ReadOnlyDictionary<int, string> GetHashMap();
     public void SetName(string name);
     public int GetName();
     public void SetDescription(string description);
@@ -67,6 +72,7 @@ public interface IModHash
 
 public interface IUserHash
 {
+    internal ReadOnlyDictionary<int, string> GetHashMap();
     public void SetNickname(string nickname);
     public int GetNickname();
     public List<IGameHash> OwnedGames { get; set; }

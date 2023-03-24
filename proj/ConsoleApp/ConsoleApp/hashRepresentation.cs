@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace ConsoleApp;
@@ -11,6 +12,7 @@ public class GameHash : IGameHash
     private int _name;
     private int _genre;
     private int _devices;
+    private Dictionary<int, string> _myHashMap1;
 
     public GameHash(string name, string genre, string devices, List<IUserHash>? authors = null, List<IReviewHash>? reviews = null, List<IModHash>? mods = null)
     {
@@ -22,6 +24,11 @@ public class GameHash : IGameHash
         Mods = mods ?? new List<IModHash>();
     }
 
+    ReadOnlyDictionary<int, string> IGameHash.GetHashMap()
+    {
+        return _myHashMap.AsReadOnly();
+    }
+    
     public void SetName(string name)
     {
         _name = name.GetHashCode();
@@ -69,6 +76,11 @@ public class ReviewHash : IReviewHash
         SetRating(rating);
         Author = author;
     }
+    
+    ReadOnlyDictionary<int, string> IReviewHash.GetHashMap()
+    {
+        return _myHashMap.AsReadOnly();
+    }
 
     public void SetText(string text)
     {
@@ -108,6 +120,11 @@ public class ModHash : IModHash
         Compatibility = compatibility ?? new List<IModHash>();
     }
 
+    ReadOnlyDictionary<int, string> IModHash.GetHashMap()
+    {
+        return _myHashMap.AsReadOnly();
+    }
+    
     public void SetName(string name)
     {
         _name = name.GetHashCode();
@@ -141,6 +158,11 @@ public class UserHash : IUserHash
     {
         SetNickname(nickname);
         OwnedGames = ownedGames ?? new List<IGameHash>();
+    }
+    
+    ReadOnlyDictionary<int, string> IUserHash.GetHashMap()
+    {
+        return _myHashMap.AsReadOnly();
     }
 
     public void SetNickname(string nickname)
