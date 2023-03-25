@@ -12,9 +12,9 @@ public class Game
         Name = name;
         Genre = genre;
         Devices = devices;
-        Authors = authors ?? new List<User>();
-        Reviews = reviews ?? new List<Review>();
-        Mods = mods ?? new List<Mod>();
+        Authors = authors!;
+        Reviews = reviews!;
+        Mods = mods!;
     }
 
     protected Game() { }
@@ -22,9 +22,22 @@ public class Game
     public virtual string Name { get; set; }
     public virtual string Genre { get; set; }
     public virtual string Devices { get; set; }
-    public virtual List<User> Authors { get; set; }
-    public virtual List<Review> Reviews { get; set; }
-    public virtual List<Mod> Mods { get; set; }
+
+    public virtual List<User> Authors
+    {
+        get => Authors;
+        set => Authors = value ?? new List<User>();
+    }
+
+    public virtual List<Review> Reviews
+    {
+        get => Reviews;
+        set => Reviews = value ?? new List<Review>();
+    }
+    public virtual List<Mod> Mods
+    {
+        get => Mods;
+        set => Mods = value ?? new List<Mod>(); }
     
     public override string ToString()
     {
@@ -58,14 +71,19 @@ public class Review
     {
         Text = text;
         Rating = rating;
-        Author = author ?? new User("");
+        Author = author!;
     }
     protected Review() { }
 
     public virtual string Text { get; set; }
     public virtual int Rating { get; set; }
-    public virtual User Author { get; set; }
-    
+
+    public virtual User Author
+    {
+        get => Author;
+        set => Author = value ?? new User("");
+    }
+
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
@@ -84,16 +102,26 @@ public class Mod
     {
         Name = name;
         Description = description;
-        Authors = authors ?? new List<User>();
-        Compatibility = compatibility ?? new List<Mod>();
+        Authors = authors!;
+        Compatibility = compatibility!;
     }
     protected Mod() { }
 
     public virtual string Name { get; set; }
     public virtual string Description { get; set; }
-    public virtual List<User> Authors { get; set; }
-    public virtual List<Mod> Compatibility { get; set; }
-    
+
+    public virtual List<User> Authors
+    {
+        get => Authors;
+        set => Authors = value ?? new List<User>();
+    }
+
+    public virtual List<Mod> Compatibility
+    {
+        get => Compatibility;
+        set => Compatibility = value ?? new List<Mod>();
+    }
+
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
@@ -118,13 +146,18 @@ public class User
     public User(string nickname, List<Game>? ownedGames = null)
     {
         Nickname = nickname;
-        OwnedGames = ownedGames ?? new List<Game>();
+        OwnedGames = ownedGames;
     }
     protected User() { }
     
     public virtual string Nickname { get; set; }
-    public virtual List<Game> OwnedGames { get; set; }
-    
+
+    public virtual List<Game> OwnedGames
+    {
+        get => OwnedGames;
+        set => OwnedGames = value ?? new List<Game>();
+    }
+
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
