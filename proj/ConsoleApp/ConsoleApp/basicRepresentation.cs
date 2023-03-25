@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// Bazowa reprezentacja (Czesc 0):
 public class Game : IGame
 {
-    public Game(string name, string genre, string devices, List<IUser>? authors = null, List<IReview>? reviews = null, List<IMod>? mods = null)
+    public Game(string name = "", string genre = "", string devices = "", List<IUser>? authors = null, List<IReview>? reviews = null, List<IMod>? mods = null)
     {
         Name = name;
         Genre = genre;
@@ -52,11 +52,11 @@ public class Game : IGame
 
 public class Review : IReview
 {
-    public Review(string text, int rating, IUser author)
+    public Review(string text = "", int rating = -1, IUser? author = null)
     {
         Text = text;
         Rating = rating;
-        Author = author;
+        Author = author ?? new User();
     }
 
     public string Text { get; set; }
@@ -77,7 +77,7 @@ public class Review : IReview
 
 public class Mod : IMod
 {
-    public Mod(string name, string description, List<IUser>? authors = null, List<IMod>? compatibility = null)
+    public Mod(string name = "", string description = "", List<IUser>? authors = null, List<IMod>? compatibility = null)
     {
         Name = name;
         Description = description;
@@ -85,7 +85,7 @@ public class Mod : IMod
         Compatibility = compatibility ?? new List<IMod>();
     }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public string Description { get; set; }
     public List<IUser> Authors { get; set; }
     public List<IMod> Compatibility { get; set; }
@@ -111,7 +111,7 @@ public class Mod : IMod
 
 public class User : IUser
 {
-    public User(string nickname, List<IGame>? ownedGames = null)
+    public User(string nickname = "", List<IGame>? ownedGames = null)
     {
         Nickname = nickname;
         OwnedGames = ownedGames ?? new List<IGame>();
