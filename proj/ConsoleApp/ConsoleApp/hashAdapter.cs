@@ -17,7 +17,7 @@ public class GameHashAdapter : Game
         this._g = g;
     }
 
-    public string Name
+    public override string Name
     {
         get => _g.GetHashMap()[_g.GetName()];
         set
@@ -25,7 +25,7 @@ public class GameHashAdapter : Game
             _g.SetName(value);
         }
     }
-    public string Genre
+    public override string Genre
     {
         get => _g.GetHashMap()[_g.GetGenre()];
         set
@@ -33,7 +33,7 @@ public class GameHashAdapter : Game
             _g.SetGenre(value);
         }
     }
-    public string Devices
+    public override string Devices
     {
         get => _g.GetHashMap()[_g.GetDevices()];
         set
@@ -42,7 +42,7 @@ public class GameHashAdapter : Game
         }
     }
     
-    public List<User> Authors
+    public override List<User> Authors
     {
         get
         {
@@ -75,7 +75,7 @@ public class GameHashAdapter : Game
         }
     }
 
-    public List<Review> Reviews
+    public override List<Review> Reviews
     {
         get
         {
@@ -93,7 +93,7 @@ public class GameHashAdapter : Game
         }
     }
 
-    public List<Mod> Mods
+    public override List<Mod> Mods
     {
         get
         {
@@ -125,7 +125,7 @@ public class ReviewHashAdapter : Review
         this._r = r;
     }
     
-    public string Text
+    public override string Text
     {
         get => _r.GetHashMap()[_r.GetText()];
         set
@@ -133,7 +133,7 @@ public class ReviewHashAdapter : Review
             _r.SetText(value);
         }
     }
-    public int Rating
+    public override int Rating
     {
         get => int.Parse(_r.GetHashMap()[_r.GetRating()]);
         set
@@ -142,7 +142,7 @@ public class ReviewHashAdapter : Review
         }
     }
     
-    public User Author
+    public override User Author
     {
         get
         {
@@ -168,7 +168,7 @@ public class ModHashAdapter : Mod
         this._m = m;
     }
     
-    public string Name
+    public override string Name
     {
         get => _m.GetHashMap()[_m.GetName()];
         set
@@ -176,7 +176,7 @@ public class ModHashAdapter : Mod
             _m.SetName(value);
         }
     }
-    public string Description
+    public override string Description
     {
         get => _m.GetHashMap()[_m.GetDescription()];
         set
@@ -185,7 +185,7 @@ public class ModHashAdapter : Mod
         }
     }
     
-    public List<User> Authors
+    public override List<User> Authors
     {
         get
         {
@@ -203,7 +203,7 @@ public class ModHashAdapter : Mod
         }
     }
 
-    public List<Mod> Compatibility
+    public override List<Mod> Compatibility
     {
         get
         {
@@ -235,7 +235,7 @@ public class UserHashAdapter : User
         this._u = u;
     }
     
-    public string Nickname
+    public override string Nickname
     {
         get => _u.GetHashMap()[_u.GetNickname()];
         set
@@ -244,7 +244,7 @@ public class UserHashAdapter : User
         }
     }
     
-    public List<Game> OwnedGames
+    public override List<Game> OwnedGames
     {
         get
         {

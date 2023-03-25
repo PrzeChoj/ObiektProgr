@@ -121,7 +121,8 @@ uh8.OwnedGames = new List<GameHash> { gh2 };
 
 // Print test
 Console.WriteLine(gh1);
-Console.WriteLine(new GameHashAdapter(gh1));
+var adaptedGh1 = new GameHashAdapter(gh1);
+Console.WriteLine(adaptedGh1);
 Console.WriteLine(uh1);
 Console.WriteLine(new UserHashAdapter(uh1));
 Console.WriteLine(rh1);

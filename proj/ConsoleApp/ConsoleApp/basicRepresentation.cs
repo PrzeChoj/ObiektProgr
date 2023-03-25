@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// Bazowa reprezentacja (Czesc 0):
 public class Game
 {
-    public Game(string name = "", string genre = "", string devices = "", List<User>? authors = null, List<Review>? reviews = null, List<Mod>? mods = null)
+    public Game(string name, string genre, string devices, List<User>? authors = null, List<Review>? reviews = null, List<Mod>? mods = null)
     {
         Name = name;
         Genre = genre;
@@ -17,12 +17,14 @@ public class Game
         Mods = mods ?? new List<Mod>();
     }
 
-    public string Name { get; set; }
-    public string Genre { get; set; }
-    public string Devices { get; set; }
-    public List<User> Authors { get; set; }
-    public List<Review> Reviews { get; set; }
-    public List<Mod> Mods { get; set; }
+    protected Game() { }
+
+    public virtual string Name { get; set; }
+    public virtual string Genre { get; set; }
+    public virtual string Devices { get; set; }
+    public virtual List<User> Authors { get; set; }
+    public virtual List<Review> Reviews { get; set; }
+    public virtual List<Mod> Mods { get; set; }
     
     public override string ToString()
     {
@@ -52,16 +54,17 @@ public class Game
 
 public class Review
 {
-    public Review(string text = "", int rating = -1, User? author = null)
+    public Review(string text, int rating, User? author = null)
     {
         Text = text;
         Rating = rating;
-        Author = author ?? new User();
+        Author = author ?? new User("");
     }
+    protected Review() { }
 
-    public string Text { get; set; }
-    public int Rating { get; set; }
-    public User Author { get; set; }
+    public virtual string Text { get; set; }
+    public virtual int Rating { get; set; }
+    public virtual User Author { get; set; }
     
     public override string ToString()
     {
@@ -77,18 +80,19 @@ public class Review
 
 public class Mod
 {
-    public Mod(string name = "", string description = "", List<User>? authors = null, List<Mod>? compatibility = null)
+    public Mod(string name, string description, List<User>? authors = null, List<Mod>? compatibility = null)
     {
         Name = name;
         Description = description;
         Authors = authors ?? new List<User>();
         Compatibility = compatibility ?? new List<Mod>();
     }
+    protected Mod() { }
 
-    public string? Name { get; set; }
-    public string Description { get; set; }
-    public List<User> Authors { get; set; }
-    public List<Mod> Compatibility { get; set; }
+    public virtual string? Name { get; set; }
+    public virtual string Description { get; set; }
+    public virtual List<User> Authors { get; set; }
+    public virtual List<Mod> Compatibility { get; set; }
     
     public override string ToString()
     {
@@ -111,14 +115,15 @@ public class Mod
 
 public class User
 {
-    public User(string nickname = "", List<Game>? ownedGames = null)
+    public User(string nickname, List<Game>? ownedGames = null)
     {
         Nickname = nickname;
         OwnedGames = ownedGames ?? new List<Game>();
     }
-
-    public string Nickname { get; set; }
-    public List<Game> OwnedGames { get; set; }
+    protected User() { }
+    
+    public virtual string Nickname { get; set; }
+    public virtual List<Game> OwnedGames { get; set; }
     
     public override string ToString()
     {
