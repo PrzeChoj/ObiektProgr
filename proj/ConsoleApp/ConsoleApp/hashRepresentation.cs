@@ -6,25 +6,25 @@ using System.Collections.Generic;
 
 
 /// HashMap reprezentacja (czesc 4):
-public class GameHash : IGameHash
+public class GameHash
 {
-    internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _name;
     private int _genre;
     private int _devices;
-    private Dictionary<int, string> _myHashMap1;
 
-    public GameHash(string name, string genre, string devices, List<IUserHash>? authors = null, List<IReviewHash>? reviews = null, List<IModHash>? mods = null)
+    public GameHash(string name, string genre, string devices, List<UserHash>? authors = null,
+        List<ReviewHash>? reviews = null, List<ModHash>? mods = null)
     {
         SetName(name);
         SetGenre(genre);
         SetDevices(devices);
-        Authors = authors ?? new List<IUserHash>();
-        Reviews = reviews ?? new List<IReviewHash>();
-        Mods = mods ?? new List<IModHash>();
+        Authors = authors ?? new List<UserHash>();
+        Reviews = reviews ?? new List<ReviewHash>();
+        Mods = mods ?? new List<ModHash>();
     }
 
-    ReadOnlyDictionary<int, string> IGameHash.GetHashMap()
+    ReadOnlyDictionary<int, string> GetHashMap()
     {
         return _myHashMap.AsReadOnly();
     }
@@ -59,25 +59,25 @@ public class GameHash : IGameHash
         return _devices;
     }
     
-    public List<IUserHash> Authors { get; set; }
-    public List<IReviewHash> Reviews { get; set; }
-    public List<IModHash> Mods { get; set; }
+    public List<UserHash> Authors { get; set; }
+    public List<ReviewHash> Reviews { get; set; }
+    public List<ModHash> Mods { get; set; }
 }
 
-public class ReviewHash : IReviewHash
+public class ReviewHash
 {
-    internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _text;
     private int _rating;
 
-    public ReviewHash(string text, int rating, IUserHash author)
+    public ReviewHash(string text, int rating, UserHash author)
     {
         SetText(text);
         SetRating(rating);
         Author = author;
     }
     
-    ReadOnlyDictionary<int, string> IReviewHash.GetHashMap()
+    ReadOnlyDictionary<int, string> GetHashMap()
     {
         return _myHashMap.AsReadOnly();
     }
@@ -103,24 +103,24 @@ public class ReviewHash : IReviewHash
         return _rating;
     }
     
-    public IUserHash Author { get; set; }
+    public UserHash Author { get; set; }
 }
 
-public class ModHash : IModHash
+public class ModHash
 {
-    internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _name;
     private int _description;
 
-    public ModHash(string name, string description, List<IUserHash>? authors = null, List<IModHash>? compatibility = null)
+    public ModHash(string name, string description, List<UserHash>? authors = null, List<ModHash>? compatibility = null)
     {
         SetName(name);
         SetDescription(description);
-        Authors = authors ?? new List<IUserHash>();
-        Compatibility = compatibility ?? new List<IModHash>();
+        Authors = authors ?? new List<UserHash>();
+        Compatibility = compatibility ?? new List<ModHash>();
     }
 
-    ReadOnlyDictionary<int, string> IModHash.GetHashMap()
+    ReadOnlyDictionary<int, string> GetHashMap()
     {
         return _myHashMap.AsReadOnly();
     }
@@ -145,22 +145,22 @@ public class ModHash : IModHash
         return _description;
     }
     
-    public List<IUserHash> Authors { get; set; }
-    public List<IModHash> Compatibility { get; set; }
+    public List<UserHash> Authors { get; set; }
+    public List<ModHash> Compatibility { get; set; }
 }
 
-public class UserHash : IUserHash
+public class UserHash
 {
-    internal Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _nickname;
 
-    public UserHash(string nickname, List<IGameHash>? ownedGames = null)
+    public UserHash(string nickname, List<GameHash>? ownedGames = null)
     {
         SetNickname(nickname);
-        OwnedGames = ownedGames ?? new List<IGameHash>();
+        OwnedGames = ownedGames ?? new List<GameHash>();
     }
     
-    ReadOnlyDictionary<int, string> IUserHash.GetHashMap()
+    ReadOnlyDictionary<int, string> GetHashMap()
     {
         return _myHashMap.AsReadOnly();
     }
@@ -175,5 +175,5 @@ public class UserHash : IUserHash
         return _nickname;
     }
     
-    public List<IGameHash> OwnedGames { get; set; }
+    public List<GameHash> OwnedGames { get; set; }
 }

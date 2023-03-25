@@ -5,24 +5,24 @@ using System.Collections.Generic;
 
 
 /// Bazowa reprezentacja (Czesc 0):
-public class Game : IGame
+public class Game
 {
-    public Game(string name = "", string genre = "", string devices = "", List<IUser>? authors = null, List<IReview>? reviews = null, List<IMod>? mods = null)
+    public Game(string name = "", string genre = "", string devices = "", List<User>? authors = null, List<Review>? reviews = null, List<Mod>? mods = null)
     {
         Name = name;
         Genre = genre;
         Devices = devices;
-        Authors = authors ?? new List<IUser>();
-        Reviews = reviews ?? new List<IReview>();
-        Mods = mods ?? new List<IMod>();
+        Authors = authors ?? new List<User>();
+        Reviews = reviews ?? new List<Review>();
+        Mods = mods ?? new List<Mod>();
     }
 
     public string Name { get; set; }
     public string Genre { get; set; }
     public string Devices { get; set; }
-    public List<IUser> Authors { get; set; }
-    public List<IReview> Reviews { get; set; }
-    public List<IMod> Mods { get; set; }
+    public List<User> Authors { get; set; }
+    public List<Review> Reviews { get; set; }
+    public List<Mod> Mods { get; set; }
     
     public override string ToString()
     {
@@ -50,9 +50,9 @@ public class Game : IGame
     }
 }
 
-public class Review : IReview
+public class Review
 {
-    public Review(string text = "", int rating = -1, IUser? author = null)
+    public Review(string text = "", int rating = -1, User? author = null)
     {
         Text = text;
         Rating = rating;
@@ -61,7 +61,7 @@ public class Review : IReview
 
     public string Text { get; set; }
     public int Rating { get; set; }
-    public IUser Author { get; set; }
+    public User Author { get; set; }
     
     public override string ToString()
     {
@@ -75,20 +75,20 @@ public class Review : IReview
     }
 }
 
-public class Mod : IMod
+public class Mod
 {
-    public Mod(string name = "", string description = "", List<IUser>? authors = null, List<IMod>? compatibility = null)
+    public Mod(string name = "", string description = "", List<User>? authors = null, List<Mod>? compatibility = null)
     {
         Name = name;
         Description = description;
-        Authors = authors ?? new List<IUser>();
-        Compatibility = compatibility ?? new List<IMod>();
+        Authors = authors ?? new List<User>();
+        Compatibility = compatibility ?? new List<Mod>();
     }
 
     public string? Name { get; set; }
     public string Description { get; set; }
-    public List<IUser> Authors { get; set; }
-    public List<IMod> Compatibility { get; set; }
+    public List<User> Authors { get; set; }
+    public List<Mod> Compatibility { get; set; }
     
     public override string ToString()
     {
@@ -109,16 +109,16 @@ public class Mod : IMod
     }
 }
 
-public class User : IUser
+public class User
 {
-    public User(string nickname = "", List<IGame>? ownedGames = null)
+    public User(string nickname = "", List<Game>? ownedGames = null)
     {
         Nickname = nickname;
-        OwnedGames = ownedGames ?? new List<IGame>();
+        OwnedGames = ownedGames ?? new List<Game>();
     }
 
     public string Nickname { get; set; }
-    public List<IGame> OwnedGames { get; set; }
+    public List<Game> OwnedGames { get; set; }
     
     public override string ToString()
     {
