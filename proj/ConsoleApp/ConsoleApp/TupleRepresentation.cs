@@ -33,6 +33,16 @@ public class GameTuple
         }
         _myLisOfPairs.Add(newPair);
     }
+
+    private Object? _getPair(string key)
+    {
+        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        {
+            if (_myLisOfPairs[i].Item1 == key)
+                return _myLisOfPairs[i].Item2;
+        }
+        return null;
+    }
     
     public virtual void SetName(string name)
     {
@@ -40,7 +50,7 @@ public class GameTuple
     }
     public virtual string GetName()
     {
-        throw new NotImplementedException();
+        return (string)_getPair("name")!; // This should not be null, but just in case
     }
 
     public virtual void SetGenre(string genre)
@@ -49,7 +59,7 @@ public class GameTuple
     }
     public virtual string GetGenre()
     {
-        throw new NotImplementedException();
+        return (string)_getPair("genre")!; // This should not be null, but just in case
     }
 
     public virtual void SetDevices(string devices)
@@ -58,7 +68,7 @@ public class GameTuple
     }
     public virtual string GetDevices()
     {
-        throw new NotImplementedException();
+        return (string)_getPair("devices")!; // This should not be null, but just in case
     }
 
     public virtual void SetAuthors(List<UserTuple>? authors)
@@ -67,7 +77,7 @@ public class GameTuple
     }
     public virtual List<UserTuple> GetAuthors()
     {
-        throw new NotImplementedException();
+        return (List<UserTuple>)_getPair("authors")!; // This should not be null, but just in case
     }
     
     public virtual void SetReviews(List<ReviewTuple>? reviews)
@@ -76,7 +86,7 @@ public class GameTuple
     }
     public virtual List<ReviewTuple> GetReviews()
     {
-        throw new NotImplementedException();
+        return (List<ReviewTuple>)_getPair("reviews")!; // This should not be null, but just in case
     }
     public virtual void SetMods(List<ModTuple>? mods)
     {
@@ -84,7 +94,7 @@ public class GameTuple
     }
     public virtual List<ModTuple> GetMods()
     {
-        throw new NotImplementedException();
+        return (List<ModTuple>)_getPair("mods")!; // This should not be null, but just in case
     }
 }
 
@@ -113,6 +123,16 @@ public class ReviewTuple
         }
         _myLisOfPairs.Add(newPair);
     }
+    
+    private Object? _getPair(string key)
+    {
+        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        {
+            if (_myLisOfPairs[i].Item1 == key)
+                return _myLisOfPairs[i].Item2;
+        }
+        return null;
+    }
 
     public virtual void SetText(string text)
     {
@@ -120,7 +140,7 @@ public class ReviewTuple
     }
     public virtual string GetText()
     {
-        throw new NotImplementedException();
+        return (string)_getPair("text")!; // This should not be null, but just in case
     }
 
     public virtual void SetRating(int rating)
@@ -129,16 +149,16 @@ public class ReviewTuple
     }
     public virtual int GetRating()
     {
-        throw new NotImplementedException();
+        return (int)_getPair("rating")!; // This should not be null, but just in case
     }
     
-    public virtual void SetAuthor(UserTuple? Author)
+    public virtual void SetAuthor(UserTuple? author)
     {
-        _addNewPair(new Tuple<string, object>("Author", Author ?? new UserTuple("")));
+        _addNewPair(new Tuple<string, object>("author", author ?? new UserTuple("")));
     }
     public virtual UserTuple GetAuthor()
     {
-        throw new NotImplementedException();
+        return (UserTuple)_getPair("author")!; // This should not be null, but just in case
     }
 }
 
@@ -168,6 +188,16 @@ public class ModTuple
         }
         _myLisOfPairs.Add(newPair);
     }
+    
+    private Object? _getPair(string key)
+    {
+        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        {
+            if (_myLisOfPairs[i].Item1 == key)
+                return _myLisOfPairs[i].Item2;
+        }
+        return null;
+    }
 
     public virtual void SetName(string name)
     {
@@ -175,7 +205,7 @@ public class ModTuple
     }
     public virtual string GetName()
     {
-        throw new NotImplementedException();
+        return (string)_getPair("name")!; // This should not be null, but just in case
     }
 
     public virtual void SetDescription(string description)
@@ -184,7 +214,7 @@ public class ModTuple
     }
     public virtual string GetDescription()
     {
-        throw new NotImplementedException();
+        return (string)_getPair("description")!; // This should not be null, but just in case
     }
     
     public virtual void SetAuthors(List<UserTuple>? authors)
@@ -193,7 +223,7 @@ public class ModTuple
     }
     public virtual List<UserTuple> GetAuthors()
     {
-        throw new NotImplementedException();
+        return (List<UserTuple>)_getPair("authors")!; // This should not be null, but just in case
     }
     
     public virtual void SetCompatibility(List<ModTuple>? mods)
@@ -202,7 +232,7 @@ public class ModTuple
     }
     public virtual List<ModTuple> GetCompatibility()
     {
-        throw new NotImplementedException();
+        return (List<ModTuple>)_getPair("mods")!; // This should not be null, but just in case
     }
 }
 
@@ -230,13 +260,23 @@ public class UserTuple
         _myLisOfPairs.Add(newPair);
     }
     
+    private Object? _getPair(string key)
+    {
+        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        {
+            if (_myLisOfPairs[i].Item1 == key)
+                return _myLisOfPairs[i].Item2;
+        }
+        return null;
+    }
+    
     public virtual void SetNickname(string nickname)
     {
         _addNewPair(new Tuple<string, object>("nickname", nickname));
     }
     public virtual string GetNickname()
     {
-        throw new NotImplementedException();
+        return (string)_getPair("nickname")!; // This should not be null, but just in case
     }
     
     public virtual void SetOwnedGames(List<GameTuple>? ownedGames)
@@ -245,6 +285,6 @@ public class UserTuple
     }
     public virtual List<GameTuple> GetOwnedGames()
     {
-        throw new NotImplementedException();
+        return (List<GameTuple>)_getPair("ownedGames")!; // This should not be null, but just in case
     }
 }
