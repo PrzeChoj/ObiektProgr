@@ -1,3 +1,6 @@
+Temat 5
+Reprezetnacja 0, 4, 7
+
 The Smoke platform is the most popular online gaming platform in Bitotia.
 There are many *games* available on the platform that are characterized by
 name (string), genre (string), author list (*users* list), reviews (*reviews*
