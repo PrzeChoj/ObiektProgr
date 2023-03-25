@@ -1,4 +1,5 @@
-using System.Text;
+using System.Collections.ObjectModel;
+using System.Net.Http.Headers;
 
 namespace ConsoleApp;
 using System.Collections.Generic;
@@ -56,22 +57,12 @@ public class AdapterGameFromHash : Game
         }
         set
         {
-            /*
-            var newGAuthors = new List<IUserHash>();
-            foreach (IUser user in value)
+            var newAuthorsList = new List<UserHash>();
+            foreach (User user in value)
             {
-                List<IGameHash> ownedGames = new List<IGameHash>();
-                foreach (IGame ownedGame in user.OwnedGames)
-                {
-                    ownedGames.Add();
-                }
-                newGAuthors.Add(new UserHash(user.Nickname, ownedGames));
+                newAuthorsList.Add(new AdapterUserToHash(user));
             }
-            
-            g.Authors = newGAuthors;
-            */
-
-            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+            _g.Authors = newAuthorsList;
         }
     }
 
@@ -89,7 +80,12 @@ public class AdapterGameFromHash : Game
         }
         set
         {
-            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+            var newReviewsList = new List<ReviewHash>();
+            foreach (Review review in value)
+            {
+                newReviewsList.Add(new AdapterReviewToHash(review));
+            }
+            _g.Reviews = newReviewsList;
         }
     }
 
@@ -107,7 +103,12 @@ public class AdapterGameFromHash : Game
         }
         set
         {
-            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+            var newModsList = new List<ModHash>();
+            foreach (Mod mod in value)
+            {
+                newModsList.Add(new AdapterModToHash(mod));
+            }
+            _g.Mods = newModsList;
         }
     }
 }
@@ -150,7 +151,7 @@ public class AdapterReviewFromHash : Review
         }
         set
         {
-            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+            _r.Author = new AdapterUserToHash(value);
         }
     }
 }
@@ -199,7 +200,13 @@ public class AdapterModFromHash : Mod
         }
         set
         {
-            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+            var newAuthors = new List<UserHash>();
+            foreach (User gAuthor in value)
+            {
+                newAuthors.Add(new AdapterUserToHash(gAuthor));
+            }
+
+            _m.Authors = newAuthors;
         }
     }
 
@@ -217,7 +224,13 @@ public class AdapterModFromHash : Mod
         }
         set
         {
-            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+            var newMods = new List<ModHash>();
+            foreach (Mod mod in value)
+            {
+                newMods.Add(new AdapterModToHash(mod));
+            }
+
+            _m.Compatibility = newMods;
         }
     }
 }
@@ -258,10 +271,329 @@ public class AdapterUserFromHash : User
         }
         set
         {
-            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+            var newGames = new List<GameHash>();
+            foreach (Game game in value)
+            {
+                newGames.Add(new AdapterGameToHash(game));
+            }
+
+            _u.OwnedGames = newGames;
         }
     }
 }
 
 
 // Adaptery z ladnej do brzydkiej
+public class AdapterGameToHash : GameHash
+{
+    private readonly Game _g;
+    
+    public AdapterGameToHash(Game g)
+    {
+        if (g == null)
+        {
+            throw new Exception("g is null");
+        }
+        this._g = g;
+    }
+    
+    internal override ReadOnlyDictionary<int, string> GetHashMap()
+    {
+        var outHashMap = new Dictionary<int, string>();
+        outHashMap[_g.Name.GetHashCode()] = _g.Name;
+        outHashMap[_g.Genre.GetHashCode()] = _g.Genre;
+        outHashMap[_g.Devices.GetHashCode()] = _g.Devices;
+
+        return outHashMap.AsReadOnly();
+    }
+    
+    public override void SetName(string name)
+    {
+        _g.Name = name;
+    }
+    public override int GetName()
+    {
+        return _g.Name.GetHashCode();
+    }
+
+    public override void SetGenre(string genre)
+    {
+        _g.Genre = genre;
+    }
+    public override int GetGenre()
+    {
+        return _g.Genre.GetHashCode();
+    }
+
+    public override void SetDevices(string devices)
+    {
+        _g.Devices = devices;
+    }
+    public override int GetDevices()
+    {
+        return _g.Devices.GetHashCode();
+    }
+
+    public override List<UserHash> Authors
+    {
+        get
+        {
+            var outAuthors = new List<UserHash>();
+            foreach (User author in _g.Authors)
+            {
+                outAuthors.Add(new AdapterUserToHash(author));
+            }
+
+            return outAuthors;
+        }
+        set
+        {
+            var newAuthors = new List<User>();
+            foreach (UserHash author in value)
+            {
+                newAuthors.Add(new AdapterUserFromHash(author));
+            }
+
+            _g.Authors = newAuthors;
+        }
+    }
+
+    public override List<ReviewHash> Reviews
+    {
+        get
+        {
+            var outReviews = new List<ReviewHash>();
+            foreach (Review review in _g.Reviews)
+            {
+                outReviews.Add(new AdapterReviewToHash(review));
+            }
+
+            return outReviews;
+        }
+        set
+        {
+            var newReviews = new List<Review>();
+            foreach (ReviewHash review in value)
+            {
+                newReviews.Add(new AdapterReviewFromHash(review));
+            }
+
+            _g.Reviews = newReviews;
+        }
+    }
+
+    public override List<ModHash> Mods
+    {
+        get
+        {
+            var outMods = new List<ModHash>();
+            foreach (Mod mod in _g.Mods)
+            {
+                outMods.Add(new AdapterModToHash(mod));
+            }
+
+            return outMods;
+        }
+        set
+        {
+            var newMods = new List<Mod>();
+            foreach (ModHash mod in value)
+            {
+                newMods.Add(new AdapterModFromHash(mod));
+            }
+
+            _g.Mods = newMods;
+        }
+    }
+}
+
+public class AdapterReviewToHash : ReviewHash
+{
+    private readonly Review _r;
+    
+    public AdapterReviewToHash(Review review)
+    {
+        _r = review;
+    }
+    
+    internal override ReadOnlyDictionary<int, string> GetHashMap()
+    {
+        var outHashMap = new Dictionary<int, string>();
+        outHashMap[_r.Text.GetHashCode()] = _r.Text;
+        
+        string stringRating = _r.Rating.ToString();
+        outHashMap[stringRating.GetHashCode()] = stringRating;
+        
+        return outHashMap.AsReadOnly();
+    }
+
+    public override void SetText(string text)
+    {
+        _r.Text = text;
+    }
+    public override int GetText()
+    {
+        return _r.Text.GetHashCode();
+    }
+
+    public override void SetRating(int rating)
+    {
+        _r.Rating = rating;
+    }
+    public override int GetRating()
+    {
+        // Przerobic rating na hasha ze stringa
+        return _r.Rating.ToString().GetHashCode();
+    }
+
+    public override UserHash Author
+    {
+        get
+        {
+            return new AdapterUserToHash(_r.Author);
+        }
+        set
+        {
+            _r.Author = new AdapterUserFromHash(value);
+        }
+    }
+}
+
+public class AdapterModToHash : ModHash
+{
+    private readonly Mod _m;
+    
+    public AdapterModToHash(Mod m)
+    {
+        if (m == null)
+        {
+            throw new Exception("m is null");
+        }
+        this._m = m;
+    }
+    
+    internal override ReadOnlyDictionary<int, string> GetHashMap()
+    {
+        var outHashMap = new Dictionary<int, string>();
+        outHashMap[_m.Name.GetHashCode()] = _m.Name;
+        outHashMap[_m.Description.GetHashCode()] = _m.Description;
+
+        return outHashMap.AsReadOnly();
+    }
+    
+    public override void SetName(string name)
+    {
+        _m.Name = name;
+    }
+    public override int GetName()
+    {
+        return _m.Name.GetHashCode();
+    }
+
+    public override void SetDescription(string description)
+    {
+        _m.Description = description;
+    }
+    public override int GetDescription()
+    {
+        return _m.Description.GetHashCode();
+    }
+
+    public override List<UserHash> Authors
+    {
+        get
+        {
+            var outAuthors = new List<UserHash>();
+            foreach (User author in _m.Authors)
+            {
+                outAuthors.Add(new AdapterUserToHash(author));
+            }
+
+            return outAuthors;
+        }
+        set
+        {
+            var newAuthors = new List<User>();
+            foreach (UserHash author in value)
+            {
+                newAuthors.Add(new AdapterUserFromHash(author));
+            }
+
+            _m.Authors = newAuthors;
+        }
+    }
+
+    public override List<ModHash> Compatibility
+    {
+        get
+        {
+            var outMods = new List<ModHash>();
+            foreach (Mod mod in _m.Compatibility)
+            {
+                outMods.Add(new AdapterModToHash(mod));
+            }
+
+            return outMods;
+        }
+        set
+        {
+            var newMods = new List<Mod>();
+            foreach (ModHash mod in value)
+            {
+                newMods.Add(new AdapterModFromHash(mod));
+            }
+
+            _m.Compatibility = newMods;
+        }
+    }
+}
+
+public class AdapterUserToHash : UserHash
+{
+    private readonly User _u;
+    public AdapterUserToHash(User user)
+    {
+        _u = user;
+    }
+    
+    internal override ReadOnlyDictionary<int, string> GetHashMap()
+    {
+        var outHashMap = new Dictionary<int, string>();
+        outHashMap[_u.Nickname.GetHashCode()] = _u.Nickname;
+
+        return outHashMap.AsReadOnly();
+    }
+
+    public override void SetNickname(string nickname)
+    {
+        _u.Nickname = nickname;
+    }
+    public override int GetNickname()
+    {
+        return _u.Nickname.GetHashCode();
+    }
+
+    public override List<GameHash> OwnedGames
+    {
+        get
+        {
+            var outGames = new List<GameHash>();
+            foreach (Game game in _u.OwnedGames)
+            {
+                outGames.Add(new AdapterGameToHash(game));
+            }
+
+            return outGames;
+        }
+        set
+        {
+            var newGames = new List<Game>();
+            foreach (GameHash game in value)
+            {
+                newGames.Add(new AdapterGameFromHash(game));
+            }
+
+            _u.OwnedGames = newGames;
+        }
+    }
+}
