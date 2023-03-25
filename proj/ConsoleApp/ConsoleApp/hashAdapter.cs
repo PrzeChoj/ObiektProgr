@@ -4,16 +4,18 @@ namespace ConsoleApp;
 using System.Collections.Generic;
 
 /// Adaptery z brzydkiej do ladnej
-/// TODO Dodać ToString()
-public class GameHashAdapter : IGame
+public class GameHashAdapter : Game
 {
-    private readonly IGameHash _g;
+    private readonly GameHash _g;
 
-    public GameHashAdapter(IGameHash g)
+    public GameHashAdapter(GameHash g)
     {
+        if (g == null)
+        {
+            throw new Exception("g is null");
+        }
         this._g = g;
     }
-
 
     public string Name
     {
@@ -40,12 +42,12 @@ public class GameHashAdapter : IGame
         }
     }
     
-    public List<IUser> Authors
+    public List<User> Authors
     {
         get
         {
-            var outAuthors = new List<IUser>();
-            foreach (IUserHash gAuthor in _g.Authors)
+            var outAuthors = new List<User>();
+            foreach (UserHash gAuthor in _g.Authors)
             {
                 outAuthors.Add(new UserHashAdapter(gAuthor));
             }
@@ -73,41 +75,53 @@ public class GameHashAdapter : IGame
         }
     }
 
-    public List<IReview> Reviews { get; set; }
-    public List<IMod> Mods { get; set; }
-    
-    public override string ToString()
+    public List<Review> Reviews
     {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Name: {Name}");
-        sb.AppendLine($"Genre: {Genre}");
-        sb.AppendLine($"Devices: {Devices}");
-        sb.AppendLine("Authors:");
-        foreach (var author in Authors)
+        get
         {
-            sb.AppendLine($"- {author.Nickname}");
+            var outRev = new List<Review>();
+            foreach (ReviewHash gRev in _g.Reviews)
+            {
+                outRev.Add(new ReviewHashAdapter(gRev));
+            }
+
+            return outRev;
         }
-        sb.AppendLine("Reviews:");
-        foreach (var review in Reviews)
+        set
         {
-            sb.AppendLine($"- {review.Author}: {review.Rating}");
+            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
         }
-        sb.AppendLine("Mods:");
-        foreach (var mod in Mods)
+    }
+
+    public List<Mod> Mods
+    {
+        get
         {
-            sb.AppendLine($"- {mod.Name}");
+            var outRev = new List<Mod>();
+            foreach (ModHash gMod in _g.Mods)
+            {
+                outRev.Add(new ModHashAdapter(gMod));
+            }
+
+            return outRev;
         }
-    
-        return sb.ToString();
+        set
+        {
+            throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
+        }
     }
 }
 
-public class ReviewHashAdapter : IReview
+public class ReviewHashAdapter : Review
 {
-    private readonly IReviewHash _r;
+    private readonly ReviewHash _r;
 
-    public ReviewHashAdapter(IReviewHash r)
+    public ReviewHashAdapter(ReviewHash r)
     {
+        if (r == null)
+        {
+            throw new Exception("r is null");
+        }
         this._r = r;
     }
     
@@ -128,7 +142,7 @@ public class ReviewHashAdapter : IReview
         }
     }
     
-    public IUser Author
+    public User Author
     {
         get
         {
@@ -139,25 +153,18 @@ public class ReviewHashAdapter : IReview
             throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
         }
     }
-    
-    public override string ToString()
-    {
-        StringBuilder sb = new StringBuilder();
-
-        sb.AppendLine($"Author: {Author.Nickname}");
-        sb.AppendLine($"Rating: {Rating}");
-        sb.AppendLine($"Text: {Text}");
-
-        return sb.ToString();
-    }
 }
 
-public class ModHashAdapter : IMod
+public class ModHashAdapter : Mod
 {
-    private readonly IModHash _m;
+    private readonly ModHash _m;
 
-    public ModHashAdapter(IModHash m)
+    public ModHashAdapter(ModHash m)
     {
+        if (m == null)
+        {
+            throw new Exception("m is null");
+        }
         this._m = m;
     }
     
@@ -178,12 +185,12 @@ public class ModHashAdapter : IMod
         }
     }
     
-    public List<IUser> Authors
+    public List<User> Authors
     {
         get
         {
-            var outAuthors = new List<IUser>();
-            foreach (IUserHash gAuthor in _m.Authors)
+            var outAuthors = new List<User>();
+            foreach (UserHash gAuthor in _m.Authors)
             {
                 outAuthors.Add(new UserHashAdapter(gAuthor));
             }
@@ -196,12 +203,12 @@ public class ModHashAdapter : IMod
         }
     }
 
-    public List<IMod> Compatibility
+    public List<Mod> Compatibility
     {
         get
         {
-            var outMods = new List<IMod>();
-            foreach (IModHash otherMod in _m.Compatibility)
+            var outMods = new List<Mod>();
+            foreach (ModHash otherMod in _m.Compatibility)
             {
                 outMods.Add(new ModHashAdapter(otherMod));
             }
@@ -213,32 +220,18 @@ public class ModHashAdapter : IMod
             throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
         }
     }
-    
-    public override string ToString()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Name: {Name}");
-        sb.AppendLine($"Description: {Description}");
-        sb.AppendLine("Authors:");
-        foreach (var author in Authors)
-        {
-            sb.AppendLine($"- {author.Nickname}");
-        }
-        sb.AppendLine("Compatibility:");
-        foreach (var mod in Compatibility)
-        {
-            sb.AppendLine($"- {mod.Name}");
-        }
-        return sb.ToString();
-    }
 }
 
-public class UserHashAdapter : IUser
+public class UserHashAdapter : User
 {
-    private readonly IUserHash _u;
+    private readonly UserHash _u;
 
-    public UserHashAdapter(IUserHash u)
+    public UserHashAdapter(UserHash u)
     {
+        if (u == null)
+        {
+            throw new Exception("u is null");
+        }
         this._u = u;
     }
     
@@ -251,12 +244,12 @@ public class UserHashAdapter : IUser
         }
     }
     
-    public List<IGame> OwnedGames
+    public List<Game> OwnedGames
     {
         get
         {
-            var outGames = new List<IGame>();
-            foreach (IGameHash game in _u.OwnedGames)
+            var outGames = new List<Game>();
+            foreach (GameHash game in _u.OwnedGames)
             {
                 outGames.Add(new GameHashAdapter(game));
             }
@@ -268,18 +261,4 @@ public class UserHashAdapter : IUser
             throw new NotImplementedException(); // TODO(Czy ja potrzebuję adaptera w droga strone?)
         }
     }
-    
-    public override string ToString()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Nickname: {Nickname}");
-        sb.AppendLine("Owned Games:");
-        foreach (var game in OwnedGames)
-        {
-            sb.AppendLine($"- {game.Name}");
-        }
-        return sb.ToString();
-    }
 }
-
-

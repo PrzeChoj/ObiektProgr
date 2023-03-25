@@ -24,7 +24,7 @@ public class GameHash
         Mods = mods ?? new List<ModHash>();
     }
 
-    ReadOnlyDictionary<int, string> GetHashMap()
+    internal ReadOnlyDictionary<int, string> GetHashMap()
     {
         return _myHashMap.AsReadOnly();
     }
@@ -77,7 +77,7 @@ public class ReviewHash
         Author = author;
     }
     
-    ReadOnlyDictionary<int, string> GetHashMap()
+    internal ReadOnlyDictionary<int, string> GetHashMap()
     {
         return _myHashMap.AsReadOnly();
     }
@@ -120,7 +120,7 @@ public class ModHash
         Compatibility = compatibility ?? new List<ModHash>();
     }
 
-    ReadOnlyDictionary<int, string> GetHashMap()
+    internal ReadOnlyDictionary<int, string> GetHashMap()
     {
         return _myHashMap.AsReadOnly();
     }
@@ -160,7 +160,7 @@ public class UserHash
         OwnedGames = ownedGames ?? new List<GameHash>();
     }
     
-    ReadOnlyDictionary<int, string> GetHashMap()
+    internal ReadOnlyDictionary<int, string> GetHashMap()
     {
         return _myHashMap.AsReadOnly();
     }
