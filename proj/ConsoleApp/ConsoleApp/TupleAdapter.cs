@@ -488,7 +488,7 @@ public class AdapterModToTuple : ModTuple
         _m.Compatibility = newMods;
     }
 
-    public virtual List<ModTuple> GetCompatibility()
+    public override List<ModTuple> GetCompatibility()
     {
         var outMods = new List<ModTuple>();
         foreach (Mod mod in _m.Compatibility)
