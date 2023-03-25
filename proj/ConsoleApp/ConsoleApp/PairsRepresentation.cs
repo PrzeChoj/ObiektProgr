@@ -21,9 +21,22 @@ public class GameTuple
     }
     protected GameTuple() { }
     
+    private void _addNewPair(Tuple<string, object> newPair)
+    {
+        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        {
+            if (_myLisOfPairs[i].Item1 == newPair.Item1)
+            {
+                _myLisOfPairs[i] = newPair;
+                return;
+            }
+        }
+        _myLisOfPairs.Add(newPair);
+    }
+    
     public virtual void SetName(string name)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("name", name));
     }
     public virtual string GetName()
     {
@@ -32,7 +45,7 @@ public class GameTuple
 
     public virtual void SetGenre(string genre)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("genre", genre));
     }
     public virtual string GetGenre()
     {
@@ -41,7 +54,7 @@ public class GameTuple
 
     public virtual void SetDevices(string devices)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("devices", devices));
     }
     public virtual string GetDevices()
     {
@@ -50,7 +63,7 @@ public class GameTuple
 
     public virtual void SetAuthors(List<UserTuple>? authors)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("authors", authors ?? new List<UserTuple>()));
     }
     public virtual List<UserTuple> GetAuthors()
     {
@@ -59,7 +72,7 @@ public class GameTuple
     
     public virtual void SetReviews(List<ReviewTuple>? reviews)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("reviews", reviews ?? new List<ReviewTuple>()));
     }
     public virtual List<ReviewTuple> GetReviews()
     {
@@ -67,7 +80,7 @@ public class GameTuple
     }
     public virtual void SetMods(List<ModTuple>? mods)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("mods", mods ?? new List<ModTuple>()));
     }
     public virtual List<ModTuple> GetMods()
     {
@@ -88,9 +101,22 @@ public class ReviewTuple
 
     protected ReviewTuple() { }
 
+    private void _addNewPair(Tuple<string, object> newPair)
+    {
+        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        {
+            if (_myLisOfPairs[i].Item1 == newPair.Item1)
+            {
+                _myLisOfPairs[i] = newPair;
+                return;
+            }
+        }
+        _myLisOfPairs.Add(newPair);
+    }
+
     public virtual void SetText(string text)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("text", text));
     }
     public virtual string GetText()
     {
@@ -99,7 +125,7 @@ public class ReviewTuple
 
     public virtual void SetRating(int rating)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("rating", rating));
     }
     public virtual int GetRating()
     {
@@ -108,7 +134,7 @@ public class ReviewTuple
     
     public virtual void SetAuthor(UserTuple? Author)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("Author", Author ?? new UserTuple("")));
     }
     public virtual UserTuple GetAuthor()
     {
@@ -129,10 +155,23 @@ public class ModTuple
     }
 
     protected ModTuple() { }
+    
+    private void _addNewPair(Tuple<string, object> newPair)
+    {
+        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        {
+            if (_myLisOfPairs[i].Item1 == newPair.Item1)
+            {
+                _myLisOfPairs[i] = newPair;
+                return;
+            }
+        }
+        _myLisOfPairs.Add(newPair);
+    }
 
     public virtual void SetName(string name)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("name", name));
     }
     public virtual string GetName()
     {
@@ -141,7 +180,7 @@ public class ModTuple
 
     public virtual void SetDescription(string description)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("description", description));
     }
     public virtual string GetDescription()
     {
@@ -150,7 +189,7 @@ public class ModTuple
     
     public virtual void SetAuthors(List<UserTuple>? authors)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("authors", authors ?? new List<UserTuple>()));
     }
     public virtual List<UserTuple> GetAuthors()
     {
@@ -159,7 +198,7 @@ public class ModTuple
     
     public virtual void SetCompatibility(List<ModTuple>? mods)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("mods", mods ?? new List<ModTuple>()));
     }
     public virtual List<ModTuple> GetCompatibility()
     {
@@ -178,9 +217,22 @@ public class UserTuple
     }
     protected UserTuple(){}
     
+    private void _addNewPair(Tuple<string, object> newPair)
+    {
+        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        {
+            if (_myLisOfPairs[i].Item1 == newPair.Item1)
+            {
+                _myLisOfPairs[i] = newPair;
+                return;
+            }
+        }
+        _myLisOfPairs.Add(newPair);
+    }
+    
     public virtual void SetNickname(string nickname)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("nickname", nickname));
     }
     public virtual string GetNickname()
     {
@@ -189,7 +241,7 @@ public class UserTuple
     
     public virtual void SetOwnedGames(List<GameTuple>? ownedGames)
     {
-        throw new NotImplementedException();
+        _addNewPair(new Tuple<string, object>("ownedGames", ownedGames ?? new List<GameTuple>()));
     }
     public virtual List<GameTuple> GetOwnedGames()
     {
