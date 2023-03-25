@@ -18,9 +18,9 @@ public class GameHash
         SetName(name);
         SetGenre(genre);
         SetDevices(devices);
-        Authors = authors ?? new List<UserHash>();
-        Reviews = reviews ?? new List<ReviewHash>();
-        Mods = mods ?? new List<ModHash>();
+        Authors = authors!;
+        Reviews = reviews!;
+        Mods = mods!;
     }
     protected GameHash() { }
 
@@ -59,9 +59,21 @@ public class GameHash
         return _devices;
     }
     
-    public virtual List<UserHash> Authors { get; set; }
-    public virtual List<ReviewHash> Reviews { get; set; }
-    public virtual List<ModHash> Mods { get; set; }
+    public virtual List<UserHash> Authors
+    {
+        get => Authors;
+        set => Authors = value ?? new List<UserHash>();
+    }
+    public virtual List<ReviewHash> Reviews
+    {
+        get => Reviews;
+        set => Reviews = value ?? new List<ReviewHash>();
+    }
+    public virtual List<ModHash> Mods
+    {
+        get => Mods;
+        set => Mods = value ?? new List<ModHash>();
+    }
 }
 
 public class ReviewHash
@@ -70,11 +82,11 @@ public class ReviewHash
     private int _text;
     private int _rating;
 
-    public ReviewHash(string text, int rating, UserHash author)
+    public ReviewHash(string text, int rating, UserHash? author = null)
     {
         SetText(text);
         SetRating(rating);
-        Author = author;
+        Author = author!;
     }
 
     protected ReviewHash() { }
@@ -105,7 +117,11 @@ public class ReviewHash
         return _rating;
     }
     
-    public virtual UserHash Author { get; set; }
+    public virtual UserHash Author
+    {
+        get => Author;
+        set => Author = value ?? new UserHash("");
+    }
 }
 
 public class ModHash
@@ -118,8 +134,8 @@ public class ModHash
     {
         SetName(name);
         SetDescription(description);
-        Authors = authors ?? new List<UserHash>();
-        Compatibility = compatibility ?? new List<ModHash>();
+        Authors = authors!;
+        Compatibility = compatibility!;
     }
 
     protected ModHash() { }
@@ -149,8 +165,16 @@ public class ModHash
         return _description;
     }
     
-    public virtual List<UserHash> Authors { get; set; }
-    public virtual List<ModHash> Compatibility { get; set; }
+    public virtual List<UserHash> Authors
+    {
+        get => Authors;
+        set => Authors = value ?? new List<UserHash>();
+    }
+    public virtual List<ModHash> Compatibility
+    {
+        get => Compatibility;
+        set => Compatibility = value ?? new List<ModHash>();
+    }
 }
 
 public class UserHash
@@ -161,7 +185,7 @@ public class UserHash
     public UserHash(string nickname, List<GameHash>? ownedGames = null)
     {
         SetNickname(nickname);
-        OwnedGames = ownedGames ?? new List<GameHash>();
+        OwnedGames = ownedGames!;
     }
     protected UserHash(){}
     
@@ -180,5 +204,9 @@ public class UserHash
         return _nickname;
     }
     
-    public virtual List<GameHash> OwnedGames { get; set; }
+    public virtual List<GameHash> OwnedGames
+    {
+        get => OwnedGames;
+        set => OwnedGames = value ?? new List<GameHash>();
+    }
 }
