@@ -3,12 +3,12 @@ using System.Text;
 namespace ConsoleApp;
 using System.Collections.Generic;
 
-/// Adaptery z brzydkiej do ladnej
-public class GameHashAdapter : Game
+// Adaptery z brzydkiej do ladnej
+public class AdapterGameFromHash : Game
 {
     private readonly GameHash _g;
 
-    public GameHashAdapter(GameHash g)
+    public AdapterGameFromHash(GameHash g)
     {
         if (g == null)
         {
@@ -49,7 +49,7 @@ public class GameHashAdapter : Game
             var outAuthors = new List<User>();
             foreach (UserHash gAuthor in _g.Authors)
             {
-                outAuthors.Add(new UserHashAdapter(gAuthor));
+                outAuthors.Add(new AdapterUserFromHash(gAuthor));
             }
 
             return outAuthors;
@@ -82,7 +82,7 @@ public class GameHashAdapter : Game
             var outRev = new List<Review>();
             foreach (ReviewHash gRev in _g.Reviews)
             {
-                outRev.Add(new ReviewHashAdapter(gRev));
+                outRev.Add(new AdapterReviewFromHash(gRev));
             }
 
             return outRev;
@@ -100,7 +100,7 @@ public class GameHashAdapter : Game
             var outRev = new List<Mod>();
             foreach (ModHash gMod in _g.Mods)
             {
-                outRev.Add(new ModHashAdapter(gMod));
+                outRev.Add(new AdapterModFromHash(gMod));
             }
 
             return outRev;
@@ -112,11 +112,11 @@ public class GameHashAdapter : Game
     }
 }
 
-public class ReviewHashAdapter : Review
+public class AdapterReviewFromHash : Review
 {
     private readonly ReviewHash _r;
 
-    public ReviewHashAdapter(ReviewHash r)
+    public AdapterReviewFromHash(ReviewHash r)
     {
         if (r == null)
         {
@@ -146,7 +146,7 @@ public class ReviewHashAdapter : Review
     {
         get
         {
-            return new UserHashAdapter(_r.Author);
+            return new AdapterUserFromHash(_r.Author);
         }
         set
         {
@@ -155,11 +155,11 @@ public class ReviewHashAdapter : Review
     }
 }
 
-public class ModHashAdapter : Mod
+public class AdapterModFromHash : Mod
 {
     private readonly ModHash _m;
 
-    public ModHashAdapter(ModHash m)
+    public AdapterModFromHash(ModHash m)
     {
         if (m == null)
         {
@@ -192,7 +192,7 @@ public class ModHashAdapter : Mod
             var outAuthors = new List<User>();
             foreach (UserHash gAuthor in _m.Authors)
             {
-                outAuthors.Add(new UserHashAdapter(gAuthor));
+                outAuthors.Add(new AdapterUserFromHash(gAuthor));
             }
 
             return outAuthors;
@@ -210,7 +210,7 @@ public class ModHashAdapter : Mod
             var outMods = new List<Mod>();
             foreach (ModHash otherMod in _m.Compatibility)
             {
-                outMods.Add(new ModHashAdapter(otherMod));
+                outMods.Add(new AdapterModFromHash(otherMod));
             }
 
             return outMods;
@@ -222,11 +222,11 @@ public class ModHashAdapter : Mod
     }
 }
 
-public class UserHashAdapter : User
+public class AdapterUserFromHash : User
 {
     private readonly UserHash _u;
 
-    public UserHashAdapter(UserHash u)
+    public AdapterUserFromHash(UserHash u)
     {
         if (u == null)
         {
@@ -251,7 +251,7 @@ public class UserHashAdapter : User
             var outGames = new List<Game>();
             foreach (GameHash game in _u.OwnedGames)
             {
-                outGames.Add(new GameHashAdapter(game));
+                outGames.Add(new AdapterGameFromHash(game));
             }
 
             return outGames;
@@ -262,3 +262,6 @@ public class UserHashAdapter : User
         }
     }
 }
+
+
+// Adaptery z ladnej do brzydkiej

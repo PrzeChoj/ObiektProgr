@@ -4,7 +4,7 @@ namespace ConsoleApp;
 using System.Collections.Generic;
 
 
-/// Bazowa reprezentacja (Czesc 0):
+// Bazowa reprezentacja (Czesc 0):
 public class Game
 {
     public Game(string name, string genre, string devices, List<User>? authors = null, List<Review>? reviews = null, List<Mod>? mods = null)
@@ -89,7 +89,7 @@ public class Mod
     }
     protected Mod() { }
 
-    public virtual string? Name { get; set; }
+    public virtual string Name { get; set; }
     public virtual string Description { get; set; }
     public virtual List<User> Authors { get; set; }
     public virtual List<Mod> Compatibility { get; set; }

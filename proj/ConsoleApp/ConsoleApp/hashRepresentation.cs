@@ -4,7 +4,7 @@ namespace ConsoleApp;
 using System.Collections.Generic;
 
 
-/// HashMap reprezentacja (czesc 4):
+// HashMap reprezentacja (czesc 4):
 public class GameHash
 {
     private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();

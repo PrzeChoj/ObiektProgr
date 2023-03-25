@@ -121,18 +121,18 @@ uh8.OwnedGames = new List<GameHash> { gh2 };
 
 // Print test
 Console.WriteLine(gh1);
-var adaptedGh1 = new GameHashAdapter(gh1);
+var adaptedGh1 = new AdapterGameFromHash(gh1);
 Console.WriteLine(adaptedGh1);
 Console.WriteLine(uh1);
-Console.WriteLine(new UserHashAdapter(uh1));
+Console.WriteLine(new AdapterUserFromHash(uh1));
 Console.WriteLine(rh1);
-Console.WriteLine(new ReviewHashAdapter(rh1));
+Console.WriteLine(new AdapterReviewFromHash(rh1));
 Console.WriteLine(mh1);
-Console.WriteLine(new ModHashAdapter(mh1));
+Console.WriteLine(new AdapterModFromHash(mh1));
 
 Console.WriteLine(mh1.Authors[0].OwnedGames.Count); // Should be 5
 
-var xd = new ModHashAdapter(mh1);
+var xd = new AdapterModFromHash(mh1);
 Console.WriteLine((xd as Mod).Name);
 
 
