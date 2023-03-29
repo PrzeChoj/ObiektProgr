@@ -12,7 +12,7 @@ User u8 = new User("Bonet");
 
 // Mods
 Mod m1 = new Mod("Clouds", "Super clouds", new List<User>{u3});
-Mod m2 = new Mod("T-pose", "Cow are now T-posing", new List<User>{});
+Mod m2 = new Mod("T-pose", "Cow are now T-posing", new List<User>());
 Mod m3 = new Mod("Commander Shepard", "I’m Commander Shepard and this is my favorite mod on Smoke",
     new List<User>{u4});
 Mod m4 = new Mod("BTM", "You can now play in BTM’s trains and bytebuses", new List<User>{u7, u8});
@@ -79,7 +79,7 @@ UserHash uh8 = new UserHash("Bonet");
 
 // Mods
 ModHash mh1 = new ModHash("Clouds", "Super clouds", new List<UserHash> {uh3});
-ModHash mh2 = new ModHash("T-pose", "Cow are now T-posing", new List<UserHash>{});
+ModHash mh2 = new ModHash("T-pose", "Cow are now T-posing", new List<UserHash>());
 ModHash mh3 = new ModHash("Commander Shepard", "I’m Commander Shepard and this is my favorite mod on Smoke",
     new List<UserHash>{uh4});
 ModHash mh4 = new ModHash("BTM", "You can now play in BTM’s trains and bytebuses", new List<UserHash>{uh7, uh8});
@@ -133,7 +133,7 @@ Console.WriteLine(new AdapterModFromHash(mh1));
 Console.WriteLine(mh1.Authors[0].OwnedGames.Count); // Should be 5
 
 var xd = new AdapterModFromHash(mh1);
-Console.WriteLine((xd as Mod).Name);
+Console.WriteLine((xd).Name);
 
 
 
