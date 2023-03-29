@@ -10,105 +10,41 @@ public class AdapterGameFromHash : Game
 
     public AdapterGameFromHash(GameHash g)
     {
-        if (g == null)
-        {
-            throw new Exception("g is null");
-        }
-        this._g = g;
+        _g = g ?? throw new Exception("g is null");
     }
 
     public override string Name
     {
         get => _g.GetHashMap()[_g.GetName()];
-        set
-        {
-            _g.SetName(value);
-        }
+        set => _g.SetName(value);
     }
     public override string Genre
     {
         get => _g.GetHashMap()[_g.GetGenre()];
-        set
-        {
-            _g.SetGenre(value);
-        }
+        set => _g.SetGenre(value);
     }
     public override string Devices
     {
         get => _g.GetHashMap()[_g.GetDevices()];
-        set
-        {
-            _g.SetDevices(value);
-        }
+        set => _g.SetDevices(value);
     }
     
     public override List<User> Authors
     {
-        get
-        {
-            var outAuthors = new List<User>();
-            foreach (UserHash gAuthor in _g.Authors)
-            {
-                outAuthors.Add(new AdapterUserFromHash(gAuthor));
-            }
-
-            return outAuthors;
-        }
-        set
-        {
-            var newAuthorsList = new List<UserHash>();
-            foreach (User user in value)
-            {
-                newAuthorsList.Add(new AdapterUserToHash(user));
-            }
-            _g.Authors = newAuthorsList;
-        }
+        get => _g.Authors.Select(gAuthor => new AdapterUserFromHash(gAuthor)).Cast<User>().ToList();
+        set => _g.Authors = value.Select(user => new AdapterUserToHash(user)).Cast<UserHash>().ToList();
     }
 
     public override List<Review> Reviews
     {
-        get
-        {
-            var outRev = new List<Review>();
-            foreach (ReviewHash gRev in _g.Reviews)
-            {
-                outRev.Add(new AdapterReviewFromHash(gRev));
-            }
-
-            return outRev;
-        }
-        set
-        {
-            var newReviewsList = new List<ReviewHash>();
-            foreach (Review review in value)
-            {
-                newReviewsList.Add(new AdapterReviewToHash(review));
-            }
-            _g.Reviews = newReviewsList;
-        }
+        get => _g.Reviews.Select(gRev => new AdapterReviewFromHash(gRev)).Cast<Review>().ToList();
+        set => _g.Reviews = value.Select(review => new AdapterReviewToHash(review)).Cast<ReviewHash>().ToList();
     }
 
     public override List<Mod> Mods
     {
-        get
-        {
-            var outRev = new List<Mod>();
-            foreach (ModHash gMod in _g.Mods)
-            {
-                outRev.Add(new AdapterModFromHash(gMod));
-            }
-
-            return outRev;
-        }
-        set
-        {
-            var newModsList = new List<ModHash>();
-            foreach (Mod mod in value)
-            {
-                newModsList.Add(new AdapterModToHash(mod));
-            }
-            _g.Mods = newModsList;
-        }
+        get => _g.Mods.Select(gMod => new AdapterModFromHash(gMod)).Cast<Mod>().ToList();
+        set => _g.Mods = value.Select(mod => new AdapterModToHash(mod)).Cast<ModHash>().ToList();
     }
 }
 
@@ -118,40 +54,24 @@ public class AdapterReviewFromHash : Review
 
     public AdapterReviewFromHash(ReviewHash r)
     {
-        if (r == null)
-        {
-            throw new Exception("r is null");
-        }
-        this._r = r;
+        _r = r ?? throw new Exception("r is null");
     }
     
     public override string Text
     {
         get => _r.GetHashMap()[_r.GetText()];
-        set
-        {
-            _r.SetText(value);
-        }
+        set => _r.SetText(value);
     }
     public override int Rating
     {
         get => int.Parse(_r.GetHashMap()[_r.GetRating()]);
-        set
-        {
-            _r.SetRating(value);
-        }
+        set => _r.SetRating(value);
     }
     
     public override User Author
     {
-        get
-        {
-            return new AdapterUserFromHash(_r.Author);
-        }
-        set
-        {
-            _r.Author = new AdapterUserToHash(value);
-        }
+        get => new AdapterUserFromHash(_r.Author);
+        set => _r.Author = new AdapterUserToHash(value);
     }
 }
 
@@ -161,76 +81,30 @@ public class AdapterModFromHash : Mod
 
     public AdapterModFromHash(ModHash m)
     {
-        if (m == null)
-        {
-            throw new Exception("m is null");
-        }
-        this._m = m;
+        _m = m ?? throw new Exception("m is null");
     }
     
     public override string Name
     {
         get => _m.GetHashMap()[_m.GetName()];
-        set
-        {
-            _m.SetName(value);
-        }
+        set => _m.SetName(value);
     }
     public override string Description
     {
         get => _m.GetHashMap()[_m.GetDescription()];
-        set
-        {
-            _m.SetDescription(value);
-        }
+        set => _m.SetDescription(value);
     }
     
     public override List<User> Authors
     {
-        get
-        {
-            var outAuthors = new List<User>();
-            foreach (UserHash gAuthor in _m.Authors)
-            {
-                outAuthors.Add(new AdapterUserFromHash(gAuthor));
-            }
-
-            return outAuthors;
-        }
-        set
-        {
-            var newAuthors = new List<UserHash>();
-            foreach (User gAuthor in value)
-            {
-                newAuthors.Add(new AdapterUserToHash(gAuthor));
-            }
-
-            _m.Authors = newAuthors;
-        }
+        get => _m.Authors.Select(gAuthor => new AdapterUserFromHash(gAuthor)).Cast<User>().ToList();
+        set => _m.Authors = value.Select(gAuthor => new AdapterUserToHash(gAuthor)).Cast<UserHash>().ToList();
     }
 
     public override List<Mod> Compatibility
     {
-        get
-        {
-            var outMods = new List<Mod>();
-            foreach (ModHash otherMod in _m.Compatibility)
-            {
-                outMods.Add(new AdapterModFromHash(otherMod));
-            }
-
-            return outMods;
-        }
-        set
-        {
-            var newMods = new List<ModHash>();
-            foreach (Mod mod in value)
-            {
-                newMods.Add(new AdapterModToHash(mod));
-            }
-
-            _m.Compatibility = newMods;
-        }
+        get => _m.Compatibility.Select(otherMod => new AdapterModFromHash(otherMod)).Cast<Mod>().ToList();
+        set => _m.Compatibility = value.Select(mod => new AdapterModToHash(mod)).Cast<ModHash>().ToList();
     }
 }
 
@@ -240,44 +114,19 @@ public class AdapterUserFromHash : User
 
     public AdapterUserFromHash(UserHash u)
     {
-        if (u == null)
-        {
-            throw new Exception("u is null");
-        }
-        this._u = u;
+        _u = u ?? throw new Exception("u is null");
     }
     
     public override string Nickname
     {
         get => _u.GetHashMap()[_u.GetNickname()];
-        set
-        {
-            _u.SetNickname(value);
-        }
+        set => _u.SetNickname(value);
     }
     
     public override List<Game> OwnedGames
     {
-        get
-        {
-            var outGames = new List<Game>();
-            foreach (GameHash game in _u.OwnedGames)
-            {
-                outGames.Add(new AdapterGameFromHash(game));
-            }
-
-            return outGames;
-        }
-        set
-        {
-            var newGames = new List<GameHash>();
-            foreach (Game game in value)
-            {
-                newGames.Add(new AdapterGameToHash(game));
-            }
-
-            _u.OwnedGames = newGames;
-        }
+        get => _u.OwnedGames.Select(game => new AdapterGameFromHash(game)).Cast<Game>().ToList();
+        set => _u.OwnedGames = value.Select(game => new AdapterGameToHash(game)).Cast<GameHash>().ToList();
     }
 }
 
@@ -289,21 +138,17 @@ public class AdapterGameToHash : GameHash
     
     public AdapterGameToHash(Game g)
     {
-        if (g == null)
-        {
-            throw new Exception("g is null");
-        }
-        this._g = g;
+        _g = g ?? throw new Exception("g is null");
     }
     
     internal override ReadOnlyDictionary<int, string> GetHashMap()
     {
-        var outHashMap = new Dictionary<int, string>();
-        outHashMap[_g.Name.GetHashCode()] = _g.Name;
-        outHashMap[_g.Genre.GetHashCode()] = _g.Genre;
-        outHashMap[_g.Devices.GetHashCode()] = _g.Devices;
-
-        return outHashMap.AsReadOnly();
+        return new Dictionary<int, string>
+            {
+                [_g.Name.GetHashCode()] = _g.Name,
+                [_g.Genre.GetHashCode()] = _g.Genre,
+                [_g.Devices.GetHashCode()] = _g.Devices
+            }.AsReadOnly();
     }
     
     public override void SetName(string name)
@@ -335,74 +180,20 @@ public class AdapterGameToHash : GameHash
 
     public override List<UserHash> Authors
     {
-        get
-        {
-            var outAuthors = new List<UserHash>();
-            foreach (User author in _g.Authors)
-            {
-                outAuthors.Add(new AdapterUserToHash(author));
-            }
-
-            return outAuthors;
-        }
-        set
-        {
-            var newAuthors = new List<User>();
-            foreach (UserHash author in value)
-            {
-                newAuthors.Add(new AdapterUserFromHash(author));
-            }
-
-            _g.Authors = newAuthors;
-        }
+        get => _g.Authors.Select(author => new AdapterUserToHash(author)).Cast<UserHash>().ToList();
+        set => _g.Authors = value.Select(author => new AdapterUserFromHash(author)).Cast<User>().ToList();
     }
 
     public override List<ReviewHash> Reviews
     {
-        get
-        {
-            var outReviews = new List<ReviewHash>();
-            foreach (Review review in _g.Reviews)
-            {
-                outReviews.Add(new AdapterReviewToHash(review));
-            }
-
-            return outReviews;
-        }
-        set
-        {
-            var newReviews = new List<Review>();
-            foreach (ReviewHash review in value)
-            {
-                newReviews.Add(new AdapterReviewFromHash(review));
-            }
-
-            _g.Reviews = newReviews;
-        }
+        get => _g.Reviews.Select(review => new AdapterReviewToHash(review)).Cast<ReviewHash>().ToList();
+        set => _g.Reviews = value.Select(review => new AdapterReviewFromHash(review)).Cast<Review>().ToList();
     }
 
     public override List<ModHash> Mods
     {
-        get
-        {
-            var outMods = new List<ModHash>();
-            foreach (Mod mod in _g.Mods)
-            {
-                outMods.Add(new AdapterModToHash(mod));
-            }
-
-            return outMods;
-        }
-        set
-        {
-            var newMods = new List<Mod>();
-            foreach (ModHash mod in value)
-            {
-                newMods.Add(new AdapterModFromHash(mod));
-            }
-
-            _g.Mods = newMods;
-        }
+        get => _g.Mods.Select(mod => new AdapterModToHash(mod)).Cast<ModHash>().ToList();
+        set => _g.Mods = value.Select(mod => new AdapterModFromHash(mod)).Cast<Mod>().ToList();
     }
 }
 
@@ -417,13 +208,13 @@ public class AdapterReviewToHash : ReviewHash
     
     internal override ReadOnlyDictionary<int, string> GetHashMap()
     {
-        var outHashMap = new Dictionary<int, string>();
-        outHashMap[_r.Text.GetHashCode()] = _r.Text;
+        var stringRating = _r.Rating.ToString();
         
-        string stringRating = _r.Rating.ToString();
-        outHashMap[stringRating.GetHashCode()] = stringRating;
-        
-        return outHashMap.AsReadOnly();
+        return new Dictionary<int, string>
+            {
+                [_r.Text.GetHashCode()] = _r.Text,
+                [stringRating.GetHashCode()] = stringRating
+            }.AsReadOnly();
     }
 
     public override void SetText(string text)
@@ -441,20 +232,13 @@ public class AdapterReviewToHash : ReviewHash
     }
     public override int GetRating()
     {
-        // Przerobic rating na hasha ze stringa
-        return _r.Rating.ToString().GetHashCode();
+        return _r.Rating.ToString().GetHashCode(); // Przerobic rating na hasha ze stringa
     }
 
     public override UserHash Author
     {
-        get
-        {
-            return new AdapterUserToHash(_r.Author);
-        }
-        set
-        {
-            _r.Author = new AdapterUserFromHash(value);
-        }
+        get => new AdapterUserToHash(_r.Author);
+        set => _r.Author = new AdapterUserFromHash(value);
     }
 }
 
@@ -464,20 +248,16 @@ public class AdapterModToHash : ModHash
     
     public AdapterModToHash(Mod m)
     {
-        if (m == null)
-        {
-            throw new Exception("m is null");
-        }
-        this._m = m;
+        _m = m ?? throw new Exception("m is null");
     }
     
     internal override ReadOnlyDictionary<int, string> GetHashMap()
     {
-        var outHashMap = new Dictionary<int, string>();
-        outHashMap[_m.Name.GetHashCode()] = _m.Name;
-        outHashMap[_m.Description.GetHashCode()] = _m.Description;
-
-        return outHashMap.AsReadOnly();
+        return new Dictionary<int, string>
+            {
+                [_m.Name.GetHashCode()] = _m.Name,
+                [_m.Description.GetHashCode()] = _m.Description
+            }.AsReadOnly();
     }
     
     public override void SetName(string name)
@@ -500,50 +280,14 @@ public class AdapterModToHash : ModHash
 
     public override List<UserHash> Authors
     {
-        get
-        {
-            var outAuthors = new List<UserHash>();
-            foreach (User author in _m.Authors)
-            {
-                outAuthors.Add(new AdapterUserToHash(author));
-            }
-
-            return outAuthors;
-        }
-        set
-        {
-            var newAuthors = new List<User>();
-            foreach (UserHash author in value)
-            {
-                newAuthors.Add(new AdapterUserFromHash(author));
-            }
-
-            _m.Authors = newAuthors;
-        }
+        get => _m.Authors.Select(author => new AdapterUserToHash(author)).Cast<UserHash>().ToList();
+        set => _m.Authors = value.Select(author => new AdapterUserFromHash(author)).Cast<User>().ToList();
     }
 
     public override List<ModHash> Compatibility
     {
-        get
-        {
-            var outMods = new List<ModHash>();
-            foreach (Mod mod in _m.Compatibility)
-            {
-                outMods.Add(new AdapterModToHash(mod));
-            }
-
-            return outMods;
-        }
-        set
-        {
-            var newMods = new List<Mod>();
-            foreach (ModHash mod in value)
-            {
-                newMods.Add(new AdapterModFromHash(mod));
-            }
-
-            _m.Compatibility = newMods;
-        }
+        get => _m.Compatibility.Select(mod => new AdapterModToHash(mod)).Cast<ModHash>().ToList();
+        set => _m.Compatibility = value.Select(mod => new AdapterModFromHash(mod)).Cast<Mod>().ToList();
     }
 }
 
@@ -557,10 +301,10 @@ public class AdapterUserToHash : UserHash
     
     internal override ReadOnlyDictionary<int, string> GetHashMap()
     {
-        var outHashMap = new Dictionary<int, string>();
-        outHashMap[_u.Nickname.GetHashCode()] = _u.Nickname;
-
-        return outHashMap.AsReadOnly();
+        return new Dictionary<int, string>
+            {
+                [_u.Nickname.GetHashCode()] = _u.Nickname
+            }.AsReadOnly();
     }
 
     public override void SetNickname(string nickname)
@@ -574,25 +318,7 @@ public class AdapterUserToHash : UserHash
 
     public override List<GameHash> OwnedGames
     {
-        get
-        {
-            var outGames = new List<GameHash>();
-            foreach (Game game in _u.OwnedGames)
-            {
-                outGames.Add(new AdapterGameToHash(game));
-            }
-
-            return outGames;
-        }
-        set
-        {
-            var newGames = new List<Game>();
-            foreach (GameHash game in value)
-            {
-                newGames.Add(new AdapterGameFromHash(game));
-            }
-
-            _u.OwnedGames = newGames;
-        }
+        get => _u.OwnedGames.Select(game => new AdapterGameToHash(game)).Cast<GameHash>().ToList();
+        set => _u.OwnedGames = value.Select(game => new AdapterGameFromHash(game)).Cast<Game>().ToList();
     }
 }

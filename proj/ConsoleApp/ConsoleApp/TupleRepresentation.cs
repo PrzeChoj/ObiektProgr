@@ -5,7 +5,7 @@ using System.Collections.Generic;
 // List<Tuple<string, Object>> reprezentacja (czesc 7):
 public class GameTuple
 {
-    private List<Tuple<string, Object>> _myLisOfPairs = new List<Tuple<string, Object>>();
+    private readonly List<Tuple<string, Object>> _myLisOfPairs = new();
     
     public GameTuple(string name, string genre, string devices, List<UserTuple>? authors = null,
         List<ReviewTuple>? reviews = null, List<ModTuple>? mods = null)
@@ -34,11 +34,12 @@ public class GameTuple
 
     private Object? _getPair(string key)
     {
-        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        foreach (var pair in _myLisOfPairs)
         {
-            if (_myLisOfPairs[i].Item1 == key)
-                return _myLisOfPairs[i].Item2;
+            if (pair.Item1 == key)
+                return pair.Item2;
         }
+
         return null;
     }
     
@@ -98,7 +99,7 @@ public class GameTuple
 
 public class ReviewTuple
 {
-    private List<Tuple<string, Object>> _myLisOfPairs = new List<Tuple<string, Object>>();
+    private readonly List<Tuple<string, Object>> _myLisOfPairs = new();
 
     public ReviewTuple(string text, int rating, UserTuple? author = null)
     {
@@ -124,11 +125,12 @@ public class ReviewTuple
     
     private Object? _getPair(string key)
     {
-        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        foreach (var pair in _myLisOfPairs)
         {
-            if (_myLisOfPairs[i].Item1 == key)
-                return _myLisOfPairs[i].Item2;
+            if (pair.Item1 == key)
+                return pair.Item2;
         }
+
         return null;
     }
 
@@ -162,7 +164,7 @@ public class ReviewTuple
 
 public class ModTuple
 {
-    private List<Tuple<string, Object>> _myLisOfPairs = new List<Tuple<string, Object>>();
+    private readonly List<Tuple<string, Object>> _myLisOfPairs = new();
 
     public ModTuple(string name, string description, List<UserTuple>? authors = null, List<ModTuple>? compatibility = null)
     {
@@ -189,11 +191,12 @@ public class ModTuple
     
     private Object? _getPair(string key)
     {
-        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        foreach (var pair in _myLisOfPairs)
         {
-            if (_myLisOfPairs[i].Item1 == key)
-                return _myLisOfPairs[i].Item2;
+            if (pair.Item1 == key)
+                return pair.Item2;
         }
+
         return null;
     }
 
@@ -236,7 +239,7 @@ public class ModTuple
 
 public class UserTuple
 {
-    private List<Tuple<string, Object>> _myLisOfPairs = new List<Tuple<string, Object>>();
+    private readonly List<Tuple<string, Object>> _myLisOfPairs = new();
 
     public UserTuple(string nickname, List<GameTuple>? ownedGames = null)
     {
@@ -260,11 +263,12 @@ public class UserTuple
     
     private Object? _getPair(string key)
     {
-        for (int i = 0; i < _myLisOfPairs.Count; i++)
+        foreach (var pair in _myLisOfPairs)
         {
-            if (_myLisOfPairs[i].Item1 == key)
-                return _myLisOfPairs[i].Item2;
+            if (pair.Item1 == key)
+                return pair.Item2;
         }
+
         return null;
     }
     

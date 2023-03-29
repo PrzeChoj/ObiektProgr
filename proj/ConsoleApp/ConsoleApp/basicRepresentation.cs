@@ -23,21 +23,26 @@ public class Game
     public virtual string Genre { get; set; }
     public virtual string Devices { get; set; }
 
+    private List<User> _authors;
     public virtual List<User> Authors
     {
-        get => Authors;
-        set => Authors = value ?? new List<User>();
+        get => _authors;
+        set => _authors = value ?? new List<User>();
     }
 
+    private List<Review> _reviews;
     public virtual List<Review> Reviews
     {
-        get => Reviews;
-        set => Reviews = value ?? new List<Review>();
+        get => _reviews;
+        set => _reviews = value ?? new List<Review>();
     }
+    
+    private List<Mod> _mods;
     public virtual List<Mod> Mods
     {
-        get => Mods;
-        set => Mods = value ?? new List<Mod>(); }
+        get => _mods;
+        set => _mods = value ?? new List<Mod>();
+    }
     
     public override string ToString()
     {
@@ -78,10 +83,11 @@ public class Review
     public virtual string Text { get; set; }
     public virtual int Rating { get; set; }
 
+    private User _author;
     public virtual User Author
     {
-        get => Author;
-        set => Author = value ?? new User("");
+        get => _author;
+        set => _author = value ?? new User("");
     }
 
     public override string ToString()
@@ -110,16 +116,18 @@ public class Mod
     public virtual string Name { get; set; }
     public virtual string Description { get; set; }
 
+    private List<User> _authors;
     public virtual List<User> Authors
     {
-        get => Authors;
-        set => Authors = value ?? new List<User>();
+        get => _authors;
+        set => _authors = value ?? new List<User>();
     }
 
+    private List<Mod> _compatibility;
     public virtual List<Mod> Compatibility
     {
-        get => Compatibility;
-        set => Compatibility = value ?? new List<Mod>();
+        get => _compatibility;
+        set => _compatibility = value ?? new List<Mod>();
     }
 
     public override string ToString()
@@ -146,16 +154,17 @@ public class User
     public User(string nickname, List<Game>? ownedGames = null)
     {
         Nickname = nickname;
-        OwnedGames = ownedGames;
+        OwnedGames = ownedGames!;
     }
     protected User() { }
     
     public virtual string Nickname { get; set; }
 
+    private List<Game> _ownedGames;
     public virtual List<Game> OwnedGames
     {
-        get => OwnedGames;
-        set => OwnedGames = value ?? new List<Game>();
+        get => _ownedGames;
+        set => _ownedGames = value ?? new List<Game>();
     }
 
     public override string ToString()

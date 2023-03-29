@@ -58,27 +58,32 @@ public class GameHash
     {
         return _devices;
     }
-    
+
+    private List<UserHash> _authors;
     public virtual List<UserHash> Authors
     {
-        get => Authors;
-        set => Authors = value ?? new List<UserHash>();
+        get => _authors;
+        set => _authors = value ?? new List<UserHash>();
     }
+
+    private List<ReviewHash> _reviews;
     public virtual List<ReviewHash> Reviews
     {
-        get => Reviews;
-        set => Reviews = value ?? new List<ReviewHash>();
+        get => _reviews;
+        set => _reviews = value ?? new List<ReviewHash>();
     }
+
+    private List<ModHash> _mods;
     public virtual List<ModHash> Mods
     {
-        get => Mods;
-        set => Mods = value ?? new List<ModHash>();
+        get => _mods;
+        set => _mods = value ?? new List<ModHash>();
     }
 }
 
 public class ReviewHash
 {
-    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    private readonly Dictionary<int, string> _myHashMap = new();
     private int _text;
     private int _rating;
 
@@ -116,17 +121,18 @@ public class ReviewHash
     {
         return _rating;
     }
-    
+
+    private UserHash _author;
     public virtual UserHash Author
     {
-        get => Author;
-        set => Author = value ?? new UserHash("");
+        get => _author;
+        set => _author = value ?? new UserHash("");
     }
 }
 
 public class ModHash
 {
-    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    private readonly Dictionary<int, string> _myHashMap = new();
     private int _name;
     private int _description;
 
@@ -164,22 +170,25 @@ public class ModHash
     {
         return _description;
     }
-    
+
+    private List<UserHash> _authors;
     public virtual List<UserHash> Authors
     {
-        get => Authors;
-        set => Authors = value ?? new List<UserHash>();
+        get => _authors;
+        set => _authors = value ?? new List<UserHash>();
     }
+
+    private List<ModHash> _compatibility;
     public virtual List<ModHash> Compatibility
     {
-        get => Compatibility;
-        set => Compatibility = value ?? new List<ModHash>();
+        get => _compatibility;
+        set => _compatibility = value ?? new List<ModHash>();
     }
 }
 
 public class UserHash
 {
-    private Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
+    private readonly Dictionary<int, string> _myHashMap = new Dictionary<int, string>();
     private int _nickname;
 
     public UserHash(string nickname, List<GameHash>? ownedGames = null)
@@ -203,10 +212,11 @@ public class UserHash
     {
         return _nickname;
     }
-    
+
+    private List<GameHash> _ownedGames;
     public virtual List<GameHash> OwnedGames
     {
-        get => OwnedGames;
-        set => OwnedGames = value ?? new List<GameHash>();
+        get => _ownedGames;
+        set => _ownedGames = value ?? new List<GameHash>();
     }
 }

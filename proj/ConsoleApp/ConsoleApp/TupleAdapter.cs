@@ -8,11 +8,7 @@ public class AdapterGameFromTuple : Game
 
     public AdapterGameFromTuple(GameTuple g)
     {
-        if (g == null)
-        {
-            throw new Exception("g is null");
-        }
-        this._g = g;
+        _g = g ?? throw new Exception("g is null");
     }
 
     public override string Name
@@ -33,71 +29,20 @@ public class AdapterGameFromTuple : Game
     
     public override List<User> Authors
     {
-        get
-        {
-            var outAuthors = new List<User>();
-            foreach (UserTuple gAuthor in _g.GetAuthors())
-            {
-                outAuthors.Add(new AdapterUserFromTuple(gAuthor));
-            }
-
-            return outAuthors;
-        }
-        set
-        {
-            var newAuthorsList = new List<UserTuple>();
-            foreach (User user in value)
-            {
-                newAuthorsList.Add(new AdapterUserToTuple(user));
-            }
-            _g.SetAuthors(newAuthorsList);
-        }
+        get => _g.GetAuthors().Select(gAuthor => new AdapterUserFromTuple(gAuthor)).Cast<User>().ToList();
+        set => _g.SetAuthors(value.Select(user => new AdapterUserToTuple(user)).Cast<UserTuple>().ToList());
     }
 
     public override List<Review> Reviews
     {
-        get
-        {
-            var outRev = new List<Review>();
-            foreach (ReviewTuple gRev in _g.GetReviews())
-            {
-                outRev.Add(new AdapterReviewFromTuple(gRev));
-            }
-
-            return outRev;
-        }
-        set
-        {
-            var newReviewsList = new List<ReviewTuple>();
-            foreach (Review review in value)
-            {
-                newReviewsList.Add(new AdapterReviewToTuple(review));
-            }
-            _g.SetReviews(newReviewsList);
-        }
+        get => _g.GetReviews().Select(gRev => new AdapterReviewFromTuple(gRev)).Cast<Review>().ToList();
+        set => _g.SetReviews(value.Select(review => new AdapterReviewToTuple(review)).Cast<ReviewTuple>().ToList());
     }
 
     public override List<Mod> Mods
     {
-        get
-        {
-            var outRev = new List<Mod>();
-            foreach (ModTuple gMod in _g.GetMods())
-            {
-                outRev.Add(new AdapterModFromTuple(gMod));
-            }
-
-            return outRev;
-        }
-        set
-        {
-            var newModsList = new List<ModTuple>();
-            foreach (Mod mod in value)
-            {
-                newModsList.Add(new AdapterModToTuple(mod));
-            }
-            _g.SetMods(newModsList);
-        }
+        get => _g.GetMods().Select(gMod => new AdapterModFromTuple(gMod)).Cast<Mod>().ToList();
+        set => _g.SetMods(value.Select(mod => new AdapterModToTuple(mod)).Cast<ModTuple>().ToList());
     }
 }
 
@@ -107,11 +52,7 @@ public class AdapterReviewFromTuple : Review
 
     public AdapterReviewFromTuple(ReviewTuple r)
     {
-        if (r == null)
-        {
-            throw new Exception("r is null");
-        }
-        this._r = r;
+        _r = r ?? throw new Exception("r is null");
     }
     
     public override string Text
@@ -127,10 +68,7 @@ public class AdapterReviewFromTuple : Review
     
     public override User Author
     {
-        get
-        {
-            return new AdapterUserFromTuple(_r.GetAuthor());
-        }
+        get => new AdapterUserFromTuple(_r.GetAuthor());
         set => _r.SetAuthor(new AdapterUserToTuple(value));
     }
 }
@@ -141,11 +79,7 @@ public class AdapterModFromTuple : Mod
 
     public AdapterModFromTuple(ModTuple m)
     {
-        if (m == null)
-        {
-            throw new Exception("m is null");
-        }
-        this._m = m;
+        _m = m ?? throw new Exception("m is null");
     }
     
     public override string Name
@@ -161,50 +95,14 @@ public class AdapterModFromTuple : Mod
     
     public override List<User> Authors
     {
-        get
-        {
-            var outAuthors = new List<User>();
-            foreach (UserTuple gAuthor in _m.GetAuthors())
-            {
-                outAuthors.Add(new AdapterUserFromTuple(gAuthor));
-            }
-
-            return outAuthors;
-        }
-        set
-        {
-            var newAuthors = new List<UserTuple>();
-            foreach (User gAuthor in value)
-            {
-                newAuthors.Add(new AdapterUserToTuple(gAuthor));
-            }
-
-            _m.SetAuthors(newAuthors);
-        }
+        get => _m.GetAuthors().Select(gAuthor => new AdapterUserFromTuple(gAuthor)).Cast<User>().ToList();
+        set => _m.SetAuthors(value.Select(gAuthor => new AdapterUserToTuple(gAuthor)).Cast<UserTuple>().ToList());
     }
 
     public override List<Mod> Compatibility
     {
-        get
-        {
-            var outMods = new List<Mod>();
-            foreach (ModTuple otherMod in _m.GetCompatibility())
-            {
-                outMods.Add(new AdapterModFromTuple(otherMod));
-            }
-
-            return outMods;
-        }
-        set
-        {
-            var newMods = new List<ModTuple>();
-            foreach (Mod mod in value)
-            {
-                newMods.Add(new AdapterModToTuple(mod));
-            }
-
-            _m.SetCompatibility(newMods);
-        }
+        get => _m.GetCompatibility().Select(otherMod => new AdapterModFromTuple(otherMod)).Cast<Mod>().ToList();
+        set => _m.SetCompatibility(value.Select(mod => new AdapterModToTuple(mod)).Cast<ModTuple>().ToList());
     }
 }
 
@@ -214,11 +112,7 @@ public class AdapterUserFromTuple : User
 
     public AdapterUserFromTuple(UserTuple u)
     {
-        if (u == null)
-        {
-            throw new Exception("u is null");
-        }
-        this._u = u;
+        _u = u ?? throw new Exception("u is null");
     }
     
     public override string Nickname
@@ -229,26 +123,8 @@ public class AdapterUserFromTuple : User
     
     public override List<Game> OwnedGames
     {
-        get
-        {
-            var outGames = new List<Game>();
-            foreach (GameTuple game in _u.GetOwnedGames())
-            {
-                outGames.Add(new AdapterGameFromTuple(game));
-            }
-
-            return outGames;
-        }
-        set
-        {
-            var newGames = new List<GameTuple>();
-            foreach (Game game in value)
-            {
-                newGames.Add(new AdapterGameToTuple(game));
-            }
-
-            _u.SetOwnedGames(newGames);
-        }
+        get => _u.GetOwnedGames().Select(game => new AdapterGameFromTuple(game)).Cast<Game>().ToList();
+        set => _u.SetOwnedGames(value.Select(game => new AdapterGameToTuple(game)).Cast<GameTuple>().ToList());
     }
 }
 
@@ -260,11 +136,7 @@ public class AdapterGameToTuple : GameTuple
     
     public AdapterGameToTuple(Game g)
     {
-        if (g == null)
-        {
-            throw new Exception("g is null");
-        }
-        this._g = g;
+        _g = g ?? throw new Exception("g is null");
     }
     
     public override void SetName(string name)
@@ -303,22 +175,14 @@ public class AdapterGameToTuple : GameTuple
             _g.Authors = newAuthors;
             return;
         }
-        
-        foreach (UserTuple author in authors)
-        {
-            newAuthors.Add(new AdapterUserFromTuple(author));
-        }
+
+        newAuthors.AddRange(authors.Select(author => new AdapterUserFromTuple(author)));
         _g.Authors = newAuthors;
     }
 
     public override List<UserTuple> GetAuthors()
     {
-        var outAuthors = new List<UserTuple>();
-        foreach (User author in _g.Authors)
-        {
-            outAuthors.Add(new AdapterUserToTuple(author));
-        }
-        return outAuthors;
+        return _g.Authors.Select(author => new AdapterUserToTuple(author)).Cast<UserTuple>().ToList();
     }
 
     public override void SetReviews(List<ReviewTuple>? reviews)
@@ -330,22 +194,14 @@ public class AdapterGameToTuple : GameTuple
             _g.Reviews = newReviews;
             return;
         }
-        
-        foreach (ReviewTuple review in reviews)
-        {
-            newReviews.Add(new AdapterReviewFromTuple(review));
-        }
+
+        newReviews.AddRange(reviews.Select(review => new AdapterReviewFromTuple(review)).Cast<Review>());
         _g.Reviews = newReviews;
     }
 
     public override List<ReviewTuple> GetReviews()
     {
-        var outReviews = new List<ReviewTuple>();
-        foreach (Review review in _g.Reviews)
-        {
-            outReviews.Add(new AdapterReviewToTuple(review));
-        }
-        return outReviews;
+        return _g.Reviews.Select(review => new AdapterReviewToTuple(review)).Cast<ReviewTuple>().ToList();
     }
 
     public override void SetMods(List<ModTuple>? mods)
@@ -357,22 +213,14 @@ public class AdapterGameToTuple : GameTuple
             _g.Mods = newMods;
             return;
         }
-        
-        foreach (ModTuple mod in mods)
-        {
-            newMods.Add(new AdapterModFromTuple(mod));
-        }
+
+        newMods.AddRange(mods.Select(mod => new AdapterModFromTuple(mod)));
         _g.Mods = newMods;
     }
 
     public override List<ModTuple> GetMods()
     {
-        var outMods = new List<ModTuple>();
-        foreach (Mod mod in _g.Mods)
-        {
-            outMods.Add(new AdapterModToTuple(mod));
-        }
-        return outMods;
+        return _g.Mods.Select(mod => new AdapterModToTuple(mod)).Cast<ModTuple>().ToList();
     }
 }
 
@@ -419,11 +267,7 @@ public class AdapterModToTuple : ModTuple
     
     public AdapterModToTuple(Mod m)
     {
-        if (m == null)
-        {
-            throw new Exception("m is null");
-        }
-        this._m = m;
+        _m = m ?? throw new Exception("m is null");
     }
     
     public override void SetName(string name)
@@ -453,22 +297,14 @@ public class AdapterModToTuple : ModTuple
             _m.Authors = newAuthors;
             return;
         }
-        
-        foreach (UserTuple author in authors)
-        {
-            newAuthors.Add(new AdapterUserFromTuple(author));
-        }
+
+        newAuthors.AddRange(authors.Select(author => new AdapterUserFromTuple(author)).Cast<User>());
         _m.Authors = newAuthors;
     }
 
     public override List<UserTuple> GetAuthors()
     {
-        var outAuthors = new List<UserTuple>();
-        foreach (User author in _m.Authors)
-        {
-            outAuthors.Add(new AdapterUserToTuple(author));
-        }
-        return outAuthors;
+        return _m.Authors.Select(author => new AdapterUserToTuple(author)).Cast<UserTuple>().ToList();
     }
 
     public override void SetCompatibility(List<ModTuple>? mods)
@@ -480,22 +316,14 @@ public class AdapterModToTuple : ModTuple
             _m.Compatibility = newMods;
             return;
         }
-        
-        foreach (ModTuple mod in mods)
-        {
-            newMods.Add(new AdapterModFromTuple(mod));
-        }
+
+        newMods.AddRange(mods.Select(mod => new AdapterModFromTuple(mod)));
         _m.Compatibility = newMods;
     }
 
     public override List<ModTuple> GetCompatibility()
     {
-        var outMods = new List<ModTuple>();
-        foreach (Mod mod in _m.Compatibility)
-        {
-            outMods.Add(new AdapterModToTuple(mod));
-        }
-        return outMods;
+        return _m.Compatibility.Select(mod => new AdapterModToTuple(mod)).Cast<ModTuple>().ToList();
     }
 }
 
@@ -525,21 +353,13 @@ public class AdapterUserToTuple : UserTuple
             _u.OwnedGames = newGames;
             return;
         }
-        
-        foreach (GameTuple game in ownedGames)
-        {
-            newGames.Add(new AdapterGameFromTuple(game));
-        }
+
+        newGames.AddRange(ownedGames.Select(game => new AdapterGameFromTuple(game)));
         _u.OwnedGames = newGames;
     }
 
     public override List<GameTuple> GetOwnedGames()
     {
-        var outGames = new List<GameTuple>();
-        foreach (Game game in _u.OwnedGames)
-        {
-            outGames.Add(new AdapterGameToTuple(game));
-        }
-        return outGames;
+        return _u.OwnedGames.Select(game => new AdapterGameToTuple(game)).Cast<GameTuple>().ToList();
     }
 }
