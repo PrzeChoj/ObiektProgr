@@ -139,13 +139,30 @@ Console.WriteLine((xd).Name);
 
 
 // Zadanie 2:
-bool IsMeanBig(Game g, double treshold = 10.0)
+bool IsMeanBig(Game g, double threshold = 10.0)
 {
-    double sum = 0;
-    foreach (Review review in g.Reviews)
-    {
-        sum += review.Rating;
-    }
-    
-    return (sum / g.Reviews.Count) > treshold;
+    double sum = g.Reviews.Aggregate<Review, double>(0, (current, review) => current + review.Rating);
+
+    return (sum / g.Reviews.Count) > threshold;
 }
+
+void PrintListForBigGames(List<Game> listOfGames)
+{
+    foreach (var game in listOfGames.Where(game => IsMeanBig(game)))
+    {
+        Console.WriteLine(game);
+    }
+}
+
+Console.WriteLine("\n\nPrint all games with big mean:");
+PrintListForBigGames(new List<Game> { g1, g2, g3, g4, g5 });
+
+Console.WriteLine("\n\nPrint all games HASH with big mean:");
+PrintListForBigGames(new List<Game>(new List<AdapterGameFromHash>
+{
+    new(gh1),
+    new(gh2),
+    new(gh3),
+    new(gh4),
+    new(gh5)
+}));
