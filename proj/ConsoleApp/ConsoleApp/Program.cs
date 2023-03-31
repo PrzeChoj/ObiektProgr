@@ -68,71 +68,71 @@ Console.WriteLine("\n==========================\n\nHASH:");
 
 // Hash
 // Users
-UserHash uh1 = new UserHash("Szredor");
-UserHash uh2 = new UserHash("Driver");
-UserHash uh3 = new UserHash("Pek");
-UserHash uh4 = new UserHash("Commander Shepard");
-UserHash uh5 = new UserHash("MLG");
-UserHash uh6 = new UserHash("Rondo");
-UserHash uh7 = new UserHash("lemon");
-UserHash uh8 = new UserHash("Bonet");
+UserTuple uh1 = new UserTuple("Szredor");
+UserTuple uh2 = new UserTuple("Driver");
+UserTuple uh3 = new UserTuple("Pek");
+UserTuple uh4 = new UserTuple("Commander Shepard");
+UserTuple uh5 = new UserTuple("MLG");
+UserTuple uh6 = new UserTuple("Rondo");
+UserTuple uh7 = new UserTuple("lemon");
+UserTuple uh8 = new UserTuple("Bonet");
 
 // Mods
-ModHash mh1 = new ModHash("Clouds", "Super clouds", new List<UserHash> {uh3});
-ModHash mh2 = new ModHash("T-pose", "Cow are now T-posing", new List<UserHash>());
-ModHash mh3 = new ModHash("Commander Shepard", "I’m Commander Shepard and this is my favorite mod on Smoke",
-    new List<UserHash>{uh4});
-ModHash mh4 = new ModHash("BTM", "You can now play in BTM’s trains and bytebuses", new List<UserHash>{uh7, uh8});
-ModHash mh5 = new ModHash("Cosmic - black hole edition", "Adds REALISTIC black holes", new List<UserHash>{uh2});
-mh1.Compatibility = new List<ModHash> { mh2, mh3, mh4, mh5 };
-mh2.Compatibility = new List<ModHash> { mh1, mh3 };
-mh3.Compatibility = new List<ModHash> { mh1, mh2, mh4 };
-mh4.Compatibility = new List<ModHash> { mh1, mh3 };
-mh5.Compatibility = new List<ModHash> { mh1 };
+ModTuple mh1 = new ModTuple("Clouds", "Super clouds", new List<UserTuple> {uh3});
+ModTuple mh2 = new ModTuple("T-pose", "Cow are now T-posing", new List<UserTuple>());
+ModTuple mh3 = new ModTuple("Commander Shepard", "I’m Commander Shepard and this is my favorite mod on Smoke",
+    new List<UserTuple>{uh4});
+ModTuple mh4 = new ModTuple("BTM", "You can now play in BTM’s trains and bytebuses", new List<UserTuple>{uh7, uh8});
+ModTuple mh5 = new ModTuple("Cosmic - black hole edition", "Adds REALISTIC black holes", new List<UserTuple>{uh2});
+mh1.SetCompatibility(new List<ModTuple> { mh2, mh3, mh4, mh5 });
+mh2.SetCompatibility(new List<ModTuple> { mh1, mh3 });
+mh3.SetCompatibility(new List<ModTuple> { mh1, mh2, mh4 });
+mh4.SetCompatibility(new List<ModTuple> { mh1, mh3 });
+mh5.SetCompatibility(new List<ModTuple> { mh1 });
 
 // Reviews
-ReviewHash rh1 = new ReviewHash("I’m Commander Shepard and this is my favorite game on Smoke", 10, uh4);
-ReviewHash rh2 = new ReviewHash("The Moo remake sets a new standard for the future of the survival horror series⁠, even if it isn't the sequel I've been pining for.",
+ReviewTuple rh1 = new ReviewTuple("I’m Commander Shepard and this is my favorite game on Smoke", 10, uh4);
+ReviewTuple rh2 = new ReviewTuple("The Moo remake sets a new standard for the future of the survival horror series⁠, even if it isn't the sequel I've been pining for.",
     12, uh2);
-ReviewHash rh3 = new ReviewHash("Universe of Technology is a spectacular 4X game, that manages to shine even when the main campaign doesn't.",
+ReviewTuple rh3 = new ReviewTuple("Universe of Technology is a spectacular 4X game, that manages to shine even when the main campaign doesn't.",
     15, uh7);
-ReviewHash rh4 = new ReviewHash("Moo’s interesting art design can't save it from its glitches, bugs, and myriad terrible game design decisions, but I love its sound design",
+ReviewTuple rh4 = new ReviewTuple("Moo’s interesting art design can't save it from its glitches, bugs, and myriad terrible game design decisions, but I love its sound design",
     2, uh8);
-ReviewHash rh5 = new ReviewHash("I've played this game for years nonstop. Over 8k hours logged (not even joking). And I'm gonna tell you: at this point, the game's just not worth playing anymore. I think it hasn't been worth playing for a year or two now, but I'm only just starting to realize it. It breaks my heart to say that, but that's just the truth of the matter.",
+ReviewTuple rh5 = new ReviewTuple("I've played this game for years nonstop. Over 8k hours logged (not even joking). And I'm gonna tell you: at this point, the game's just not worth playing anymore. I think it hasn't been worth playing for a year or two now, but I'm only just starting to realize it. It breaks my heart to say that, but that's just the truth of the matter.",
     5, uh1);
 
 // Games
-GameHash gh1 = new GameHash("Garbage Collector", "simulation", "PW", null, null, new List<ModHash>{mh1});
-GameHash gh2 = new GameHash("Universe of Technology", "4X", "bitnix", null, new List<ReviewHash>{rh3}, new List<ModHash>{mh1, mh3});
-GameHash gh3 = new GameHash("Moo", "rogue-like", "bitstation", new List<UserHash>{uh2}, new List<ReviewHash>{rh2, rh4}, new List<ModHash>{mh1, mh2, mh3});
-GameHash gh4 = new GameHash("Tickets Please", "platformer", "bitbox", new List<UserHash>{uh1}, new List<ReviewHash>{rh1}, new List<ModHash>{mh1, mh3, mh4});
-GameHash gh5 = new GameHash("Cosmic", "MOBA", "cross platform", new List<UserHash>{uh5}, new List<ReviewHash>{rh5}, new List<ModHash>{mh1, mh5});
+GameTuple gh1 = new GameTuple("Garbage Collector", "simulation", "PW", null, null, new List<ModTuple>{mh1});
+GameTuple gh2 = new GameTuple("Universe of Technology", "4X", "bitnix", null, new List<ReviewTuple>{rh3}, new List<ModTuple>{mh1, mh3});
+GameTuple gh3 = new GameTuple("Moo", "rogue-like", "bitstation", new List<UserTuple>{uh2}, new List<ReviewTuple>{rh2, rh4}, new List<ModTuple>{mh1, mh2, mh3});
+GameTuple gh4 = new GameTuple("Tickets Please", "platformer", "bitbox", new List<UserTuple>{uh1}, new List<ReviewTuple>{rh1}, new List<ModTuple>{mh1, mh3, mh4});
+GameTuple gh5 = new GameTuple("Cosmic", "MOBA", "cross platform", new List<UserTuple>{uh5}, new List<ReviewTuple>{rh5}, new List<ModTuple>{mh1, mh5});
 
 // Add Games for Users
-uh1.OwnedGames = new List<GameHash> { gh1, gh2, gh3, gh4, gh5 };
-uh2.OwnedGames = new List<GameHash> { gh1, gh2, gh3, gh4, gh5 };
-uh3.OwnedGames = new List<GameHash> { gh1, gh2, gh3, gh4, gh5 };
-uh4.OwnedGames = new List<GameHash> { gh1, gh2, gh4 };
-uh5.OwnedGames = new List<GameHash> { gh1, gh5 };
-uh6.OwnedGames = new List<GameHash> { gh1 };
-uh7.OwnedGames = new List<GameHash> { gh3, gh4 };
-uh8.OwnedGames = new List<GameHash> { gh2 };
+uh1.SetOwnedGames(new List<GameTuple> { gh1, gh2, gh3, gh4, gh5 });
+uh2.SetOwnedGames(new List<GameTuple> { gh1, gh2, gh3, gh4, gh5 });
+uh3.SetOwnedGames(new List<GameTuple> { gh1, gh2, gh3, gh4, gh5 });
+uh4.SetOwnedGames(new List<GameTuple> { gh1, gh2, gh4 });
+uh5.SetOwnedGames(new List<GameTuple> { gh1, gh5 });
+uh6.SetOwnedGames(new List<GameTuple> { gh1 });
+uh7.SetOwnedGames(new List<GameTuple> { gh3, gh4 });
+uh8.SetOwnedGames(new List<GameTuple> { gh2 });
 
 
 // Print test
 Console.WriteLine(gh1);
-var adaptedGh1 = new AdapterGameFromHash(gh1);
+var adaptedGh1 = new AdapterGameFromTuple(gh1);
 Console.WriteLine(adaptedGh1);
 Console.WriteLine(uh1);
-Console.WriteLine(new AdapterUserFromHash(uh1));
+Console.WriteLine(new AdapterUserFromTuple(uh1));
 Console.WriteLine(rh1);
-Console.WriteLine(new AdapterReviewFromHash(rh1));
+Console.WriteLine(new AdapterReviewFromTuple(rh1));
 Console.WriteLine(mh1);
-Console.WriteLine(new AdapterModFromHash(mh1));
+Console.WriteLine(new AdapterModFromTuple(mh1));
 
-Console.WriteLine(mh1.Authors[0].OwnedGames.Count); // Should be 5
+Console.WriteLine(mh1.GetAuthors()[0].GetOwnedGames().Count); // Should be 5
 
-var xd = new AdapterModFromHash(mh1);
+var xd = new AdapterModFromTuple(mh1);
 Console.WriteLine((xd).Name);
 
 
@@ -157,8 +157,8 @@ void PrintListForBigGames(List<Game> listOfGames)
 Console.WriteLine("\n\nPrint all games with big mean:");
 PrintListForBigGames(new List<Game> { g1, g2, g3, g4, g5 });
 
-Console.WriteLine("\n\nPrint all games HASH with big mean:");
-PrintListForBigGames(new List<Game>(new List<AdapterGameFromHash>
+Console.WriteLine("\n\nPrint all games Tuple with big mean:");
+PrintListForBigGames(new List<Game>(new List<AdapterGameFromTuple>
 {
     new(gh1),
     new(gh2),
