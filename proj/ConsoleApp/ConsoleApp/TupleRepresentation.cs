@@ -34,13 +34,7 @@ public class GameTuple
 
     private Object? _getPair(string key)
     {
-        foreach (var pair in _myLisOfPairs)
-        {
-            if (pair.Item1 == key)
-                return pair.Item2;
-        }
-
-        return null;
+        return (from pair in _myLisOfPairs where pair.Item1 == key select pair.Item2).FirstOrDefault();
     }
     
     public virtual void SetName(string name)
@@ -125,13 +119,7 @@ public class ReviewTuple
     
     private Object? _getPair(string key)
     {
-        foreach (var pair in _myLisOfPairs)
-        {
-            if (pair.Item1 == key)
-                return pair.Item2;
-        }
-
-        return null;
+        return (from pair in _myLisOfPairs where pair.Item1 == key select pair.Item2).FirstOrDefault();
     }
 
     public virtual void SetText(string text)
