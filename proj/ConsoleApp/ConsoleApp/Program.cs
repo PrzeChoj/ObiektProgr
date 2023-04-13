@@ -1,5 +1,7 @@
 ﻿using ConsoleApp;
 
+bool print_old = false;
+
 // Users
 User u1 = new User("Szredor");
 User u2 = new User("Driver");
@@ -51,20 +53,22 @@ u6.OwnedGames = new List<Game> { g1 };
 u7.OwnedGames = new List<Game> { g3, g4 };
 u8.OwnedGames = new List<Game> { g2 };
 
+if (print_old)
+{
+    // Print test
+    Console.WriteLine(g1);
+    Console.WriteLine(u1);
+    Console.WriteLine(r1);
+    Console.WriteLine(m1);
 
-// Print test
-Console.WriteLine(g1);
-Console.WriteLine(u1);
-Console.WriteLine(r1);
-Console.WriteLine(m1);
+    Console.WriteLine(m1.Authors[0].OwnedGames.Count); // Should be 5
 
-Console.WriteLine(m1.Authors[0].OwnedGames.Count); // Should be 5
-
-Console.WriteLine(r1.ToString());
-Console.WriteLine(r1.Author.OwnedGames[2].Reviews[0].ToString());
+    Console.WriteLine(r1.ToString());
+    Console.WriteLine(r1.Author.OwnedGames[2].Reviews[0].ToString());
 
 
-Console.WriteLine("\n==========================\n\nHASH:");
+    Console.WriteLine("\n==========================\n\nHASH:");
+}
 
 // Hash
 // Users
@@ -119,23 +123,24 @@ uh7.SetOwnedGames(new List<GameTuple> { gh3, gh4 });
 uh8.SetOwnedGames(new List<GameTuple> { gh2 });
 
 
-// Print test
-Console.WriteLine(gh1);
-var adaptedGh1 = new AdapterGameFromTuple(gh1);
-Console.WriteLine(adaptedGh1);
-Console.WriteLine(uh1);
-Console.WriteLine(new AdapterUserFromTuple(uh1));
-Console.WriteLine(rh1);
-Console.WriteLine(new AdapterReviewFromTuple(rh1));
-Console.WriteLine(mh1);
-Console.WriteLine(new AdapterModFromTuple(mh1));
+if (print_old)
+{
+    // Print test
+    Console.WriteLine(gh1);
+    var adaptedGh1 = new AdapterGameFromTuple(gh1);
+    Console.WriteLine(adaptedGh1);
+    Console.WriteLine(uh1);
+    Console.WriteLine(new AdapterUserFromTuple(uh1));
+    Console.WriteLine(rh1);
+    Console.WriteLine(new AdapterReviewFromTuple(rh1));
+    Console.WriteLine(mh1);
+    Console.WriteLine(new AdapterModFromTuple(mh1));
 
-Console.WriteLine(mh1.GetAuthors()[0].GetOwnedGames().Count); // Should be 5
-
-var xd = new AdapterModFromTuple(mh1);
-Console.WriteLine((xd).Name);
-
-
+    Console.WriteLine(mh1.GetAuthors()[0].GetOwnedGames().Count); // Should be 5
+    
+    var xd = new AdapterModFromTuple(mh1);
+    Console.WriteLine((xd).Name);
+}
 
 
 // Zadanie 2:
@@ -146,23 +151,45 @@ bool IsMeanBig(Game g, double threshold = 10.0)
     return (sum / g.Reviews.Count) > threshold;
 }
 
-void PrintListForBigGames(List<Game> listOfGames)
+if (print_old)
 {
-    foreach (var game in listOfGames.Where(game => IsMeanBig(game)))
+    void PrintListForBigGames(List<Game> listOfGames)
     {
-        Console.WriteLine(game);
+        foreach (var game in listOfGames.Where(game => IsMeanBig(game)))
+        {
+            Console.WriteLine(game);
+        }
     }
+
+    Console.WriteLine("\n\nPrint all games with big mean:");
+    PrintListForBigGames(new List<Game> { g1, g2, g3, g4, g5 });
+
+    Console.WriteLine("\n\nPrint all games Tuple with big mean:");
+    PrintListForBigGames(new List<Game>(new List<AdapterGameFromTuple>
+    {
+        new(gh1),
+        new(gh2),
+        new(gh3),
+        new(gh4),
+        new(gh5)
+    }));
 }
 
-Console.WriteLine("\n\nPrint all games with big mean:");
-PrintListForBigGames(new List<Game> { g1, g2, g3, g4, g5 });
 
-Console.WriteLine("\n\nPrint all games Tuple with big mean:");
-PrintListForBigGames(new List<Game>(new List<AdapterGameFromTuple>
-{
-    new(gh1),
-    new(gh2),
-    new(gh3),
-    new(gh4),
-    new(gh5)
-}));
+var x = new DoublyLinkedList<Game>();
+x.Add(g1);
+x.Add(g2);
+x.Add(g3);
+x.Add(g4);
+x.Add(g5);
+x.Add(new AdapterGameFromTuple(gh1));
+x.Add(new AdapterGameFromTuple(gh2));
+x.Add(new AdapterGameFromTuple(gh3));
+x.Add(new AdapterGameFromTuple(gh4));
+x.Add(new AdapterGameFromTuple(gh5));
+
+// Mam funkcje IsMeanBig(Game g, double threshold = 10.0) :D
+// Pierwsza gra z duza srednia:
+Console.WriteLine(AlgorithmsOnICollection.Find<Game>(x!, game => IsMeanBig(game)));
+Console.WriteLine("=======================\nWszystkie:");
+AlgorithmsOnICollection.Print<Game>(x!, game => IsMeanBig(game));

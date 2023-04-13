@@ -170,7 +170,7 @@ public class Vector<T> : ICollection<T>
 }
 
 
-public static class FindFromICollection
+public static class AlgorithmsOnICollection
 {
     public static T? Find<T>(ICollection<T?> collection, Func<T, bool> predicate, bool reverse = false)
     {
@@ -187,5 +187,20 @@ public static class FindFromICollection
         }
 
         return default;
+    }
+    
+    public static void Print<T>(ICollection<T?> collection, Func<T, bool> predicate, bool reverse = false)
+    {
+        var enumerator = reverse ? collection.GetReverseEnumerator() : collection.GetEnumerator();
+
+        while (enumerator.MoveNext())
+        {
+            var item = enumerator.Current;
+
+            if (predicate(item!))
+            {
+                Console.WriteLine(item);
+            }
+        }
     }
 }
