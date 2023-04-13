@@ -3,107 +3,189 @@ using System.Diagnostics;
 
 namespace ConsoleApp;
 
-public class DoubleLinkedList<T>
+public interface ICollection<T>
 {
-    private Node? _start { get; set; }
-    private Node? _end { get; set; }
+    void Add(T item);
+    void Remove(T item);
+    IEnumerator<T> GetEnumerator();
+    IEnumerator<T> GetReverseEnumerator();
+}
 
-    public class Node
+public class DoublyLinkedList<T> : ICollection<T>
+{
+    private class Node
     {
-        public Node? Next { get; set; }
-        public Node? Prev { get; set; }
         public T Value { get; set; }
+        public Node? Prev { get; set; }
+        public Node? Next { get; set; }
 
-        public void Append(T value)
+        public Node(T value)
         {
-            if (Next == null)
-            {
-                Next = new Node { Value = value, Prev = this};
-                return;
-            }
-            Next.Append(value);
+            Value = value;
         }
-
-        public T Get(int i) => i == 0 ? Value : Next!.Get(--i);
     }
 
-    public void Add(T value)
+    private Node? _head;
+    private Node? _tail;
+
+    public void Add(T item)
     {
-        if (_start == null)
+        var node = new Node(item);
+
+        if (_head == null || _tail == null)
         {
-            _start = new Node { Value = value };
-            _end = _start;
+            _head = node;
+            _tail = node;
+        }
+        else
+        {
+            node.Prev = _tail;
+            _tail.Next = node;
+            _tail = node;
+        }
+    }
+
+    public void Remove(T item)
+    {
+        var node = FindNode(item);
+
+        if (node == null)
+        {
             return;
         }
-        _end!.Append(value);
-        _end = _end.Next;
-    }
 
-    public T Get(int i)
-    {
-        Debug.Assert(_start != null, nameof(_start) + " != null");
-        return _start.Get(i);
-    }
-
-    public ForwardIteratorClass ForwardIterator
-    {
-        get
+        // Change the next
+        if (node.Prev == null)
         {
-            Debug.Assert(_start != null, nameof(_start) + " != null");
-            return new ForwardIteratorClass(_start);
+            _head = node.Next;
+        }
+        else
+        {
+            node.Prev.Next = node.Next;
+        }
+
+        // Change the prev
+        if (node.Next == null)
+        {
+            _tail = node.Prev;
+        }
+        else
+        {
+            node.Next.Prev = node.Prev;
         }
     }
 
-    public class ForwardIteratorClass
+    private Node? FindNode(T item)
     {
-        private readonly Node _root;
-        private Node? _current;
-        public ForwardIteratorClass(Node root) => _root = _current = root;
+        var node = _head;
 
-        public T Next()
+        while (node != null)
         {
-            Debug.Assert(_current != null, nameof(_current) + " != null");
-            var value = _current.Value;
-            _current = _current.Next;
-            return value;
+            if (node.Value!.Equals(item))
+            {
+                return node;
+            }
+
+            node = node.Next;
         }
 
-        public bool Complete => _current == null;
-
-        public void Reset()
-        {
-            _current = _root;
-        }
+        return null;
     }
-    
-    public ReverseIteratorClass ReverseIterator
+
+    public IEnumerator<T> GetEnumerator()
     {
-        get
+        var node = _head;
+
+        while (node != null)
         {
-            Debug.Assert(_end != null, nameof(_end) + " != null");
-            return new ReverseIteratorClass(_end);
+            yield return node.Value;
+            node = node.Next;
         }
     }
 
-    public class ReverseIteratorClass
+    public IEnumerator<T> GetReverseEnumerator()
     {
-        private readonly Node _tail;
-        private Node? _current;
-        public ReverseIteratorClass(Node tail) => _tail = _current = tail;
+        var node = _tail;
 
-        public T Next()
+        while (node != null)
         {
-            Debug.Assert(_current != null, nameof(_current) + " != null");
-            var value = _current.Value;
-            _current = _current.Prev;
-            return value;
+            yield return node.Value;
+            node = node.Prev;
+        }
+    }
+}
+
+public class Vector<T> : ICollection<T>
+{
+    private T[] _items;
+    private int _count;
+
+    public Vector(int capacity = 4)
+    {
+        _items = new T[capacity];
+    }
+
+    public void Add(T item)
+    {
+        if (_count == _items.Length)
+        {
+            Array.Resize(ref _items, _items.Length * 2);
         }
 
-        public bool Complete => _current == null;
+        _items[_count++] = item;
+    }
 
-        public void Reset()
+    public void Remove(T item)
+    {
+        for (int i = 0; i < _count; i++)
         {
-            _current = _tail;
+            if (!_items[i]!.Equals(item)) continue;
+            
+            // Found it!
+            for (int j = i; j < _count - 1; j++)
+            {
+                _items[j] = _items[j + 1];
+            }
+
+            _count--;
+            return;
         }
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        for (int i = 0; i < _count; i++)
+        {
+            yield return _items[i];
+        }
+    }
+
+    public IEnumerator<T> GetReverseEnumerator()
+    {
+        for (int i = _count - 1; i >= 0; i--)
+        {
+            yield return _items[i];
+        }
+    }
+}
+
+
+public static class FindFromICollection
+{
+    public static T? Find<T>(ICollection<T?> collection, Func<T, bool> predicate, bool reverse = false)
+    {
+        var enumerator = reverse ? collection.GetReverseEnumerator() : collection.GetEnumerator();
+
+        while (enumerator.MoveNext())
+        {
+            var item = enumerator.Current;
+
+            if (predicate(item!))
+            {
+                return item;
+            }
+        }
+
+        return default;
     }
 }
