@@ -3,14 +3,6 @@ using System.Diagnostics;
 
 namespace ConsoleApp;
 
-public interface ICollection<T>
-{
-    void Add(T item);
-    void Remove(T item);
-    IEnumerator<T> GetEnumerator();
-    IEnumerator<T> GetReverseEnumerator();
-}
-
 public class DoublyLinkedList<T> : ICollection<T>
 {
     private class Node
