@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Diagnostics;
-using System.Xml;
-
 namespace ConsoleApp;
 
 public interface ICollection<T>
@@ -28,248 +24,280 @@ public class MyBinaryTree<T> : ICollection<T>
     }
 
     private Node? _root;
-    private Random _random = new Random();
 
     public void Add(T item)
     {
+        Node newNode = new Node(item);
+
         if (_root == null)
         {
-            _root = new Node(item);
+            _root = newNode;
+            return;
         }
-        else
-        {
-            Add(item, _root);
-        }
-    }
-    
-    private void Add(T item, Node thisNode)
-    {
-        var node = new Node(item);
 
-        bool thisIsLeaf = thisNode.LChild == null && thisNode.RChild == null;
+        Node current = _root;
 
-        if (thisIsLeaf)
+        while (current != null)
         {
-            node.Parent = thisNode;
-            if (_random.Next(2) == 0)
+            bool currentFasBothChildren = current.LChild != null && current.RChild != null;
+            if (currentFasBothChildren)
             {
-                thisNode.LChild = node;
+                current = ((new Random().Next(2) == 0) ? current.LChild : current.RChild)!;
+                continue;
+            }
+
+            bool currentIsLeaf = current.LChild == null && current.RChild == null;
+            if (currentIsLeaf)
+            {
+                if (new Random().Next(2) == 0)
+                {
+                    current.LChild = newNode;
+                    newNode.Parent = current;
+                }
+                else
+                {
+                    current.RChild = newNode;
+                    newNode.Parent = current;
+                }
+            }
+            else if (current.LChild == null)
+            {
+                current.LChild = newNode;
+                newNode.Parent = current;
+            }
+            else if (current.RChild == null)
+            {
+                current.RChild = newNode;
+                newNode.Parent = current;
             }
             else
             {
-                thisNode.RChild = node;
+                throw new Exception("Error in logic");
             }
-        }
-        else if (thisNode.LChild == null)
-        {
-            node.Parent = thisNode;
-            thisNode.LChild = node;
-        }
-        else if (thisNode.RChild == null)
-        {
-            node.Parent = thisNode;
-            thisNode.RChild = node;
-        }
-        else
-        {
-            Add(item, _random.Next(2) == 0 ? thisNode.LChild : thisNode.RChild);
+            
+            return;
         }
     }
 
     public void Remove(T item)
     {
-        var node = FindNode(item);
-
-        if (node == null)
+        Node? nodeToRemove = FindNode(item);
+        
+        // Case 0: Nothing to remove
+        if (nodeToRemove == null)
         {
             return;
         }
 
-        if (node.Parent == null)
+        // Case 1: Node is a leaf node
+        bool removeLeaf = nodeToRemove.LChild == null && nodeToRemove.RChild == null;
+        if (removeLeaf)
         {
-            // This is root
-            Node leaf2;
-            if (_root!.LChild == null)
+            if (Equals(nodeToRemove, _root))
             {
-                if (_root.RChild == null)
-                {
-                    _root = null;
-                    return;
-                }
-
-                leaf2 = _DetachLeaf(_root.RChild);
+                _root = null;
+            }
+            else if (nodeToRemove.Parent == null)
+            {
+                throw new Exception("Only root is allowed to not have parents");
+            }
+            else if (Equals(nodeToRemove, nodeToRemove.Parent.LChild))
+            {
+                nodeToRemove.Parent.LChild = null;
+            }
+            else if (Equals(nodeToRemove, nodeToRemove.Parent.RChild))
+            {
+                nodeToRemove.Parent.RChild = null;
             }
             else
             {
-                leaf2 = _DetachLeaf();
+                throw new Exception("Tree had unexpected structure");
             }
-            _root = leaf2;
-            _root.LChild = node.LChild;
-            _root.RChild = node.RChild;
-            return;
         }
-
-        bool thisIsLeaf = node.LChild == null && node.RChild == null;
-
-        if (thisIsLeaf)
+        // Case 2: Node has one child
+        else if (nodeToRemove.LChild == null && nodeToRemove.RChild != null)
         {
-            if (node.Parent.LChild == node)
+            // nodeToRemove.RChild będzie dzieckiem swojego dziadka
+            if (nodeToRemove.Parent == null)
             {
-                node.Parent.LChild = null;
+                _root = nodeToRemove.RChild;
+            }
+            else if (Equals(nodeToRemove.Parent.LChild, nodeToRemove))
+            {
+                nodeToRemove.Parent.LChild = nodeToRemove.RChild;
+            }
+            else if (Equals(nodeToRemove.Parent.RChild, nodeToRemove))
+            {
+                nodeToRemove.Parent.RChild = nodeToRemove.RChild;
             }
             else
             {
-                node.Parent.RChild = null;
+                throw new Exception("Tree was wrongly build");
             }
 
-            return;
+            // Set new parent
+            nodeToRemove.RChild.Parent = nodeToRemove.Parent;
         }
-        
-        if (node.LChild == null)
+        else if (nodeToRemove.LChild != null && nodeToRemove.RChild == null)
         {
-            node.RChild!.Parent = node.Parent;
-            if (node.Parent.LChild == node)
+            // nodeToRemove.RChild będzie dzieckiem swojego dziadka
+            if (nodeToRemove.Parent == null)
             {
-                node.Parent.LChild = node.RChild;
+                _root = nodeToRemove.LChild;
+            }
+            else if (Equals(nodeToRemove.Parent.LChild, nodeToRemove))
+            {
+                nodeToRemove.Parent.LChild = nodeToRemove.LChild;
+            }
+            else if (Equals(nodeToRemove.Parent.RChild, nodeToRemove))
+            {
+                nodeToRemove.Parent.RChild = nodeToRemove.LChild;
             }
             else
             {
-                node.Parent.RChild = node.RChild;
+                throw new Exception("Tree was wrongly build");
             }
 
-            return;
+            // Set new parent
+            nodeToRemove.LChild.Parent = nodeToRemove.Parent;
         }
-        
-        if (node.RChild == null)
+        // Case 3: Node has two children
+        else if (nodeToRemove.LChild != null && nodeToRemove.RChild != null)
         {
-            node.LChild!.Parent = node.Parent;
-            if (node.Parent.LChild == node)
+            Node nodeWithoutRChild = nodeToRemove.RChild;
+            bool changeWithChild = true;
+            while (nodeWithoutRChild.RChild != null)
             {
-                node.Parent.LChild = node.LChild;
+                nodeWithoutRChild = nodeWithoutRChild.RChild;
+                changeWithChild = false;
+            }
+            // Now, nodeWithoutRChild is what its name said
+
+            // nodeWithoutRChild always has a parent
+            nodeWithoutRChild.Parent!.RChild = nodeWithoutRChild.LChild;
+
+            if (nodeWithoutRChild.LChild != null)
+            {
+                nodeWithoutRChild.LChild.Parent = nodeWithoutRChild.Parent;
+            }
+            // Now, the nodeWithoutRChild was removed
+            
+            // I want to place nodeWithoutRChild in the place of nodeToRemove
+            
+            // Change the parent:
+            if (nodeToRemove.Parent == null)
+            {
+                _root = nodeWithoutRChild;
+            }
+            else if (Equals(nodeToRemove.Parent.LChild, nodeToRemove))
+            {
+                nodeToRemove.Parent.LChild = nodeWithoutRChild;
             }
             else
             {
-                node.Parent.RChild = node.LChild;
+                nodeToRemove.Parent.RChild = nodeWithoutRChild;
+            }
+            
+            // Change the parent of children:
+            nodeToRemove.LChild.Parent = nodeWithoutRChild;
+            if (!changeWithChild) // This was pain to see. Took an hour and a half of debugging...
+            {
+                nodeToRemove.RChild.Parent = nodeWithoutRChild;
             }
 
-            return;
-        }
-        
-        // This has both childs and parent
-        
-        Node leaf = _DetachLeaf()!;
-        leaf.LChild = node.LChild;
-        node.LChild.Parent = leaf;
-        leaf.RChild = node.RChild;
-        node.RChild.Parent = leaf;
-        leaf.Parent = node.Parent;
-        if (node.Parent.LChild == node)
-        {
-            node.Parent.LChild = leaf;
+            // Change the pointers of the nodeWithoutRChild:
+            nodeWithoutRChild.LChild = nodeToRemove.LChild;
+            nodeWithoutRChild.RChild = nodeToRemove.RChild;
+            nodeWithoutRChild.Parent = nodeToRemove.Parent;
         }
         else
         {
-            node.Parent.RChild = leaf;
+            throw new Exception("Logic is not working");
         }
     }
 
-    private Node? _DetachLeaf(Node? startNode = null)
+    public IEnumerator<T> GetEnumerator()
     {
-        if (startNode == null)
+        if (_root == null)
         {
-            startNode = _root;
-        }
-        
-        Node? node = startNode;
-        if (node == null)
-        {
-            return null;
+            yield break;
         }
 
-        while (node.LChild != null)
-        {
-            node = node.LChild;
-        }
+        Stack<Node> stack = new Stack<Node>();
+        Node? current = _root;
 
-        return node;
+        while (current != null || stack.Count > 0)
+        {
+            while (current != null)
+            {
+                stack.Push(current);
+                current = current.LChild;
+            }
+            
+            current = stack.Pop();
+            yield return current.Value;
+            current = current.RChild;
+        }
     }
 
+    public IEnumerator<T> GetReverseEnumerator()
+    {
+        if (_root == null)
+        {
+            yield break;
+        }
+
+        Stack<Node> stack = new Stack<Node>();
+        Node? current = _root;
+
+        while (current != null || stack.Count > 0)
+        {
+            while (current != null)
+            {
+                stack.Push(current);
+                current = current.RChild;
+            }
+
+            current = stack.Pop();
+            yield return current.Value;
+            current = current.LChild;
+        }
+    }
+    
     private Node? FindNode(T item)
     {
         if (_root == null)
         {
             return null;
         }
-        var enumerator = _GetEnumeratorNode();
-        if (item!.Equals(enumerator.Current.Value))
+        
+        Queue<Node> queue = new Queue<Node>();
+        queue.Enqueue(_root);
+
+        while (queue.Count > 0)
         {
-            return enumerator.Current;
-        }
-        while (enumerator.MoveNext())
-        {
-            if (item!.Equals(enumerator.Current.Value))
+            Node current = queue.Dequeue();
+
+            if (current.Value!.Equals(item))
             {
-                return enumerator.Current;
+                return current;
+            }
+
+            if (current.LChild != null)
+            {
+                queue.Enqueue(current.LChild);
+            }
+
+            if (current.RChild != null)
+            {
+                queue.Enqueue(current.RChild);
             }
         }
 
         return null;
     }
-
-    public IEnumerator<T> GetEnumerator()
-    {
-        var node = _root;
-
-        while (node != null)
-        {
-            yield return node.Value;
-            node = node.RChild;
-        }
-    }
-    
-    private IEnumerator<Node> _GetEnumeratorNode()
-    {
-        var node = _root;
-
-        if (node == null)
-        {
-            yield return null;
-        }
-        else
-        {
-            while (node != null)
-            {
-                yield return node;
-                node = _getNextNode(node);
-            }            
-        }
-    }
-
-    private Node? _getNextNode(Node node)
-    {
-        if (node.LChild != null)
-        {
-            return node.LChild;
-        }
-
-        if (node.RChild != null)
-        {
-            return node.RChild;
-        }
-
-        while (node.Parent != null && node.Parent.RChild == null)
-        {
-            node = node.Parent;
-        }
-
-        return node;
-    }
-
-    public IEnumerator<T> GetReverseEnumerator()
-    {
-        throw new NotImplementedException();
-    }
 }
+
 
 
 public static class AlgorithmsOnTrees // TODO

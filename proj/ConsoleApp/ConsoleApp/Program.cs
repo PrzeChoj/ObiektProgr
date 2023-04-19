@@ -1,6 +1,6 @@
 ﻿using ConsoleApp;
 
-bool print_old = false;
+bool printOld = false;
 
 // Users
 User u1 = new User("Szredor");
@@ -53,7 +53,7 @@ u6.OwnedGames = new List<Game> { g1 };
 u7.OwnedGames = new List<Game> { g3, g4 };
 u8.OwnedGames = new List<Game> { g2 };
 
-if (print_old)
+if (printOld)
 {
     // Print test
     Console.WriteLine(g1);
@@ -123,7 +123,7 @@ uh7.SetOwnedGames(new List<GameTuple> { gh3, gh4 });
 uh8.SetOwnedGames(new List<GameTuple> { gh2 });
 
 
-if (print_old)
+if (printOld)
 {
     // Print test
     Console.WriteLine(gh1);
@@ -151,7 +151,7 @@ bool IsMeanBig(Game g, double threshold = 10.0)
     return (sum / g.Reviews.Count) > threshold;
 }
 
-if (print_old)
+if (printOld)
 {
     void PrintListForBigGames(List<Game> listOfGames)
     {
@@ -175,21 +175,65 @@ if (print_old)
     }));
 }
 
+var x = new MyBinaryTree<Game>();
 
-var x = new DoublyLinkedList<Game>();
+Game gAdapt1 = new AdapterGameFromTuple(gh1);
+Game gAdapt2 = new AdapterGameFromTuple(gh2);
+Game gAdapt3 = new AdapterGameFromTuple(gh3);
+Game gAdapt4 = new AdapterGameFromTuple(gh4);
+Game gAdapt5 = new AdapterGameFromTuple(gh5);
 x.Add(g1);
 x.Add(g2);
 x.Add(g3);
 x.Add(g4);
 x.Add(g5);
-x.Add(new AdapterGameFromTuple(gh1));
-x.Add(new AdapterGameFromTuple(gh2));
-x.Add(new AdapterGameFromTuple(gh3));
-x.Add(new AdapterGameFromTuple(gh4));
-x.Add(new AdapterGameFromTuple(gh5));
+/*
+x.Add(gAdapt1);
+x.Add(gAdapt2);
+x.Add(gAdapt3);
+x.Add(gAdapt4);
+x.Add(gAdapt5);*/
+
+IEnumerator<Game> myEnumerator = x.GetEnumerator();
+while (myEnumerator.MoveNext())
+{
+    Console.WriteLine(myEnumerator.Current);
+}
+
+Console.WriteLine("======================REVERSE======================");
+myEnumerator = x.GetReverseEnumerator();
+while (myEnumerator.MoveNext())
+{
+    Console.WriteLine(myEnumerator.Current);
+}
+
+Console.WriteLine("======================REMOVE======================");
+
+
+
+x.Remove(g1);
+x.Remove(g2);
+x.Remove(g3);
+x.Remove(g4);
+x.Remove(g5);
+/*
+x.Remove(gAdapt1);
+x.Remove(gAdapt2);
+x.Remove(gAdapt3);
+x.Remove(gAdapt4);
+x.Remove(gAdapt5);*/
+
+myEnumerator = x.GetEnumerator();
+while (myEnumerator.MoveNext())
+{
+    Console.WriteLine(myEnumerator.Current);
+}
+
 
 // Mam funkcje IsMeanBig(Game g, double threshold = 10.0) :D
 // Pierwsza gra z duza srednia:
+/*
 Console.WriteLine(AlgorithmsOnICollection.Find<Game>(x!, game => IsMeanBig(game)));
 Console.WriteLine("=======================\nWszystkie:");
 AlgorithmsOnICollection.Print<Game>(x!, game => IsMeanBig(game));
+*/
