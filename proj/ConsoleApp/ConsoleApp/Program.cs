@@ -150,6 +150,10 @@ bool IsMeanBig(Game g, double threshold = 10.0)
 
     return (sum / g.Reviews.Count) > threshold;
 }
+bool IsMeanBigNoThreshold(Game g)
+{
+    return IsMeanBig(g);
+}
 
 if (printOld)
 {
@@ -230,3 +234,15 @@ while (myEnumerator.MoveNext())
     Console.WriteLine(myEnumerator.Current.Name);
 }
 
+Console.WriteLine("======================Predicates======================");
+Console.WriteLine(AlgorithmsOnTrees.FindGame(x.GetEnumerator(), IsMeanBigNoThreshold));
+bool GameNone(Game g)
+{
+    return false;
+}
+Console.WriteLine(AlgorithmsOnTrees.FindGame(x.GetEnumerator(), GameNone));
+
+Console.WriteLine("====Print All====");
+void myPrint<T>(T t){Console.WriteLine(t);}
+AlgorithmsOnTrees.ForEach<Game>(x.GetEnumerator(), myPrint<Game>);
+Console.WriteLine(AlgorithmsOnTrees.CountIf<Game>(x.GetEnumerator(), IsMeanBigNoThreshold));

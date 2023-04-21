@@ -305,7 +305,38 @@ public class MyBinaryTree<T> : ICollection<T>
 
 
 
-public static class AlgorithmsOnTrees // TODO
+public static class AlgorithmsOnTrees // 
 {
+    // Find(iterator , predicate) -> T?
+    public static T? FindGame<T>(IEnumerator<T> enumerator, Func<T, bool> predicate)
+    {
+        bool anyTrue = false;
+        while (enumerator.MoveNext() && !anyTrue)
+        {
+            anyTrue = predicate(enumerator.Current);
+        }
+
+        return anyTrue ? enumerator.Current : default;
+    }
     
+    // ForEach(iterator , function) -> void
+    public static void ForEach<T>(IEnumerator<T> enumerator, Action<T> func)
+    {
+        while (enumerator.MoveNext())
+        {
+            func(enumerator.Current);
+        }
+    }
+    
+    // CountIf(iterator , predicate) -> int
+    public static int CountIf<T>(IEnumerator<T> enumerator, Func<T, bool> predicate)
+    {
+        int sum = 0;
+        while (enumerator.MoveNext())
+        {
+            sum++;
+        }
+
+        return sum;
+    }
 }
