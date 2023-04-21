@@ -204,6 +204,11 @@ public class MyBinaryTree<T> : ICollection<T>
             {
                 nodeToRemove.RChild.Parent = nodeWithoutRChild;
             }
+            else // This was also pain to see. Took additional an hour and a half of debugging...
+            {
+                if (nodeWithoutRChild.LChild != null)
+                    nodeWithoutRChild.LChild.Parent = nodeWithoutRChild;
+            }
 
             // Change the pointers of the nodeWithoutRChild:
             nodeWithoutRChild.LChild = nodeToRemove.LChild;

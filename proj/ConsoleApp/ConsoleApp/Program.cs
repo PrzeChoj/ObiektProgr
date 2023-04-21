@@ -187,24 +187,23 @@ x.Add(g2);
 x.Add(g3);
 x.Add(g4);
 x.Add(g5);
-/*
 x.Add(gAdapt1);
 x.Add(gAdapt2);
 x.Add(gAdapt3);
 x.Add(gAdapt4);
-x.Add(gAdapt5);*/
+x.Add(gAdapt5);
 
 IEnumerator<Game> myEnumerator = x.GetEnumerator();
 while (myEnumerator.MoveNext())
 {
-    Console.WriteLine(myEnumerator.Current);
+    Console.WriteLine(myEnumerator.Current.Name);
 }
 
 Console.WriteLine("======================REVERSE======================");
 myEnumerator = x.GetReverseEnumerator();
 while (myEnumerator.MoveNext())
 {
-    Console.WriteLine(myEnumerator.Current);
+    Console.WriteLine(myEnumerator.Current.Name);
 }
 
 Console.WriteLine("======================REMOVE======================");
@@ -215,25 +214,19 @@ x.Remove(g1);
 x.Remove(g2);
 x.Remove(g3);
 x.Remove(g4);
-x.Remove(g5);
-/*
 x.Remove(gAdapt1);
-x.Remove(gAdapt2);
-x.Remove(gAdapt3);
-x.Remove(gAdapt4);
-x.Remove(gAdapt5);*/
+x.Remove(gAdapt5);
+/*
+x.Remove(g5); // Cosmic
+x.Remove(gAdapt2); // Universe of Technology
+x.Remove(gAdapt3); // Moo
+x.Remove(gAdapt4); // Ticets Please
+*/
 
 myEnumerator = x.GetEnumerator();
+int myIter = 0;
 while (myEnumerator.MoveNext())
 {
-    Console.WriteLine(myEnumerator.Current);
+    Console.WriteLine(myEnumerator.Current.Name);
 }
 
-
-// Mam funkcje IsMeanBig(Game g, double threshold = 10.0) :D
-// Pierwsza gra z duza srednia:
-/*
-Console.WriteLine(AlgorithmsOnICollection.Find<Game>(x!, game => IsMeanBig(game)));
-Console.WriteLine("=======================\nWszystkie:");
-AlgorithmsOnICollection.Print<Game>(x!, game => IsMeanBig(game));
-*/
