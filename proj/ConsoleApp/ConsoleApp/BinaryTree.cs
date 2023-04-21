@@ -334,7 +334,8 @@ public static class AlgorithmsOnTrees //
         int sum = 0;
         while (enumerator.MoveNext())
         {
-            sum++;
+            if(predicate(enumerator.Current))
+                sum++;
         }
 
         return sum;
