@@ -22,7 +22,7 @@ public class MyConsole
 
         while (ContinueRunning)
         {
-            Console.Write("> ");
+            Console.Write("============================================================\n> ");
             string input = Console.ReadLine();
 
             string[] args = input.Split(' ');

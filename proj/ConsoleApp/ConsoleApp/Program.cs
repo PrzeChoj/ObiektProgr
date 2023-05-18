@@ -186,28 +186,22 @@ Game gAdapt3 = new AdapterGameFromTuple(gh3);
 Game gAdapt4 = new AdapterGameFromTuple(gh4);
 Game gAdapt5 = new AdapterGameFromTuple(gh5);
 
-var x = new MyBinaryTree<Game>();
-x.Add(g1);
-x.Add(g2);
-x.Add(g3);
-x.Add(g4);
-x.Add(g5);
-x.Add(gAdapt1);
-x.Add(gAdapt2);
-x.Add(gAdapt3);
-x.Add(gAdapt4);
-x.Add(gAdapt5);
+var gamesTree = new MyBinaryTree<Game>();
+gamesTree.Add(g1);
+gamesTree.Add(g2);
+gamesTree.Add(gAdapt4);
+gamesTree.Add(gAdapt5);
 
 if (printOld)
 {
-    IEnumerator<Game> myEnumerator = x.GetEnumerator();
+    IEnumerator<Game> myEnumerator = gamesTree.GetEnumerator();
     while (myEnumerator.MoveNext())
     {
         Console.WriteLine(myEnumerator.Current.Name);
     }
 
     Console.WriteLine("======================REVERSE======================");
-    myEnumerator = x.GetReverseEnumerator();
+    myEnumerator = gamesTree.GetReverseEnumerator();
     while (myEnumerator.MoveNext())
     {
         Console.WriteLine(myEnumerator.Current.Name);
@@ -217,12 +211,12 @@ if (printOld)
 
 
 
-    x.Remove(g1);
-    x.Remove(g2);
-    x.Remove(g3);
-    x.Remove(g4);
-    x.Remove(gAdapt1);
-    x.Remove(gAdapt5);
+    gamesTree.Remove(g1);
+    gamesTree.Remove(g2);
+    gamesTree.Remove(g3);
+    gamesTree.Remove(g4);
+    gamesTree.Remove(gAdapt1);
+    gamesTree.Remove(gAdapt5);
     /*
     x.Remove(g5); // Cosmic
     x.Remove(gAdapt2); // Universe of Technology
@@ -230,7 +224,7 @@ if (printOld)
     x.Remove(gAdapt4); // Ticets Please
     */
     
-    myEnumerator = x.GetEnumerator();
+    myEnumerator = gamesTree.GetEnumerator();
     int myIter = 0;
     while (myEnumerator.MoveNext())
     {
@@ -238,14 +232,14 @@ if (printOld)
     }
 
     Console.WriteLine("======================Predicates======================");
-    Console.WriteLine(AlgorithmsOnCollections.FindGame(x.GetEnumerator(), IsMeanBigNoThreshold));
+    Console.WriteLine(AlgorithmsOnCollections.FindGame(gamesTree.GetEnumerator(), IsMeanBigNoThreshold));
 
     bool GameNone(Game g)
     {
         return false;
     }
 
-    Console.WriteLine(AlgorithmsOnCollections.FindGame(x.GetEnumerator(), GameNone));
+    Console.WriteLine(AlgorithmsOnCollections.FindGame(gamesTree.GetEnumerator(), GameNone));
 
     Console.WriteLine("====Print All====");
 
@@ -254,14 +248,29 @@ if (printOld)
         Console.WriteLine(t);
     }
 
-    AlgorithmsOnCollections.ForEach<Game>(x.GetEnumerator(), MyPrint<Game>);
-    Console.WriteLine(AlgorithmsOnCollections.CountIf<Game>(x.GetEnumerator(), IsMeanBigNoThreshold));
+    AlgorithmsOnCollections.ForEach<Game>(gamesTree.GetEnumerator(), MyPrint<Game>);
+    Console.WriteLine(AlgorithmsOnCollections.CountIf<Game>(gamesTree.GetEnumerator(), IsMeanBigNoThreshold));
 }
+
+var modsTree = new MyBinaryTree<Mod>();
+modsTree.Add(m1);
+modsTree.Add(m2);
+
+var usersTree = new MyBinaryTree<User>();
+usersTree.Add(u1);
+usersTree.Add(u2);
+
+var reviewsTree = new MyBinaryTree<Review>();
+reviewsTree.Add(r1);
+reviewsTree.Add(r2);
 
 Console.WriteLine("====Console App====");
 
 Dictionary<string, ConsoleApp.IMyCollection<Object>> lists = new Dictionary<string, ConsoleApp.IMyCollection<Object>>();
-lists["GAMES"] = new MyBinaryTreeAdapter<Game>(x);
+lists["GAMES"] = new MyBinaryTreeAdapter<Game>(gamesTree);
+lists["USERS"] = new MyBinaryTreeAdapter<User>(usersTree);
+lists["REVIEWS"] = new MyBinaryTreeAdapter<Review>(reviewsTree);
+lists["MODS"] = new MyBinaryTreeAdapter<Mod>(modsTree);
 
 MyConsole myConsole = new MyConsole(lists);
 
