@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace ConsoleApp;
 
-public class DoublyLinkedList<T> : ICollection<T>
+public class DoublyLinkedList<T> : IMyCollection<T>
 {
     private class Node
     {
@@ -107,7 +107,7 @@ public class DoublyLinkedList<T> : ICollection<T>
     }
 }
 
-public class Vector<T> : ICollection<T>
+public class Vector<T> : IMyCollection<T>
 {
     private T[] _items;
     private int _count;
@@ -164,9 +164,9 @@ public class Vector<T> : ICollection<T>
 
 public static class AlgorithmsOnICollection
 {
-    public static T? Find<T>(ICollection<T?> collection, Func<T, bool> predicate, bool reverse = false)
+    public static T? Find<T>(IMyCollection<T?> myCollection, Func<T, bool> predicate, bool reverse = false)
     {
-        var enumerator = reverse ? collection.GetReverseEnumerator() : collection.GetEnumerator();
+        var enumerator = reverse ? myCollection.GetReverseEnumerator() : myCollection.GetEnumerator();
 
         while (enumerator.MoveNext())
         {
@@ -181,9 +181,9 @@ public static class AlgorithmsOnICollection
         return default;
     }
     
-    public static void Print<T>(ICollection<T?> collection, Func<T, bool> predicate, bool reverse = false)
+    public static void Print<T>(IMyCollection<T?> myCollection, Func<T, bool> predicate, bool reverse = false)
     {
-        var enumerator = reverse ? collection.GetReverseEnumerator() : collection.GetEnumerator();
+        var enumerator = reverse ? myCollection.GetReverseEnumerator() : myCollection.GetEnumerator();
 
         while (enumerator.MoveNext())
         {

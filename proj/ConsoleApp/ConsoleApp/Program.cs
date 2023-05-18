@@ -1,4 +1,5 @@
-﻿using ConsoleApp;
+﻿using System.Collections;
+using ConsoleApp;
 
 bool printOld = false;
 
@@ -179,13 +180,13 @@ if (printOld)
     }));
 }
 
-var x = new MyBinaryTree<Game>();
-
 Game gAdapt1 = new AdapterGameFromTuple(gh1);
 Game gAdapt2 = new AdapterGameFromTuple(gh2);
 Game gAdapt3 = new AdapterGameFromTuple(gh3);
 Game gAdapt4 = new AdapterGameFromTuple(gh4);
 Game gAdapt5 = new AdapterGameFromTuple(gh5);
+
+var x = new MyBinaryTree<Game>();
 x.Add(g1);
 x.Add(g2);
 x.Add(g3);
@@ -197,52 +198,71 @@ x.Add(gAdapt3);
 x.Add(gAdapt4);
 x.Add(gAdapt5);
 
-IEnumerator<Game> myEnumerator = x.GetEnumerator();
-while (myEnumerator.MoveNext())
+if (printOld)
 {
-    Console.WriteLine(myEnumerator.Current.Name);
+    IEnumerator<Game> myEnumerator = x.GetEnumerator();
+    while (myEnumerator.MoveNext())
+    {
+        Console.WriteLine(myEnumerator.Current.Name);
+    }
+
+    Console.WriteLine("======================REVERSE======================");
+    myEnumerator = x.GetReverseEnumerator();
+    while (myEnumerator.MoveNext())
+    {
+        Console.WriteLine(myEnumerator.Current.Name);
+    }
+
+    Console.WriteLine("======================REMOVE======================");
+
+
+
+    x.Remove(g1);
+    x.Remove(g2);
+    x.Remove(g3);
+    x.Remove(g4);
+    x.Remove(gAdapt1);
+    x.Remove(gAdapt5);
+    /*
+    x.Remove(g5); // Cosmic
+    x.Remove(gAdapt2); // Universe of Technology
+    x.Remove(gAdapt3); // Moo
+    x.Remove(gAdapt4); // Ticets Please
+    */
+    
+    myEnumerator = x.GetEnumerator();
+    int myIter = 0;
+    while (myEnumerator.MoveNext())
+    {
+        Console.WriteLine(myEnumerator.Current.Name);
+    }
+
+    Console.WriteLine("======================Predicates======================");
+    Console.WriteLine(AlgorithmsOnCollections.FindGame(x.GetEnumerator(), IsMeanBigNoThreshold));
+
+    bool GameNone(Game g)
+    {
+        return false;
+    }
+
+    Console.WriteLine(AlgorithmsOnCollections.FindGame(x.GetEnumerator(), GameNone));
+
+    Console.WriteLine("====Print All====");
+
+    void MyPrint<T>(T t)
+    {
+        Console.WriteLine(t);
+    }
+
+    AlgorithmsOnCollections.ForEach<Game>(x.GetEnumerator(), MyPrint<Game>);
+    Console.WriteLine(AlgorithmsOnCollections.CountIf<Game>(x.GetEnumerator(), IsMeanBigNoThreshold));
 }
 
-Console.WriteLine("======================REVERSE======================");
-myEnumerator = x.GetReverseEnumerator();
-while (myEnumerator.MoveNext())
-{
-    Console.WriteLine(myEnumerator.Current.Name);
-}
+Console.WriteLine("====Console App====");
 
-Console.WriteLine("======================REMOVE======================");
+Dictionary<string, ConsoleApp.IMyCollection<Object>> lists = new Dictionary<string, ConsoleApp.IMyCollection<Object>>();
+lists["GAMES"] = new MyBinaryTreeAdapter<Game>(x);
 
+MyConsole myConsole = new MyConsole(lists);
 
-
-x.Remove(g1);
-x.Remove(g2);
-x.Remove(g3);
-x.Remove(g4);
-x.Remove(gAdapt1);
-x.Remove(gAdapt5);
-/*
-x.Remove(g5); // Cosmic
-x.Remove(gAdapt2); // Universe of Technology
-x.Remove(gAdapt3); // Moo
-x.Remove(gAdapt4); // Ticets Please
-*/
-
-myEnumerator = x.GetEnumerator();
-int myIter = 0;
-while (myEnumerator.MoveNext())
-{
-    Console.WriteLine(myEnumerator.Current.Name);
-}
-
-Console.WriteLine("======================Predicates======================");
-Console.WriteLine(AlgorithmsOnTrees.FindGame(x.GetEnumerator(), IsMeanBigNoThreshold));
-bool GameNone(Game g)
-{
-    return false;
-}
-Console.WriteLine(AlgorithmsOnTrees.FindGame(x.GetEnumerator(), GameNone));
-
-Console.WriteLine("====Print All====");
-void myPrint<T>(T t){Console.WriteLine(t);}
-AlgorithmsOnTrees.ForEach<Game>(x.GetEnumerator(), myPrint<Game>);
-Console.WriteLine(AlgorithmsOnTrees.CountIf<Game>(x.GetEnumerator(), IsMeanBigNoThreshold));
+myConsole.Run();

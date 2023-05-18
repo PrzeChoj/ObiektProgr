@@ -1,6 +1,6 @@
 namespace ConsoleApp;
 
-public interface ICollection<T>
+public interface IMyCollection<T>
 {
     void Add(T item);
     void Remove(T item);
@@ -8,7 +8,7 @@ public interface ICollection<T>
     IEnumerator<T> GetReverseEnumerator();
 }
 
-public class MyBinaryTree<T> : ICollection<T>
+public class MyBinaryTree<T> : IMyCollection<T>
 {
     private class Node
     {
@@ -305,7 +305,7 @@ public class MyBinaryTree<T> : ICollection<T>
 
 
 
-public static class AlgorithmsOnTrees // 
+public static class AlgorithmsOnCollections // 
 {
     // Find(iterator , predicate) -> T?
     public static T? FindGame<T>(IEnumerator<T> enumerator, Func<T, bool> predicate)
