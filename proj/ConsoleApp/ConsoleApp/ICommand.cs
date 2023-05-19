@@ -12,7 +12,7 @@ public class MyConsole
         CommandDic.Add("LIST", new ListCommand());
         CommandDic.Add("EXIT", new ExitCommand());
         CommandDic.Add("FIND", new FindCommand());
-        //CommandDic.Add("ADD", new AddCommand());
+        CommandDic.Add("ADD", new AddCommand());
         MyConsole.Lists = Lists;
 
         Run();
@@ -223,5 +223,55 @@ public class FindCommand : ICommand
         }
         
         AlgorithmsOnCollections.DoIf(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](args), MyPrint);
+    }
+}
+
+public class AddCommand : ICommand
+{
+    private static Dictionary<string, string[]> legalFields = new Dictionary<string, string[]>()
+    {
+        { "GAMES", new[] { "NAME", "GENRE", "DEVICES" } },
+        { "USERS", new[] { "NICKNAME", "NAME" } },
+        { "REVIEWS", new[] { "TEXT", "RATING" } },
+        { "MODS", new[] { "NAME", "DESCRIPTION" } }
+    };
+    private static Dictionary<string, string[]> defaultFieldsValues = new Dictionary<string, string[]>()
+    {
+        { "GAMES", new[] { "defaultName", "defaultGenre", "defaultDevices" } },
+        { "USERS", new[] { "defaultName", "defaultName" } },
+        { "REVIEWS", new[] { "defaultText", "0" } },
+        { "MODS", new[] { "defaultName", "defaultDescription" } }
+    };
+    
+    Dictionary<string, ICommand> AddDict;
+    public string Name { get; } = "ADD";
+    public string Description { get; } = "Adds object";
+    public AddCommand()
+    {
+        AddDict = new Dictionary<string, ICommand>();
+        AddDict.Add("GAMES", new AddGame());
+        //AddDict.Add("NEXT", new AddNext());
+    }
+    
+    public void Execute(string[] args)
+    {
+
+        try { AddDict[args[1].ToUpper()].Execute(args); }
+        catch {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("INVALID ADD ARGUMENT");
+            Console.ResetColor();
+        };
+    }
+}
+
+public class AddGame : ICommand
+{
+    public string Name { get; } = "ADD Game";
+    public string Description { get; } = "Adds Game";
+    private Dictionary<string, IMyCollection<object>>? _lists;
+    public void Execute(string[] args)
+    {
+        throw new NotImplementedException();
     }
 }
