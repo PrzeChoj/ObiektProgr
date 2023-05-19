@@ -255,6 +255,7 @@ if (printOld)
 var modsTree = new MyBinaryTree<Mod>();
 modsTree.Add(m1);
 modsTree.Add(m2);
+modsTree.Add(m3);
 
 var usersTree = new MyBinaryTree<User>();
 usersTree.Add(u1);

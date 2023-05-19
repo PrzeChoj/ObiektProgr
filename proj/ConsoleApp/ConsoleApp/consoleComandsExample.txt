@@ -1,0 +1,13 @@
+Czemu tak: bo nie mogłem IMyCollection<Object> nadpisać MyBinaryTree<Game>.
+
+list games
+list users
+list reviews
+list mods
+
+find users name="Szredor"
+find games name>"Uni"
+find mods name>"co" name<"comme"
+
+
+exit

@@ -340,4 +340,14 @@ public static class AlgorithmsOnCollections //
 
         return sum;
     }
+
+    // DoIf(iterator , predicate , function) -> void
+    public static void DoIf<T>(IEnumerator<T> enumerator, Func<T, bool> predicate, Action<T> func)
+    {
+        while (enumerator.MoveNext())
+        {
+            if(predicate(enumerator.Current))
+                func(enumerator.Current);
+        }
+    }
 }
