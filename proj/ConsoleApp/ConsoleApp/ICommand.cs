@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace ConsoleApp;
 
 public class MyConsole
@@ -5,6 +7,7 @@ public class MyConsole
     public readonly Dictionary<string, ICommand> CommandDic;
     public static Dictionary<string, ConsoleApp.IMyCollection<Object>> Lists;
     public static bool ContinueRunning = true;
+    public static readonly Queue CommandsQueue = new Queue();
     
     public MyConsole(Dictionary<string, ConsoleApp.IMyCollection<Object>> Lists)
     {
@@ -13,12 +16,14 @@ public class MyConsole
         CommandDic.Add("EXIT", new ExitCommand());
         CommandDic.Add("FIND", new FindCommand());
         CommandDic.Add("ADD", new AddCommand());
+        CommandDic.Add("QUEUE", new QueueCommand());
         MyConsole.Lists = Lists;
 
         Run();
     }
     public void Run()
     {
+        CommandsQueue.Clear();
 
         while (ContinueRunning)
         {
@@ -39,7 +44,10 @@ public class MyConsole
             }
 
             ICommand command = CommandDic[commandName];
-            command.Execute(args);
+            if(command.ExecuteInstantly())
+                command.Execute(args);
+            else
+                CommandsQueue.Enqueue(command);
         }
 
         Console.WriteLine("Goodbye!");
@@ -51,6 +59,52 @@ public interface ICommand
     public string Name { get; }
     public string Description { get; }
     public void Execute(string[] args);
+    public bool ExecuteInstantly() { return false; }
+
+    public string ToString(); // TODO()
+}
+
+public class QueueCommand : ICommand
+{
+    public readonly Dictionary<string, ICommand> CommandTypesDic = new Dictionary<string, ICommand>()
+    {
+        {"PRINT", new QueuePrintCommand()},
+        //{"EXPORT", new QueueExportCommand()}, // TODO()
+        //{"COMMIT", new QueueCommitCommand()} // TODO()
+    };
+
+    public string Name { get; } = "QueueCommand";
+    public string Description { get; } = "Redirects to proper queue command";
+    public void Execute(string[] args)
+    {
+        string commandType = args[1].ToUpper();
+        
+        if (!CommandTypesDic.ContainsKey(commandType))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"ERROR: UNKNOWN QUEUE COMMAND {commandType}");
+            Console.ResetColor();
+            return;
+        }
+        
+        CommandTypesDic[commandType].Execute(args);
+    }
+    public bool ExecuteInstantly() { return true; }
+}
+
+public class QueuePrintCommand : ICommand
+{
+    public string Name { get; } = "QueuePrint";
+    public string Description { get; } = "prints all commands currently stored in the queue";
+    public void Execute(string[] args)
+    {
+        foreach (object o in MyConsole.CommandsQueue)
+        {
+            ICommand command = (ICommand)o;
+            
+            Console.WriteLine(command.ToString());
+        }
+    }
 }
 
 public class ExitCommand : ICommand
@@ -61,6 +115,11 @@ public class ExitCommand : ICommand
     {
         MyConsole.ContinueRunning = false;
         Console.WriteLine("Exiting...");
+    }
+
+    public bool ExecuteInstantly()
+    {
+        return true;
     }
 }
 
