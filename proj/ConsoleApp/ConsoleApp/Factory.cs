@@ -45,3 +45,11 @@ public class QueueCommandFactory : ICommandFactory
     }
 }
 
+public class EditCommandFactory : ICommandFactory
+{
+    public ICommand Create()
+    {
+        return new EditCommand();
+    }
+}
+

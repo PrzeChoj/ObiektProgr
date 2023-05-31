@@ -17,7 +17,8 @@ public class MyConsole
             { "EXIT", new ExitCommandFactory() },
             { "FIND", new FindCommandFactory() },
             { "ADD", new AddCommandFactory() },
-            { "QUEUE", new QueueCommandFactory() }
+            { "QUEUE", new QueueCommandFactory() },
+            { "EDIT", new EditCommandFactory()}
         };
         MyConsole.Lists = Lists;
 
@@ -173,7 +174,7 @@ public class ListCommand : ICommand
 
 public class FindCommand : ICommand
 {
-    private readonly Dictionary<string, Func<string[], Func<object, bool>>> _filter;
+    protected readonly Dictionary<string, Func<string[], Func<object, bool>>> _filter;
     public string Name { get; } = "FIND";
     public string Description { get; } = "Prints objects matching certain conditions";
     public string[] args { get; set; }
@@ -290,7 +291,7 @@ public class FindCommand : ICommand
         return partsOut;
     }
     
-    public void Execute()
+    public virtual void Execute()
     {
         void MyPrint<T>(T t)
         {
@@ -319,6 +320,66 @@ public class FindCommand : ICommand
         }
         return String.Format(outString);
     }
+    
+    public virtual bool ExecuteInstantly() { return false; }
+}
+
+public class EditCommand : FindCommand
+{
+    public override void Execute()
+    {
+        var fieldDic = new Dictionary<string, string[]>
+        {
+            { "GAME", new []{"NAME", "GENRE", "DEVICES"} },
+            { "USERS", new []{"NICKNAME"} },
+            { "REVIEWS", new []{"TEXT", "RATING"} },
+            { "MODS", new []{"NAME", "DESCRIPTION"} }
+        };
+        
+        void MyEdit<T>(T t)
+        {
+            while (true)
+            {
+                Console.Write("Write <name_of_field>=<value>:\n> ");
+                string input = Console.ReadLine();
+
+                string[] args = input.Split('=');
+
+                if (args.Length != 2)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Error: Wrong input. Try again");
+                    Console.ResetColor();
+                    Console.Write("> ");
+                    continue;
+                }
+                string fieldName = args[0].ToUpper();
+                if (!fieldDic[t.GetType().Name.ToUpper()].Contains(fieldName))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Error: Unknown command {fieldName}");
+                    Console.ResetColor();
+                    continue;
+                }
+                
+                // TODO(Zmodyfikuj te cos w obiekcie. Jest to obiekt klasy t.GetType().Name i chce zmodyfikowac args[0] nadajac mu wartosc args[1])
+                // TODO(Wyjscie z pentli)
+            }
+        }
+        
+        string ListName = args[1].ToUpper();
+        if (!MyConsole.Lists.ContainsKey(ListName))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"ERROR: UNKNOWN COLLECTION {ListName}");
+            Console.ResetColor();
+            return;
+        }
+        
+        AlgorithmsOnCollections.DoIf(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](args), MyEdit);
+    }
+    
+    public override bool ExecuteInstantly() { return true; }
 }
 
 public class AddCommand : ICommand
