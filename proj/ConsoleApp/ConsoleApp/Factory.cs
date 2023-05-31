@@ -1,20 +1,47 @@
 namespace ConsoleApp;
-/*
-public interface GameFactory
+
+public interface ICommandFactory
 {
-    public Game Create(string name, string genre, string devices, List<User>? authors = null, List<Review>? reviews = null, List<Mod>? mods = null);
+    public ICommand Create();
 }
-public class GameBase : GameFactory
+
+public class ListCommandFactory : ICommandFactory
 {
-    public Game Create(string name, string genre, string devices, List<User>? authors = null, List<Review>? reviews = null, List<Mod>? mods = null)
+    public ICommand Create()
     {
-        return new Game(name, genre, devices, authors, reviews, mods);
+        return new ListCommand();
     }
 }
-public class GameSecond : GameFactory
+
+public class ExitCommandFactory : ICommandFactory
 {
-    public Game Create(string name, string genre, string devices, List<User>? authors = null, List<Review>? reviews = null, List<Mod>? mods = null)
+    public ICommand Create()
     {
-        return new AdapterGameFromHash(new GameHash(name, genre, devices, authors, reviews, mods));
+        return new ExitCommand();
     }
-}*/
+}
+
+public class FindCommandFactory : ICommandFactory
+{
+    public ICommand Create()
+    {
+        return new FindCommand();
+    }
+}
+
+public class AddCommandFactory : ICommandFactory
+{
+    public ICommand Create()
+    {
+        return new AddCommand();
+    }
+}
+
+public class QueueCommandFactory : ICommandFactory
+{
+    public ICommand Create()
+    {
+        return new QueueCommand();
+    }
+}
+
