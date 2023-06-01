@@ -2,12 +2,12 @@ namespace ConsoleApp;
 
 public interface ICommandFactory
 {
-    public ICommand Create();
+    public AbstractCommand Create();
 }
 
 public class ListCommandFactory : ICommandFactory
 {
-    public ICommand Create()
+    public AbstractCommand Create()
     {
         return new ListCommand();
     }
@@ -15,7 +15,7 @@ public class ListCommandFactory : ICommandFactory
 
 public class ExitCommandFactory : ICommandFactory
 {
-    public ICommand Create()
+    public AbstractCommand Create()
     {
         return new ExitCommand();
     }
@@ -23,7 +23,7 @@ public class ExitCommandFactory : ICommandFactory
 
 public class FindCommandFactory : ICommandFactory
 {
-    public ICommand Create()
+    public AbstractCommand Create()
     {
         return new FindCommand();
     }
@@ -31,7 +31,7 @@ public class FindCommandFactory : ICommandFactory
 
 public class AddCommandFactory : ICommandFactory
 {
-    public ICommand Create()
+    public AbstractCommand Create()
     {
         return new AddCommand();
     }
@@ -39,7 +39,7 @@ public class AddCommandFactory : ICommandFactory
 
 public class QueueCommandFactory : ICommandFactory
 {
-    public ICommand Create()
+    public AbstractCommand Create()
     {
         return new QueueCommand();
     }
@@ -47,7 +47,7 @@ public class QueueCommandFactory : ICommandFactory
 
 public class EditCommandFactory : ICommandFactory
 {
-    public ICommand Create()
+    public AbstractCommand Create()
     {
         return new EditCommand();
     }

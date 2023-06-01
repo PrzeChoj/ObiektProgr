@@ -1,5 +1,6 @@
-using System.Collections;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Xml;
 
 namespace ConsoleApp;
 
@@ -8,7 +9,7 @@ public class MyConsole
     public readonly Dictionary<string, ICommandFactory> CommandDic;
     public static Dictionary<string, ConsoleApp.IMyCollection<Object>> Lists;
     public static bool ContinueRunning = true;
-    public static readonly Queue CommandsQueue = new Queue();
+    public static readonly List<AbstractCommand> CommandsList = new ();
     
     public MyConsole(Dictionary<string, ConsoleApp.IMyCollection<Object>> Lists)
     {
@@ -27,7 +28,7 @@ public class MyConsole
     }
     public void Run()
     {
-        CommandsQueue.Clear();
+        CommandsList.Clear();
 
         while (ContinueRunning)
         {
@@ -49,43 +50,50 @@ public class MyConsole
                 continue;
             }
 
-            ICommand command = CommandDic[commandName].Create();
-            command.args = args;
+            AbstractCommand command = CommandDic[commandName].Create();
+            command.Args = args;
             if (command.ExecuteInstantly())
                 command.Execute();
             else
-                CommandsQueue.Enqueue(command);
+                CommandsList.Add(command);
         }
 
         Console.WriteLine("Goodbye!");
     }
 }
 
-public interface ICommand
+public abstract class AbstractCommand
 {
-    public string Name { get; }
-    public string Description { get; }
-    public string[] args { get; set; }
-    public void Execute();
-    public bool ExecuteInstantly() { return false; }
+    public virtual string Name { get; }
+    public string[] Args { get; set; }
+    public abstract void Execute();
+    public virtual bool ExecuteInstantly() { return false; }
+    public string mySerialize(bool returnName = false)
+    {
+        string outStr = returnName ? Name + " " : "";
+        
+        foreach (string arg in Args)
+        {
+            outStr += arg + " ";
+        }
+        return outStr;
+    }
 }
 
-public class QueueCommand : ICommand
+public class QueueCommand : AbstractCommand
 {
-    public readonly Dictionary<string, ICommand> CommandTypesDic = new Dictionary<string, ICommand>()
+    public readonly Dictionary<string, AbstractCommand> CommandTypesDic = new Dictionary<string, AbstractCommand>()
     {
         {"PRINT", new QueuePrintCommand()},
-        //{"EXPORT", new QueueExportCommand()}, // TODO()
+        {"EXPORT", new QueueExportCommand()},
         {"COMMIT", new QueueCommitCommand()}
     };
 
-    public string Name { get; } = "QueueCommand";
+    public override string Name { get; } = "QueueCommand";
     public string Description { get; } = "Redirects to proper queue command";
-    public string[] args { get; set; }
-
-    public void Execute()
+    public override void Execute()
     {
-        string commandType = args[1].ToUpper();
+        string commandType = Args[1].ToUpper();
         
         if (!CommandTypesDic.ContainsKey(commandType))
         {
@@ -94,82 +102,132 @@ public class QueueCommand : ICommand
             Console.ResetColor();
             return;
         }
-        
+
+        CommandTypesDic[commandType].Args = Args;
         CommandTypesDic[commandType].Execute();
     }
 
-    public void Execute(string[] args)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool ExecuteInstantly() { return true; }
+    public override bool ExecuteInstantly() { return true; }
 }
 
-public class QueuePrintCommand : ICommand
+public class QueueExportCommand : AbstractCommand
 {
-    public string Name { get; } = "QueuePrint";
-    public string Description { get; } = "prints all commands currently stored in the queue";
-    public string[] args { get; set; }
-    public void Execute()
+    public override string Name { get; } = "QueueExportCommand";
+    public string Description { get; } = "exports all commands currently stored in the queue into a file";
+    public override void Execute()
     {
-        foreach (object o in MyConsole.CommandsQueue)
+        string filename = Args[2];
+        string format = "XML";
+        if (Args.Length == 4)
         {
-            ICommand command = (ICommand)o;
-            
+            format = Args[3];
+        }
+
+        if (format == "plaintext")
+        {
+            using (StreamWriter writer = new StreamWriter(filename))
+            {
+                int cnt = 0;
+                foreach (AbstractCommand command in MyConsole.CommandsList)
+                {
+                    string commandString = command.mySerialize(false);
+                    writer.Write(commandString);
+                    if (cnt++ != MyConsole.CommandsList.Count - 1)
+                        writer.Write("\n");
+                }
+            }
+        }
+        else if (format == "XML")
+        {
+            using (XmlWriter writer = XmlWriter.Create(filename))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("Commands");
+
+                foreach (AbstractCommand command in MyConsole.CommandsList)
+                {
+                    string commandString = command.mySerialize(true);
+                    writer.WriteStartElement("Command");
+                    writer.WriteString(commandString);
+                    writer.WriteEndElement();
+                }
+
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+            }
+        }
+    }
+    
+    public override bool ExecuteInstantly() { return true; }
+}
+
+public class QueuePrintCommand : AbstractCommand
+{
+    public override string Name { get; } = "QueuePrintCommand";
+    public string Description { get; } = "prints all commands currently stored in the queue";
+    public override void Execute()
+    {
+        if (MyConsole.CommandsList.Count == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Queue is empty :>");
+            Console.ResetColor();
+        }
+        
+        foreach (AbstractCommand command in MyConsole.CommandsList)
+        {
             Console.WriteLine(command.ToString());
         }
     }
+    
+    public override bool ExecuteInstantly() { return true; }
 }
 
-public class QueueCommitCommand : ICommand
+public class QueueCommitCommand : AbstractCommand
 {
-    public string Name { get; } = "QueueCommit";
+    public override string Name { get; } = "QueueCommitCommand";
     public string Description { get; } = "Commits and executes all commands currently stored in the queue";
-    public string[] args { get; set; }
-    public void Execute()
+    public override void Execute()
     {
-        foreach (object o in MyConsole.CommandsQueue)
+        foreach (object o in MyConsole.CommandsList)
         {
-            ICommand command = (ICommand)o;
+            AbstractCommand command = (AbstractCommand)o;
             
             command.Execute();
         }
 
-        MyConsole.CommandsQueue.Clear();
+        MyConsole.CommandsList.Clear();
     }
 }
 
-public class ExitCommand : ICommand
+public class ExitCommand : AbstractCommand
 {
-    public string Name { get; } = "EXIT";
+    public override string Name { get; } = "ExitCommand";
     public string Description { get; } = "EXIT app";
-    public string[] args { get; set; }
-    public void Execute()
+    public override void Execute()
     {
         MyConsole.ContinueRunning = false;
         Console.WriteLine("Exiting...");
     }
 
-    public bool ExecuteInstantly()
+    public override bool ExecuteInstantly()
     {
         return true;
     }
 }
 
-public class ListCommand : ICommand
+public class ListCommand : AbstractCommand
 {
-    public string Name { get; } = "LIST";
+    public override string Name { get; } = "ListCommand";
     public string Description { get; } = "Print all objects in list";
-    public string[] args { get; set; }
-    public void Execute() // Taka sama logika dla kadego rodzaju
+    public override void Execute() // Taka sama logika dla kadego rodzaju
     {
         void MyPrint<T>(T t)
         {
             Console.WriteLine(t);
         }
         
-        string ListName = args[1].ToUpper();
+        string ListName = Args[1].ToUpper();
         if (!MyConsole.Lists.ContainsKey(ListName))
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -184,21 +242,20 @@ public class ListCommand : ICommand
     public override string ToString()
     {
         String outString = "";
-        for (int i = 0; i < args.Length; i++)
+        for (int i = 0; i < Args.Length; i++)
         {
-            outString += args[i];
+            outString += Args[i];
             outString += " ";
         }
         return String.Format(outString);
     }
 }
 
-public class FindCommand : ICommand
+public class FindCommand : AbstractCommand
 {
     protected readonly Dictionary<string, Func<string[], Func<object, bool>>> _filter;
-    public string Name { get; } = "FIND";
+    public override string Name { get; } = "FindCommand";
     public string Description { get; } = "Prints objects matching certain conditions";
-    public string[] args { get; set; }
     public FindCommand()
     {
         var preds = new Dictionary<string, Func<IComparable, IComparable, bool>>();
@@ -384,14 +441,14 @@ public class FindCommand : ICommand
         return partsOut;
     }
     
-    public virtual void Execute()
+    public override void Execute()
     {
         void MyPrint<T>(T t)
         {
             Console.WriteLine(t);
         }
         
-        string ListName = args[1].ToUpper();
+        string ListName = Args[1].ToUpper();
         if (!MyConsole.Lists.ContainsKey(ListName))
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -400,25 +457,26 @@ public class FindCommand : ICommand
             return;
         }
         
-        AlgorithmsOnCollections.DoIf(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](args), MyPrint);
+        AlgorithmsOnCollections.DoIf(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](Args), MyPrint);
     }
     
     public override string ToString()
     {
         String outString = "";
-        for (int i = 0; i < args.Length; i++)
+        for (int i = 0; i < Args.Length; i++)
         {
-            outString += args[i];
+            outString += Args[i];
             outString += " ";
         }
         return String.Format(outString);
     }
     
-    public virtual bool ExecuteInstantly() { return false; }
+    public override bool ExecuteInstantly() { return false; }
 }
 
 public class EditCommand : FindCommand
 {
+    public override string Name { get; } = "EditCommand";
     public override void Execute()
     {
         var fieldDic = new Dictionary<string, string[]>
@@ -481,7 +539,7 @@ public class EditCommand : FindCommand
             }
         }
         
-        string ListName = args[1].ToUpper();
+        string ListName = Args[1].ToUpper();
         if (!MyConsole.Lists.ContainsKey(ListName))
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -490,7 +548,7 @@ public class EditCommand : FindCommand
             return;
         }
         
-        AlgorithmsOnCollections.DoIf(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](args), MyEdit);
+        AlgorithmsOnCollections.DoIf(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](Args), MyEdit);
     }
     
     public override bool ExecuteInstantly() { return true; }
@@ -518,9 +576,8 @@ public class EditCommand : FindCommand
     }
 }
 
-public class AddCommand : ICommand
+public class AddCommand : AbstractCommand
 {
-    public string[] args { get; set; }
     private static Dictionary<string, string[]> legalFields = new Dictionary<string, string[]>()
     {
         { "GAMES", new[] { "NAME", "GENRE", "DEVICES" } },
@@ -536,20 +593,20 @@ public class AddCommand : ICommand
         { "MODS", new[] { "defaultName", "defaultDescription" } }
     };
     
-    Dictionary<string, ICommand> AddDict;
-    public string Name { get; } = "ADD";
+    Dictionary<string, AbstractCommand> AddDict;
+    public override string Name { get; } = "AddCommand";
     public string Description { get; } = "Adds object";
     public AddCommand()
     {
-        AddDict = new Dictionary<string, ICommand>();
+        AddDict = new Dictionary<string, AbstractCommand>();
         AddDict.Add("GAMES", new AddGame());
         //AddDict.Add("NEXT", new AddNext());
     }
     
-    public void Execute()
+    public override void Execute()
     {
 
-        try { AddDict[args[1].ToUpper()].Execute(); }
+        try { AddDict[Args[1].ToUpper()].Execute(); }
         catch {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("INVALID ADD ARGUMENT");
@@ -560,22 +617,21 @@ public class AddCommand : ICommand
     public override string ToString()
     {
         String outString = "";
-        for (int i = 0; i < args.Length; i++)
+        for (int i = 0; i < Args.Length; i++)
         {
-            outString += args[i];
+            outString += Args[i];
             outString += " ";
         }
         return String.Format(outString);
     }
 }
 
-public class AddGame : ICommand
+public class AddGame : AbstractCommand
 {
-    public string Name { get; } = "ADD Game";
+    public override string Name { get; } = "AddGame";
     public string Description { get; } = "Adds Game";
-    public string[] args { get; set; }
     private Dictionary<string, IMyCollection<object>>? _lists;
-    public void Execute()
+    public override void Execute()
     {
         throw new NotImplementedException();
     }
@@ -583,9 +639,9 @@ public class AddGame : ICommand
     public override string ToString()
     {
         String outString = "";
-        for (int i = 0; i < args.Length; i++)
+        for (int i = 0; i < Args.Length; i++)
         {
-            outString += args[i];
+            outString += Args[i];
             outString += " ";
         }
         return String.Format(outString);

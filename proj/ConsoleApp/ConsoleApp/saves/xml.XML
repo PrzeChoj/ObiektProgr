@@ -1,0 +1,1 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Commands><Command>ListCommand list users </Command><Command>ListCommand list reviews </Command><Command>FindCommand find users name="Szredor" </Command><Command>FindCommand find games name&gt;"Uni" </Command><Command>FindCommand find mods name&gt;"co" name&lt;"comme" </Command></Commands>

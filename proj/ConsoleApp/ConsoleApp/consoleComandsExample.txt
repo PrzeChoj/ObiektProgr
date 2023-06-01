@@ -21,11 +21,13 @@ edit games name="Cosmic" // To jest adapter
 Name=DiffName
 
 queue commit
+queue export ./../../../saves/plaintext.txt plaintext
+queue export ./../../../saves/xml.XML
 
 exit
 
 
 1. Ogarnia błędy usera
 2. Umie zarówno Game jak i AdapterGameFromTuple
-3. 
+3. Serializuje poprzez zapisanie do string tego co trzeba
 4. 
