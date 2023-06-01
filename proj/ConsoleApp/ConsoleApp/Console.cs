@@ -86,7 +86,8 @@ public class QueueCommand : AbstractCommand
     {
         {"PRINT", new QueuePrintCommand()},
         {"EXPORT", new QueueExportCommand()},
-        {"COMMIT", new QueueCommitCommand()}
+        {"COMMIT", new QueueCommitCommand()},
+        {"DISMISS", new QueueDismissCommand()}
     };
 
     public override string Name { get; } = "QueueCommand";
@@ -197,6 +198,20 @@ public class QueueCommitCommand : AbstractCommand
         }
 
         MyConsole.CommandsList.Clear();
+    }
+}
+
+public class QueueDismissCommand : AbstractCommand
+{
+    public override string Name { get; } = "QueueDismissCommand";
+    public string Description { get; } = "Deletes all commands currently stored in the queue";
+    public override void Execute()
+    {
+        MyConsole.CommandsList.Clear();
+        
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Queue will now be empty :>");
+        Console.ResetColor();
     }
 }
 
