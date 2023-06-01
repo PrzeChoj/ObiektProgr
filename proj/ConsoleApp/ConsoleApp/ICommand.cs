@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 
 namespace ConsoleApp;
 
@@ -42,7 +43,9 @@ public class MyConsole
             string commandName = args[0].ToUpper();
             if (!CommandDic.ContainsKey(commandName))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: Unknown command {commandName}");
+                Console.ResetColor();
                 continue;
             }
 
@@ -73,7 +76,7 @@ public class QueueCommand : ICommand
     {
         {"PRINT", new QueuePrintCommand()},
         //{"EXPORT", new QueueExportCommand()}, // TODO()
-        //{"COMMIT", new QueueCommitCommand()} // TODO()
+        {"COMMIT", new QueueCommitCommand()}
     };
 
     public string Name { get; } = "QueueCommand";
@@ -116,6 +119,24 @@ public class QueuePrintCommand : ICommand
             
             Console.WriteLine(command.ToString());
         }
+    }
+}
+
+public class QueueCommitCommand : ICommand
+{
+    public string Name { get; } = "QueueCommit";
+    public string Description { get; } = "Commits and executes all commands currently stored in the queue";
+    public string[] args { get; set; }
+    public void Execute()
+    {
+        foreach (object o in MyConsole.CommandsQueue)
+        {
+            ICommand command = (ICommand)o;
+            
+            command.Execute();
+        }
+
+        MyConsole.CommandsQueue.Clear();
     }
 }
 
@@ -199,7 +220,32 @@ public class FindCommand : ICommand
                 return findIfAllOfRequremandsAreSatisfied(args, preds, fields);
             };
         });
+        _filter.Add("ADAPTERGAMEFROMTUPLE", args =>
+        {
+            return o =>
+            {
+                Game myGame = (Game)o;
+                var fields = new Dictionary<string, string>();
+                fields.Add("NAME", myGame.Name);
+                fields.Add("GENRE", myGame.Genre);
+                fields.Add("DEVICES", myGame.Devices);
+
+                return findIfAllOfRequremandsAreSatisfied(args, preds, fields);
+            };
+        });
         _filter.Add("USERS", args =>
+        {
+            return o =>
+            {
+                User myUser = (User)o;
+                var fields = new Dictionary<string, string>();
+                fields.Add("NICKNAME", myUser.Nickname);
+                fields.Add("NAME", myUser.Nickname); // Yes, this is copy
+
+                return findIfAllOfRequremandsAreSatisfied(args, preds, fields);
+            };
+        });
+        _filter.Add("ADAPTERUSERSFROMTUPLE", args =>
         {
             return o =>
             {
@@ -223,7 +269,31 @@ public class FindCommand : ICommand
                 return findIfAllOfRequremandsAreSatisfied(args, preds, fields);
             };
         });
+        _filter.Add("ADAPTERREVIEWSFROMTUPLE", args =>
+        {
+            return o =>
+            {
+                Review myReview = (Review)o;
+                var fields = new Dictionary<string, string>();
+                fields.Add("TEXT", myReview.Text);
+                fields.Add("RATING", myReview.Rating.ToString());
+
+                return findIfAllOfRequremandsAreSatisfied(args, preds, fields);
+            };
+        });
         _filter.Add("MODS", args =>
+        {
+            return o =>
+            {
+                Mod myReview = (Mod)o;
+                var fields = new Dictionary<string, string>();
+                fields.Add("NAME", myReview.Name);
+                fields.Add("DESCRIPTION", myReview.Description);
+
+                return findIfAllOfRequremandsAreSatisfied(args, preds, fields);
+            };
+        });
+        _filter.Add("ADAPTERMODSFROMTUPLE", args =>
         {
             return o =>
             {
@@ -242,6 +312,10 @@ public class FindCommand : ICommand
         for (int i = 2; i < args.Length; i++)
         {
             string[] splittedArgs = splitStringForFind(args[i]);
+            if (splittedArgs == null)
+            {
+                return false;
+            }
                     
             string nameReal = splittedArgs[0].ToUpper();
             string equalSmallerOrBigger = splittedArgs[1];
@@ -270,6 +344,16 @@ public class FindCommand : ICommand
     {
         string[] parts;
         string whatContains;
+
+        if (!s.Contains("\""))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Error: Finding component has to possess a \" sign: {s}");
+            Console.ResetColor();
+
+            return null;
+        }
+        
         if (s.Contains("="))
         {
             parts = s.Split('=');
@@ -284,6 +368,15 @@ public class FindCommand : ICommand
         {
             parts = s.Split('>');
             whatContains = ">";
+        }
+        
+        if (parts.Length != 2 || parts[1].Length == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Error: Wrong finding component: {s}");
+            Console.ResetColor();
+
+            return null;
         }
         
         string[] partsOut = {parts[0], whatContains, parts[1].Substring(1, parts[1].Length - 2)};
@@ -331,21 +424,30 @@ public class EditCommand : FindCommand
         var fieldDic = new Dictionary<string, string[]>
         {
             { "GAME", new []{"NAME", "GENRE", "DEVICES"} },
+            { "ADAPTERGAMEFROMTUPLE", new []{"NAME", "GENRE", "DEVICES"} },
             { "USERS", new []{"NICKNAME"} },
+            { "ADAPTERUSERSFROMTUPLE", new []{"NICKNAME"} },
             { "REVIEWS", new []{"TEXT", "RATING"} },
-            { "MODS", new []{"NAME", "DESCRIPTION"} }
+            { "ADAPTERREVIEWSFROMTUPLE", new []{"TEXT", "RATING"} },
+            { "MODS", new []{"NAME", "DESCRIPTION"} },
+            { "ADAPTERMODSFROMTUPLE", new []{"NAME", "DESCRIPTION"} }
         };
         
         void MyEdit<T>(T t)
         {
             while (true)
             {
-                Console.Write("Write <name_of_field>=<value>:\n> ");
+                Console.Write("Write <name_of_field>=<value> or DONE:\n> ");
                 string input = Console.ReadLine();
 
-                string[] args = input.Split('=');
+                if (input.ToUpper() is "DONE" or "EXIT")
+                {
+                    break;
+                }
 
-                if (args.Length != 2)
+                string[] newAttribute = input.Split('=');
+
+                if (newAttribute.Length != 2)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Error: Wrong input. Try again");
@@ -353,17 +455,29 @@ public class EditCommand : FindCommand
                     Console.Write("> ");
                     continue;
                 }
-                string fieldName = args[0].ToUpper();
+                string fieldName = newAttribute[0].ToUpper();
                 if (!fieldDic[t.GetType().Name.ToUpper()].Contains(fieldName))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Error: Unknown command {fieldName}");
+                    Console.WriteLine($"Error: Unknown attribute {fieldName}");
                     Console.ResetColor();
                     continue;
                 }
                 
-                // TODO(Zmodyfikuj te cos w obiekcie. Jest to obiekt klasy t.GetType().Name i chce zmodyfikowac args[0] nadajac mu wartosc args[1])
-                // TODO(Wyjscie z pentli)
+                Type type = t.GetType();
+                if (!SetAttributeValue(t, type, newAttribute[0], newAttribute[1]))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Error: Provided attribute has wrong uppercases: {newAttribute[0]}");
+                    Console.ResetColor();
+                    continue;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Attribute successfully edited!");
+                    Console.ResetColor();
+                }
             }
         }
         
@@ -380,6 +494,28 @@ public class EditCommand : FindCommand
     }
     
     public override bool ExecuteInstantly() { return true; }
+    
+    public static bool SetAttributeValue(object obj, Type type, string attribute, string value)
+    {
+        PropertyInfo property = type.GetProperty(attribute);
+
+        if (property == null)
+        {
+            return false;
+        }
+        
+        if (property.PropertyType == typeof(int))
+        {
+            int intValue = Convert.ToInt32(value);
+            property.SetValue(obj, intValue);
+        }
+        else
+        {
+            property.SetValue(obj, value);
+        }
+
+        return true;
+    }
 }
 
 public class AddCommand : ICommand

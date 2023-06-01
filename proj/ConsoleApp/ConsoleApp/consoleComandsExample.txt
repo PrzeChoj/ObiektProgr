@@ -15,5 +15,17 @@ find games name>"Uni"
 find mods name>"co" name<"comme"
 
 queue print
+edit games name>"Uni"
+edit games name="Cosmic" // To jest adapter
+//name=DiffName // Zła duża litera
+Name=DiffName
+
+queue commit
 
 exit
+
+
+1. Ogarnia błędy usera
+2. Umie zarówno Game jak i AdapterGameFromTuple
+3. 
+4. 
