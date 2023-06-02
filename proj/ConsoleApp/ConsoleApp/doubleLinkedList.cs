@@ -37,13 +37,13 @@ public class DoublyLinkedList<T> : IMyCollection<T>
         }
     }
 
-    public void Remove(T item)
+    public bool Remove(T item)
     {
         var node = FindNode(item);
 
         if (node == null)
         {
-            return;
+            return false;
         }
 
         // Change the next
@@ -65,6 +65,8 @@ public class DoublyLinkedList<T> : IMyCollection<T>
         {
             node.Next.Prev = node.Prev;
         }
+
+        return true;
     }
 
     private Node? FindNode(T item)
@@ -127,7 +129,7 @@ public class Vector<T> : IMyCollection<T>
         _items[_count++] = item;
     }
 
-    public void Remove(T item)
+    public bool Remove(T item)
     {
         for (int i = 0; i < _count; i++)
         {
@@ -140,8 +142,10 @@ public class Vector<T> : IMyCollection<T>
             }
 
             _count--;
-            return;
+            return true;
         }
+        
+        return false;
     }
 
     public IEnumerator<T> GetEnumerator()

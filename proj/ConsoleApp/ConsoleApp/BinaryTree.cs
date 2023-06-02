@@ -3,7 +3,7 @@ namespace ConsoleApp;
 public interface IMyCollection<T>
 {
     void Add(T item);
-    void Remove(T item);
+    bool Remove(T item);
     IEnumerator<T> GetEnumerator();
     IEnumerator<T> GetReverseEnumerator();
 }
@@ -79,14 +79,14 @@ public class MyBinaryTree<T> : IMyCollection<T>
         }
     }
 
-    public void Remove(T item)
+    public bool Remove(T item)
     {
         Node? nodeToRemove = FindNode(item);
         
         // Case 0: Nothing to remove
         if (nodeToRemove == null)
         {
-            return;
+            return false;
         }
 
         // Case 1: Node is a leaf node
@@ -219,6 +219,8 @@ public class MyBinaryTree<T> : IMyCollection<T>
         {
             throw new Exception("Logic is not working");
         }
+
+        return true;
     }
 
     public IEnumerator<T> GetEnumerator()

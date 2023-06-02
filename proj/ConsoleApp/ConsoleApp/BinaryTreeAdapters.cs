@@ -23,11 +23,11 @@ public class MyBinaryTreeAdapter<T> : IMyCollection<object>, IEnumerable
         }
     }
 
-    public void Remove(object item)
+    public bool Remove(object item)
     {
         if (item is T convertedItem)
         {
-            _tree.Remove(convertedItem);
+            return _tree.Remove(convertedItem);
         }
         else
         {

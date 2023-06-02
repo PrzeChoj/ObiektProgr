@@ -579,11 +579,21 @@ public class DeleteCommand : AbstractFilteringCommand
         }
 
         var x = AlgorithmsOnCollections.FindObject(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](Args));
-        MyConsole.Lists[ListName].Remove(x);
+        var wasDeleted = MyConsole.Lists[ListName].Remove(x);
+
+        if (wasDeleted)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Successfully deleted an object!");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("An object was not deleted!");
+            Console.ResetColor();
+        }
         
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Successfully deleted an object!");
-        Console.ResetColor();
     }
     
     public override string ToString()
@@ -609,12 +619,12 @@ public class EditCommand : AbstractFilteringCommand
         {
             { "GAME", new []{"NAME", "GENRE", "DEVICES"} },
             { "ADAPTERGAMEFROMTUPLE", new []{"NAME", "GENRE", "DEVICES"} },
-            { "USERS", new []{"NICKNAME"} },
-            { "ADAPTERUSERSFROMTUPLE", new []{"NICKNAME"} },
-            { "REVIEWS", new []{"TEXT", "RATING"} },
-            { "ADAPTERREVIEWSFROMTUPLE", new []{"TEXT", "RATING"} },
-            { "MODS", new []{"NAME", "DESCRIPTION"} },
-            { "ADAPTERMODSFROMTUPLE", new []{"NAME", "DESCRIPTION"} }
+            { "USER", new []{"NICKNAME"} },
+            { "ADAPTERUSERFROMTUPLE", new []{"NICKNAME"} },
+            { "REVIEW", new []{"TEXT", "RATING"} },
+            { "ADAPTERREVIEWFROMTUPLE", new []{"TEXT", "RATING"} },
+            { "MOD", new []{"NAME", "DESCRIPTION"} },
+            { "ADAPTERMODFROMTUPLE", new []{"NAME", "DESCRIPTION"} }
         };
         
         void MyEdit<T>(T t)
