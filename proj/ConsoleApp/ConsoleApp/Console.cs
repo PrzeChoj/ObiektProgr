@@ -13,12 +13,14 @@ public class MyConsole
         { "ADD", new AddCommandFactory() },
         { "QUEUE", new QueueCommandFactory() },
         { "EDIT", new EditCommandFactory() },
-        { "DELETE", new DeleteCommandFactory() }
+        { "DELETE", new DeleteCommandFactory() },
+        { "HISTORY", new HistoryCommandFactory() }
     };
     public static Dictionary<string, ConsoleApp.IMyCollection<Object>> Lists;
     public static bool ContinueRunning = true;
     public static readonly List<AbstractCommand> CommandsList = new ();
-    
+    public static List<AbstractCommand> History = new List<AbstractCommand>();
+
     public MyConsole(Dictionary<string, ConsoleApp.IMyCollection<Object>> Lists)
     {
         MyConsole.Lists = Lists;
@@ -60,7 +62,10 @@ public class MyConsole
         AbstractCommand command = CommandDic[commandName].Create();
         command.Args = args;
         if (command.ExecuteInstantly())
+        {
             command.Execute();
+            History.Add(command);
+        }
         else
             CommandsList.Add(command);
     }
@@ -111,6 +116,7 @@ public class QueueCommand : AbstractCommand
 
         CommandTypesDic[commandType].Args = Args;
         CommandTypesDic[commandType].Execute();
+        MyConsole.History.Add(CommandTypesDic[commandType]);
     }
 
     public override bool ExecuteInstantly() { return true; }
@@ -237,6 +243,7 @@ public class QueueCommitCommand : AbstractCommand
             AbstractCommand command = (AbstractCommand)o;
             
             command.Execute();
+            MyConsole.History.Add(command);
         }
 
         MyConsole.CommandsList.Clear();
@@ -741,7 +748,11 @@ public class AddCommand : AbstractCommand
     public override void Execute()
     {
 
-        try { AddDict[Args[1].ToUpper()].Execute(); }
+        try
+        {
+            AddDict[Args[1].ToUpper()].Execute();
+            MyConsole.History.Add(AddDict[Args[1].ToUpper()]);
+        }
         catch {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("INVALID ADD ARGUMENT");
@@ -781,4 +792,26 @@ public class AddGame : AbstractCommand
         }
         return String.Format(outString);
     }
+}
+
+public class HistoryCommand : AbstractCommand
+{
+    public override string Name { get; } = "HistoryCommand";
+    public string Description { get; } = "prints all executed commands";
+    public override void Execute()
+    {
+        if (MyConsole.History.Count == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("No commands were executed :<");
+            Console.ResetColor();
+        }
+        
+        foreach (AbstractCommand command in MyConsole.History)
+        {
+            Console.WriteLine(command.ToString());
+        }
+    }
+    
+    public override bool ExecuteInstantly() { return true; }
 }

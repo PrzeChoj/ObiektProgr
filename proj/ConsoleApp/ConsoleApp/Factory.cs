@@ -60,3 +60,11 @@ public class DeleteCommandFactory : ICommandFactory
         return new DeleteCommand();
     }
 }
+
+public class HistoryCommandFactory : ICommandFactory
+{
+    public AbstractCommand Create()
+    {
+        return new HistoryCommand();
+    }
+}
