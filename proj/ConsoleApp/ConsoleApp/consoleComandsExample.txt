@@ -37,4 +37,5 @@ exit
 1. Ogarnia błędy usera
 2. Umie zarówno Game jak i AdapterGameFromTuple
 3. Serializuje poprzez zapisanie do string tego co trzeba
-4. TODO(wczytanie)
+4. AbstractFilteringCommand
+5. TODO(wczytanie)

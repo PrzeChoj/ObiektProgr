@@ -1,4 +1,3 @@
-list reviews 
 list mods 
 find users name="Szredor" 
-find games name>"Uni" 
+list reviews 
