@@ -6,23 +6,22 @@ namespace ConsoleApp;
 
 public class MyConsole
 {
-    public readonly Dictionary<string, ICommandFactory> CommandDic;
+    public static readonly Dictionary<string, ICommandFactory> CommandDic = new Dictionary<string, ICommandFactory>
+    {
+        { "LIST", new ListCommandFactory() },
+        { "EXIT", new ExitCommandFactory() },
+        { "FIND", new FindCommandFactory() },
+        { "ADD", new AddCommandFactory() },
+        { "QUEUE", new QueueCommandFactory() },
+        { "EDIT", new EditCommandFactory() },
+        { "DELETE", new DeleteCommandFactory() }
+    };
     public static Dictionary<string, ConsoleApp.IMyCollection<Object>> Lists;
     public static bool ContinueRunning = true;
     public static readonly List<AbstractCommand> CommandsList = new ();
     
     public MyConsole(Dictionary<string, ConsoleApp.IMyCollection<Object>> Lists)
     {
-        CommandDic = new Dictionary<string, ICommandFactory>
-        {
-            { "LIST", new ListCommandFactory() },
-            { "EXIT", new ExitCommandFactory() },
-            { "FIND", new FindCommandFactory() },
-            { "ADD", new AddCommandFactory() },
-            { "QUEUE", new QueueCommandFactory() },
-            { "EDIT", new EditCommandFactory() },
-            { "DELETE", new DeleteCommandFactory() }
-        };
         MyConsole.Lists = Lists;
 
         Run();
@@ -36,30 +35,35 @@ public class MyConsole
             Console.Write("============================================================\n> ");
             string input = Console.ReadLine();
 
-            string[] args = input.Split(' ');
-
-            if (args.Length == 0)
-            {
-                continue;
-            }
-            string commandName = args[0].ToUpper();
-            if (!CommandDic.ContainsKey(commandName))
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Error: Unknown command {commandName}");
-                Console.ResetColor();
-                continue;
-            }
-
-            AbstractCommand command = CommandDic[commandName].Create();
-            command.Args = args;
-            if (command.ExecuteInstantly())
-                command.Execute();
-            else
-                CommandsList.Add(command);
+            addInput(input);
         }
 
         Console.WriteLine("Goodbye!");
+    }
+
+    public static void addInput(string input)
+    {
+        string[] args = input.Split(' ');
+
+        if (args.Length == 0)
+        {
+            return;
+        }
+        string commandName = args[0].ToUpper();
+        if (!CommandDic.ContainsKey(commandName))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Error: Unknown command {commandName}");
+            Console.ResetColor();
+            return;
+        }
+
+        AbstractCommand command = CommandDic[commandName].Create();
+        command.Args = args;
+        if (command.ExecuteInstantly())
+            command.Execute();
+        else
+            CommandsList.Add(command);
     }
 }
 
@@ -88,7 +92,8 @@ public class QueueCommand : AbstractCommand
         {"PRINT", new QueuePrintCommand()},
         {"EXPORT", new QueueExportCommand()},
         {"COMMIT", new QueueCommitCommand()},
-        {"DISMISS", new QueueDismissCommand()}
+        {"DISMISS", new QueueDismissCommand()},
+        {"LOAD", new QueueLoadCommand()}
     };
 
     public override string Name { get; } = "QueueCommand";
@@ -157,6 +162,43 @@ public class QueueExportCommand : AbstractCommand
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
             }
+        }
+    }
+    
+    public override bool ExecuteInstantly() { return true; }
+}
+
+public class QueueLoadCommand : AbstractCommand
+{
+    public override string Name { get; } = "QueueLoadCommand";
+    public string Description { get; } = "load commands from file into the queue";
+    public override void Execute()
+    {
+        if (Args.Length != 3)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"ERROR: Wrong number of arguments: {Args.Length} != 3");
+            Console.ResetColor();
+            return;
+        }
+        
+        string filename = Args[2];
+        string format = filename.Substring(filename.Length-3, 3).ToUpper();
+
+        if (format == "TXT")
+        {
+
+            MyConsole.addInput("dupa"); // TODO()
+        }
+        else if (format == "XML")
+        {
+            
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"ERROR: Wrong format: {format}");
+            Console.ResetColor();
         }
     }
     

@@ -27,6 +27,8 @@ queue export ./../../../saves/xml.XML
 
 queue dismiss
 
+queue load ./../../../saves/xml.XML
+
 delete users name="Szredor"
 
 exit
