@@ -20,7 +20,8 @@ public class MyConsole
             { "FIND", new FindCommandFactory() },
             { "ADD", new AddCommandFactory() },
             { "QUEUE", new QueueCommandFactory() },
-            { "EDIT", new EditCommandFactory()}
+            { "EDIT", new EditCommandFactory() },
+            { "DELETE", new DeleteCommandFactory() }
         };
         MyConsole.Lists = Lists;
 
@@ -478,7 +479,69 @@ public class FindCommand : AbstractFilteringCommand
             return;
         }
         
+        int howManyRecordsSattisfy =
+            AlgorithmsOnCollections.CountIf(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](Args));
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Found {howManyRecordsSattisfy} object sattisfying conditions:");
+        Console.ResetColor();
         AlgorithmsOnCollections.DoIf(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](Args), MyPrint);
+    }
+    
+    public override string ToString()
+    {
+        String outString = "";
+        for (int i = 0; i < Args.Length; i++)
+        {
+            outString += Args[i];
+            outString += " ";
+        }
+        return String.Format(outString);
+    }
+    
+    public override bool ExecuteInstantly() { return false; }
+}
+
+public class DeleteCommand : AbstractFilteringCommand
+{
+    public override string Name { get; } = "DeleteCommand";
+    public string Description { get; } = "Deletes objects matching certain conditions, but only when the single object can be identified";
+    
+    public override void Execute()
+    {
+        string ListName = Args[1].ToUpper();
+        if (!MyConsole.Lists.ContainsKey(ListName))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"ERROR: UNKNOWN COLLECTION {ListName}");
+            Console.ResetColor();
+            return;
+        }
+
+        int howManyRecordsSattisfy =
+            AlgorithmsOnCollections.CountIf(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](Args));
+        if (howManyRecordsSattisfy == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("ERROR: Conditions are not Sattisfied by any record");
+            Console.ResetColor();
+            return;
+        }
+
+        if (howManyRecordsSattisfy != 1)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"ERROR: Conditions are Sattisfied by {howManyRecordsSattisfy} records");
+            Console.WriteLine("Deletion is only possible when a single record can to identified!");
+            Console.ResetColor();
+            return;
+        }
+
+        var x = AlgorithmsOnCollections.FindObject(MyConsole.Lists[ListName].GetEnumerator(), _filter[ListName](Args));
+        MyConsole.Lists[ListName].Remove(x);
+        
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Successfully deleted an object!");
+        Console.ResetColor();
     }
     
     public override string ToString()

@@ -232,14 +232,14 @@ if (printOld)
     }
 
     Console.WriteLine("======================Predicates======================");
-    Console.WriteLine(AlgorithmsOnCollections.FindGame(gamesTree.GetEnumerator(), IsMeanBigNoThreshold));
+    Console.WriteLine(AlgorithmsOnCollections.FindObject(gamesTree.GetEnumerator(), IsMeanBigNoThreshold));
 
     bool GameNone(Game g)
     {
         return false;
     }
 
-    Console.WriteLine(AlgorithmsOnCollections.FindGame(gamesTree.GetEnumerator(), GameNone));
+    Console.WriteLine(AlgorithmsOnCollections.FindObject(gamesTree.GetEnumerator(), GameNone));
 
     Console.WriteLine("====Print All====");
 

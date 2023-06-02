@@ -27,11 +27,12 @@ queue export ./../../../saves/xml.XML
 
 queue dismiss
 
+delete users name="Szredor"
+
 exit
 
 
 1. Ogarnia błędy usera
 2. Umie zarówno Game jak i AdapterGameFromTuple
 3. Serializuje poprzez zapisanie do string tego co trzeba
-4. TODO(delete)
-5. TODO(wczytanie)
+4. TODO(wczytanie)

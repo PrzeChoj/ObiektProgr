@@ -308,7 +308,7 @@ public class MyBinaryTree<T> : IMyCollection<T>
 public static class AlgorithmsOnCollections // 
 {
     // Find(iterator , predicate) -> T?
-    public static T? FindGame<T>(IEnumerator<T> enumerator, Func<T, bool> predicate)
+    public static T? FindObject<T>(IEnumerator<T> enumerator, Func<T, bool> predicate)
     {
         bool anyTrue = false;
         while (enumerator.MoveNext() && !anyTrue)

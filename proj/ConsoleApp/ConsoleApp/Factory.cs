@@ -53,3 +53,10 @@ public class EditCommandFactory : ICommandFactory
     }
 }
 
+public class DeleteCommandFactory : ICommandFactory
+{
+    public AbstractCommand Create()
+    {
+        return new DeleteCommand();
+    }
+}
