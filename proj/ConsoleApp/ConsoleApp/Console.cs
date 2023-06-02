@@ -266,12 +266,12 @@ public class ListCommand : AbstractCommand
     }
 }
 
-public class FindCommand : AbstractCommand
+public abstract class AbstractFilteringCommand : AbstractCommand
 {
     protected readonly Dictionary<string, Func<string[], Func<object, bool>>> _filter;
-    public override string Name { get; } = "FindCommand";
+    public override string Name { get; } = "FilteringCommand";
     public string Description { get; } = "Prints objects matching certain conditions";
-    public FindCommand()
+    public AbstractFilteringCommand()
     {
         var preds = new Dictionary<string, Func<IComparable, IComparable, bool>>();
         preds.Add("=", (a, b) => a.Equals(b));
@@ -455,6 +455,12 @@ public class FindCommand : AbstractCommand
         
         return partsOut;
     }
+}
+
+public class FindCommand : AbstractFilteringCommand
+{
+    public override string Name { get; } = "FindCommand";
+    public string Description { get; } = "Prints objects matching certain conditions";
     
     public override void Execute()
     {
@@ -489,7 +495,7 @@ public class FindCommand : AbstractCommand
     public override bool ExecuteInstantly() { return false; }
 }
 
-public class EditCommand : FindCommand
+public class EditCommand : AbstractFilteringCommand
 {
     public override string Name { get; } = "EditCommand";
     public override void Execute()

@@ -1,5 +1,4 @@
-list users 
 list reviews 
+list mods 
 find users name="Szredor" 
 find games name>"Uni" 
-find mods name>"co" name<"comme" 
