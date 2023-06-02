@@ -29,7 +29,11 @@ queue dismiss
 
 queue load ./../../../saves/xml.XML
 
+find users name="Szredor"
 delete users name="Szredor"
+delete users name="Szredor"
+find users name="Szredor"
+queue commit
 
 exit
 
